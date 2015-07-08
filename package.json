@@ -1,0 +1,22 @@
+{
+  "name": "flare",
+  "version": "0.0.1",
+  "description": "A frontend for Flare",
+  "main": "js/main.jsx",
+  "dependencies": {
+    "bootstrap": "*",
+    "d3": "*",
+    "font-awesome": "*",
+    "jquery": "*",
+    "lodash": "*",
+    "react": "*",
+    "react-async": "*",
+    "react-bootstrap": "*",
+    "react-localstorage": "*",
+    "react-router": "*"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node ./js/main.jsx"
+  }
+}
