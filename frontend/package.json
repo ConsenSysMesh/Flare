@@ -19,7 +19,6 @@
   "dependencies": {
     "ejs": "^2.3.1",
     "errorhandler": "^1.4.0",
-    "express": "^4.13.0",
-    "react-tools": "^0.13.3"
+    "express": "^4.13.0"
   }
 }
