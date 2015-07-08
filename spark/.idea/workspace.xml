@@ -2,24 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="8e80ae19-ad78-4713-a753-dc60bd5fe734" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Ethereum Connector/Ethereum Connector.iml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../frontend/public/lib/js/JSXTransformer.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../frontend/public/lib/js/ethlightjs.min.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../frontend/views/home.html" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../frontend/public/lib/js/react.js" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../frontend/build/.module-cache/0d4aba06f1b7e54968beed295bb8ff3ef204b8f8.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../frontend/build/.module-cache/25dfe0fa16db01ff5d73a796af23f24c913a5320.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../frontend/build/.module-cache/ed1a4df7b49c54e48c7ca730c0a743f3c340a49d.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../frontend/build/.module-cache/manifest/0d4aba06f1b7e54968beed295bb8ff3ef204b8f8.json" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../frontend/build/.module-cache/manifest/25dfe0fa16db01ff5d73a796af23f24c913a5320.json" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../frontend/build/.module-cache/manifest/ed1a4df7b49c54e48c7ca730c0a743f3c340a49d.json" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../frontend/build/home.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../frontend/src/home.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../frontend/src/home.js" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../README.md" afterPath="$PROJECT_DIR$/../README.md" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../frontend/app.js" afterPath="$PROJECT_DIR$/../frontend/app.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../frontend/package.json" afterPath="$PROJECT_DIR$/../frontend/package.json" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../frontend/routes.js" afterPath="$PROJECT_DIR$/../frontend/routes.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../frontend/views/home.jsx" afterPath="$PROJECT_DIR$/../frontend/views/home.jsx" />
     </list>
     <ignored path="spark.iws" />
     <ignored path=".idea/workspace.xml" />
