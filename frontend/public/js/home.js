@@ -1,6 +1,6 @@
 var webSocket;
 var messages = $("#messages");
-
+console.log("awake");
 function openSocket(){
   // Ensures only one connection is open at a time
   if(webSocket !== undefined && webSocket.readyState !== WebSocket.CLOSED){
@@ -10,6 +10,7 @@ function openSocket(){
   // Create a new instance of the websocket
   webSocket = new WebSocket("ws://localhost:38477");
 
+  console.log("ad");
   /**
   * Binds functions to the listeners for the websocket.
   */
