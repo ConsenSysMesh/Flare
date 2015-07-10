@@ -171,13 +171,18 @@ strong {
   border-radius: 4px;
 }
 .icon{
-  height: 25px;
+  	height: 25px;
+}
+#github{
+padding-right: 1em;
 }
 li a#github {
   	opacity: 0.4;
+	font-size: 25px;
 }
 li a:hover#github{
   	opacity: 1;
+  	font-size: 25px;
 }
 
 /*
