@@ -1,23 +1,17 @@
 var JSX = require('node-jsx').install();
 var React = require('react');
-var global = require('./global.jsx');
-
-var body = (
-	<body>
-		<h3>Hi!!</h3>
-  	</body>
-)
 
 var Home = React.createClass({
 	displayName: "Home",
     render: function(){
+		console.log('GET home');
     	return(
-			<html>
-				{global.head}
-				<global.nav path="home"/>
-				{body}
-			</html>
+			    <div className='row'>
+      				<div className='container home'>
+      				  <h3>Welcome to Project: FLARE</h3>
+      				</div>
+    			</div>
 		)
     }
-})
+});
 module.exports = Home

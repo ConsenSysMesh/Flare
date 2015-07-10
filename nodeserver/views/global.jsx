@@ -1,5 +1,10 @@
 var JSX = require('node-jsx').install();
 var React = require('react');
+var Home = require('./home.jsx');
+var Connections = require('./connections.jsx');
+var Submit = require('./submit.jsx');
+var Settings = require('./settings.jsx');
+var Logs = require('./logs.jsx');
 
 var Head = React.createClass({
 	render: function(){
@@ -32,31 +37,31 @@ var Sidebar = React.createClass({
 			      <div className='row'>
 			        <ul id='side' className='nav nav-sidebar'>
 						<li className='active'>
-						<a className={this.checkPath("/")} href="/">
+						<a className={this.checkPath("/")} id = "home" href="/">
 			            	<span className='icon fa fa-dot-circle-o' aria-hidden='true'></span> Home
 			          	</a>
 						</li>
 
 			          	<li>
-						<a className={this.checkPath("connections")} id="connections" href="/connections">
+						<a className={this.checkPath("/connections")} id="connections" href="/connections">
 			            	<span className='icon fa fa-globe' aria-hidden='true'></span> Connections
 						</a>
 			          	</li>
 
 			          	<li>
-						<a className={this.checkPath("submit")} id= "submit" href="/submit">
+						<a className={this.checkPath("/submit")} id= "submit" href="/submit">
 			              <span className='icon fa fa-cloud-upload' aria-hidden='true'></span> Submit 
 						</a>
 			          	</li>
 
 				       	<li>
-						<a className={this.checkPath("settings")} id="settings" href="/settings">
+						<a className={this.checkPath("/settings")} id="settings" href="/settings">
 			              <span className='icon fa fa-cog' aria-hidden='true'></span> Settings
 						</a>
 			          	</li>
 			          	
 						<li>
-						<a className={this.checkPath("logs")} id="logs" href="/logs">
+						<a className={this.checkPath("/logs")} id="logs" href="/logs">
 			            	<span href="/logs" className='icon fa fa-list' aria-hidden='true'></span> Logs
 						</a>
 			          	</li>
@@ -105,6 +110,26 @@ var Navbar = React.createClass({
 });
 
 var Template = React.createClass({
+	routing: function(){
+		var path = this.props.path;
+		switch(path) {
+			case '/':
+				return (<Home/>)
+				break;
+			case '/connections':
+				return (<Connections/>)
+				break;
+			case '/submit':
+				return (<Submit/>)
+				break;
+			case '/settings':
+				return (<Settings/>)
+				break;
+			case '/logs':
+				return (<Logs/>)
+				break;
+		}
+	},
 	render: function(){
 		return(
 			<html>
@@ -112,6 +137,7 @@ var Template = React.createClass({
 				<body>
 					<Navbar/>
 					<Sidebar path={this.props.path}/>
+					{this.routing()}
 				</body>
 			</html>
 		)
