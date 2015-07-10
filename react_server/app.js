@@ -1,7 +1,3 @@
-// Transparently support JSX
-require('node-jsx').install();
-
-var React = require('react');
 var express = require('express');
 var http = require('http');
 var path = require('path');
@@ -14,7 +10,7 @@ app.set('view engine', 'ejs');
 app.engine('html', require('ejs').renderFile);
 
 app.set('views', path.join(__dirname, 'views'));
-app.use(express.static(__dirname + 'public'));
+app.use(express.static(path.join(__dirname,  'public')));
 
 if ('development' == app.get('env')) {
   app.use(errorhandler());
