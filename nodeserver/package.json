@@ -1,25 +1,26 @@
 {
-  "name": "Flare",
-  "version": "0.1.0",
-  "description": "Distributed Decentralized APPlications",
-  "main": "app.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/lumichael94/Flare.git"
-  },
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/lumichael94/Flare/issues"
-  },
-  "homepage": "https://github.com/lumichael94/Flare#readme",
+  "name": "flare",
+  "version": "0.0.1",
+  "description": "A frontend for Flare",
+  "main": "js/main.jsx",
   "dependencies": {
-    "ejs": "^2.3.1",
-    "errorhandler": "^1.4.0",
-    "express": "^4.13.0",
-    "socket": ""
+    "d3": "*",
+    "ejs": "^2.3.2",
+    "errorhandler": "^1.4.1",
+    "express": "^4.13.1",
+    "font-awesome": "*",
+    "jquery": "^2.1.4",
+    "lodash": "*",
+    "node-jsx": "^0.13.3",
+    "react": "*",
+    "react-async": "*",
+    "react-bootstrap": "*",
+    "react-localstorage": "*",
+    "react-router": "*",
+    "websocket":"*"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node ./js/main.jsx"
   }
 }
