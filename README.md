@@ -1,3 +1,1 @@
-# DDAppTemplate
- 
-Hello World!
+HELLO WORLD
