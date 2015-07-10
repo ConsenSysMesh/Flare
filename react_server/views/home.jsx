@@ -1,12 +1,22 @@
 var JSX = require('node-jsx').install();
 var React = require('react');
+var global = require('./global.jsx');
+
+var body = (
+	<body>
+		<h3>Hi!!</h3>
+  	</body>
+)
 
 var Home = React.createClass({
 	displayName: "Home",
-    render: function() {
+    render: function(){
     	return(
-			<link rel="stylesheet" type="text/css" href="/static/global.css"/>
-			<h3>Node Info</h3>	
+			<html>
+				{global.head}
+				<global.nav path="home"/>
+				{body}
+			</html>
 		)
     }
 })
