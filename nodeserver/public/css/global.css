@@ -435,3 +435,12 @@ li.active a span.icon-log {
 .main {
   padding: 20px;
 }
+.container {
+	left: 20%;
+	width: 80%;
+	float: left;
+	position: relative;
+  	min-height: 1px;
+  	padding-left: 15px;
+  	padding-right: 15px;
+}
