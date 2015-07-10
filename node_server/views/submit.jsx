@@ -6,11 +6,13 @@ var Submit = React.createClass({
 	displayName: "Submit",
     render: function(){
     	return(
-			<div className='row'>
-      			<div className='container submit'>
-      			  <h3>Submit</h3>
-      			</div>
-    		</div>
+			<div className='outline'>
+				<div className='row'>
+      				<div className='container submit'>
+      				  <h3>Submit</h3>
+      				</div>
+    			</div>
+			</div>
 		)
     }
 })
