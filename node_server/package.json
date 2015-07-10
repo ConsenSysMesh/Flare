@@ -16,7 +16,8 @@
     "react-async": "*",
     "react-bootstrap": "*",
     "react-localstorage": "*",
-    "react-router": "*"
+    "react-router": "*",
+    "websocket": "^1.0.19"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
