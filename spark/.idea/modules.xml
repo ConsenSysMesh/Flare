@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/DDAppTemplate/DDAppTemplate.iml" filepath="$PROJECT_DIR$/DDAppTemplate/DDAppTemplate.iml" />
       <module fileurl="file://$PROJECT_DIR$/Ethereum Connector/Ethereum Connector.iml" filepath="$PROJECT_DIR$/Ethereum Connector/Ethereum Connector.iml" />
       <module fileurl="file://$PROJECT_DIR$/spark.iml" filepath="$PROJECT_DIR$/spark.iml" />
       <module fileurl="file://$PROJECT_DIR$/testDapp/testDapp.iml" filepath="$PROJECT_DIR$/testDapp/testDapp.iml" />
