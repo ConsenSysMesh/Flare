@@ -1,23 +1,3 @@
-var JSX = require('node-jsx').install();
-var React = require('react');
-var Home = require('./home.jsx');
-var Connections = require('./connections.jsx');
-var Submit = require('./submit.jsx');
-var Settings = require('./settings.jsx');
-var Logs = require('./logs.jsx');
-
-var Head = React.createClass({
-	render: function(){
-		return(
-			<head>
-				<title>flare</title>
-				<link rel="stylesheet" type="text/css" href="/css/global.css" />
-				<link rel="stylesheet" type="text/css" href="/css/font-awesome.min.css" />
-			</head>
-		);
-	}
-});
-
 var Sidebar = React.createClass({
 	checkPath: function(id){
 		if(this.props.path == id){
@@ -111,7 +91,7 @@ var Navbar = React.createClass({
 
 var Template = React.createClass({
 	routing: function(){
-		var path = this.props.path;
+		var path = window.location.pathname;
 		switch(path) {
 			case '/':
 				return (<Home/>)
@@ -132,16 +112,13 @@ var Template = React.createClass({
 	},
 	render: function(){
 		return(
-			<html>
-				<Head/>
-				<body>
-					<Navbar/>
-					<Sidebar path={this.props.path}/>
+			<div>
+				<Navbar/>
+				<Sidebar path={window.location.pathname}/>
+				<div className='container'>
 					{this.routing()}
-				</body>
-			</html>
+				</div>
+			</div>
 		)
 	}
 })
-
-module.exports = Template

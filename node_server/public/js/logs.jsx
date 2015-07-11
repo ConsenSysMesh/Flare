@@ -1,7 +1,3 @@
-var JSX = require('node-jsx').install();
-var React = require('react');
-var global = require('./global.jsx');
-
 var Logs = React.createClass({
 	displayName: "Logs",
     render: function(){
@@ -16,4 +12,3 @@ var Logs = React.createClass({
 		)
     }
 })
-module.exports = Logs 

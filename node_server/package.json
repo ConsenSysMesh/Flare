@@ -4,19 +4,21 @@
   "description": "A frontend for Flare",
   "main": "js/main.jsx",
   "dependencies": {
+    "browserify": "^10.2.6",
     "d3": "*",
     "ejs": "^2.3.2",
     "errorhandler": "^1.4.1",
     "express": "^4.13.1",
     "font-awesome": "*",
     "jquery": "^2.1.4",
-    "lodash": "*",
+    "lodash": "^3.10.0",
     "node-jsx": "^0.13.3",
-    "react": "*",
+    "react": "^0.13.3",
     "react-async": "*",
     "react-bootstrap": "*",
     "react-localstorage": "*",
     "react-router": "*",
+    "reactify": "^1.1.1",
     "websocket": "^1.0.19"
   },
   "scripts": {

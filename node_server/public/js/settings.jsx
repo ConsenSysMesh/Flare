@@ -1,7 +1,3 @@
-var JSX = require('node-jsx').install();
-var React = require('react');
-var global = require('./global.jsx');
-
 var Settings = React.createClass({
 	displayName: "Settings",
     render: function(){
@@ -16,4 +12,3 @@ var Settings = React.createClass({
 		)
     }
 })
-module.exports = Settings 
