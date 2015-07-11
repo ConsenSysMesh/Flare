@@ -16,7 +16,6 @@ if ('development' == app.get('env')) {
   app.use(errorhandler());
 }
 
-//require('./routes')(app);
 app.get('/*', function(req, res) {
   res.send(res.render('./template.html'));
 });
@@ -26,3 +25,4 @@ var server = http.createServer(app).listen(app.get('port'), function(){
 });
 
 require('./sockets')(server)
+
