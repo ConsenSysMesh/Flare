@@ -1,11 +1,9 @@
-var JSX = require('node-jsx').install();
-var React = require('react');
 
 var Home = React.createClass({
 	displayName: "Home",
     render: function(){
 		console.log('GET home');
-    	return(
+    	return (
 			<div className='outline'>
 			    <div className='row'>
       				<div className='container home'>
@@ -16,4 +14,3 @@ var Home = React.createClass({
 		)
     }
 });
-module.exports = Home

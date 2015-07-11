@@ -1,7 +1,3 @@
-var JSX = require('node-jsx').install();
-var React = require('react');
-var global = require('./global.jsx');
-
 var Connections = React.createClass({
 	displayName: "Connections",
     render: function(){
@@ -16,4 +12,3 @@ var Connections = React.createClass({
 		)
     }
 })
-module.exports = Connections 
