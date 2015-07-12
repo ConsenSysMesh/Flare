@@ -1,4 +1,4 @@
-ws = new WebSocket('ws://127.0.0.1');
+ws = new WebSocket('ws://127.0.0.1:38477');
 
 var Addfile = React.createClass({
 	onClick: function(event){
@@ -25,7 +25,7 @@ var Submit = React.createClass({
 			return;
 		}
 		console.log('Handling file');
-		console.log(file.name);
+		ws.send(file.name);
 		ws.send(file);
 	},
     render: function(){

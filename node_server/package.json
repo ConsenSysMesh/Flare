@@ -19,6 +19,7 @@
     "react-localstorage": "*",
     "react-router": "*",
     "reactify": "^1.1.1",
+    "shelljs": "^0.5.1",
     "websocket": "^1.0.19"
   },
   "scripts": {
