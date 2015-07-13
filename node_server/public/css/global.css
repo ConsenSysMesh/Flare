@@ -324,7 +324,7 @@ ul#side li a {
   padding: 13px 20px;
   color: #fff;
 }
-.btn-second:hover, .btn-second:active, .btn-second:focus {
+.btn-second:hover:enabled, .btn-second:active:enabled, .btn-second:focus:enabled {
   background-color: #82939c;
   border-color: #82939c;
   color: #fff;
@@ -453,3 +453,64 @@ li.active a span.icon-log {
   	padding-left: 15px;
   	padding-right: 15px;
 }
+
+/*
+ * Submit Page
+ */
+#progress-bar{
+	margin-top: 15%;
+	width: 70%;
+	height: 25px;
+	background-color: #f69696;
+	background-image: linear-gradient(-45deg, rgba(255, 255, 255, 0.15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0.15) 75%, transparent 75%, transparent);
+	background-size: 40px 40px;
+	animation: progress-bar-stripes 2s linear infinite;
+}
+@keyframes progress-bar-stripes {
+  from  { background-position: 40px 0; }
+  to    { background-position: 0 0; }
+}
+#progress-text{
+	color: white;
+	position: relative;
+	text-align: center;
+	padding-top: 2px;
+	font-size: larger;
+}
+div#button-row{
+	margin-top: 35px;
+
+}
+div#button-row > span{
+	float: left;
+}
+div#button-row > span + span{
+	margin-left: 10%;
+}
+.config-form{
+}
+label#form-label, input{
+	display: block;
+	margin-top: 10px;
+	margin-bottom: 10px;
+	width: 375px;
+	height: 30px;
+	position: relative;
+}
+input, textarea{
+	background-color: #EBEBEB;
+	padding-left: 10px;
+}
+label#form-label{
+	margin-top 20px;
+	margin-bottom: 20px;
+	padding-top: 10px;
+	padding-bottom: 10px;
+	font-size: larger;
+}
+
+/* Greyed out disabled buttons*/
+button:disabled{
+	background:#dddddd;
+}
+
