@@ -35,8 +35,19 @@ module.exports = function(server){
           if (message.type === 'utf8') {
               console.log('Received Message: ' + message.utf8Data);
               connection.sendUTF(message.utf8Data);
+			  var messageArr = message.utf8Data.split('|');
+			  var configString = '';
+			  if(messageArr[0] == 'config'){
+					for (i = 1; i < messageArr.length; i++){
+						configString += messageArr[i] + '\n';
+					}
+					console.log(configString);
+					fs.writeFile('./files/deployment.conf', configString, function(err){
+						if(err) throw err;
+						connection.sendUTF('config transferred');
+					});
+			  }
 			  fileName = message.utf8Data;
-				
           }
           else if (message.type === 'binary') {
               console.log('Received Binary Message of ' + message.binaryData.length + ' bytes');
@@ -48,6 +59,7 @@ module.exports = function(server){
 			      fileName = '';
 				  //Place spark submit in here
 				  //shell.exec('');
+				  connection.sendUTF('jar transferred');
 			  });
           }
       });
