@@ -5,7 +5,7 @@ body {
   color: #929db1;
   font-family: Myriad Pro, "Helvetica Neue", Helvetica, Arial, sans-serif; }
 
-h1, h2, h3, h4, #log-select > div > label input, #log-select > div > label input + span, h5, h6 {
+h1, h2, h3, h4, #log-select > label input, #log-select > label input + span, h5, h6 {
   color: #586071;
   text-transform: uppercase;
   font-weight: 600; }
@@ -19,7 +19,7 @@ h2 {
 h3 {
   font-size: 18px; }
 
-h4, #log-select > div > label input, #log-select > div > label input + span {
+h4, #log-select > label input, #log-select > label input + span {
   font-size: 16px; }
 
 h5 {
@@ -86,8 +86,8 @@ strong {
   padding: 2%; }
 
 /*
-* navbar
-*/
+ * navbar
+ */
 .navbar-inverse {
   background: #33373f; }
 
@@ -169,8 +169,8 @@ li a:hover#github {
   font-size: 25px; }
 
 /*
-* sidebar
-*/
+ * sidebar
+ */
 .bottom {
   bottom: 0;
   position: fixed;
@@ -208,8 +208,8 @@ ul#side li a {
   background-color: #5f697d; }
 
 /*
-* buttons
-*/
+ * buttons
+ */
 /* success */
 .btn-success {
   background-color: #81c784;
@@ -313,22 +313,22 @@ ul#side li a {
   color: #78c1c1; }
 
 /*
-* Global add-ons
-*/
+ * Global add-ons
+ */
 .sub-header {
   padding-bottom: 10px;
   border-bottom: 1px solid #eee; }
 
 /*
-* Top navigation
-* Hide default border to remove 1px line.
-*/
+ * Top navigation
+ * Hide default border to remove 1px line.
+ */
 .navbar-fixed-top {
   border: 0; }
 
 /*
-* Sidebar
-*/
+ * Sidebar
+ */
 @media (min-width: 768px) {
   .navbar-collapse {
     width: auto;
@@ -395,8 +395,8 @@ li.active a span.icon-log {
   background-position: bottom; }
 
 /*
-* Main content
-*/
+ * Main content
+ */
 .main {
   padding: 20px; }
 
@@ -418,9 +418,34 @@ li.active a span.icon-log {
   padding-left: 15px;
   padding-right: 15px; }
 
-/*
-* Submit Page
-*/
+#infobox {
+  margin-bottom: 5%;
+  margin-right: 5%;
+  padding-bottom: 2px;
+  padding-top: 2px;
+  background-color: #fffbe8;
+  border-style: solid;
+  border-color: #d8d8d8;
+  border-width: 1px; }
+
+#infobox > span {
+  margin-left: 3%;
+  display: block;
+  margin-right: 5%;
+  padding-bottom: 15px;
+  padding-top: 15px; }
+
+#infobox > span > * {
+  display: inline;
+  color: #586071; }
+
+#infobox > span#publickey > * {
+  margin-top: -1%;
+  display: block; }
+
+#ipfs-public-key {
+  min-width: 100%; }
+
 #progress-bar {
   margin-top: 15%;
   width: 70%;
@@ -471,65 +496,46 @@ label#form-label {
   padding-bottom: 10px;
   font-size: larger; }
 
-/* Greyed out disabled buttons*/
 button:disabled {
   background: #dddddd; }
 
-/**
-*Logs page
-*/
 #log-select {
-  height: 50%;
-  display: block;
-  min-height: 1; }
-  #log-select > div {
-    padding: 0;
-    height: 200px; }
-    #log-select > div > label {
-      position: absolute;
-      margin: 0;
-      width: 95%;
-      height: 45%;
-      align-items: center;
-      display: flex; }
-      #log-select > div > label[for=brick] {
-        top: 0;
-        left: 0;
-        background-color: #555;
-        color: #fff; }
-        #log-select > div > label[for=brick].checked {
-          background-color: #fff;
-          color: #555; }
-      #log-select > div > label[for=steak] {
-        bottom: 0;
-        left: 0;
-        background-color: #555;
-        color: #fff; }
-        #log-select > div > label[for=steak].checked {
-          background-color: #fff;
-          color: #555; }
-      #log-select > div > label[for=bitcoin] {
-        top: 0;
-        right: 0;
-        background-color: #555;
-        color: #fff; }
-        #log-select > div > label[for=bitcoin].checked {
-          background-color: #fff;
-          color: #555; }
-      #log-select > div > label[for=phone] {
-        bottom: 0;
-        right: 0;
-        background-color: #555;
-        color: #fff; }
-        #log-select > div > label[for=phone].checked {
-          background-color: #fff;
-          color: #555; }
-      #log-select > div > label input {
-        display: none; }
-        #log-select > div > label input + span {
-          position: absolute;
-          position: relative;
-          text-align: center;
-          flex: 1; }
-        #log-select > div > label input:checked + span {
-          text-shadow: 1px rgba(255, 255, 255, 0.5); }
+  display: inline-block;
+  width: 100%; }
+  #log-select > label {
+    margin: 0;
+    display: flex;
+    float: left;
+    width: 25%;
+    height: 20%;
+    align-items: center; }
+    #log-select > label[for=spark-ui] {
+      background-color: #555;
+      color: #fff; }
+      #log-select > label[for=spark-ui].checked {
+        background-color: #fff;
+        color: #555; }
+    #log-select > label[for=spark] {
+      background-color: #555;
+      color: #fff; }
+      #log-select > label[for=spark].checked {
+        background-color: #fff;
+        color: #555; }
+    #log-select > label[for=tracing] {
+      background-color: #555;
+      color: #fff; }
+      #log-select > label[for=tracing].checked {
+        background-color: #fff;
+        color: #555; }
+    #log-select > label[for=system] {
+      background-color: #555;
+      color: #fff; }
+      #log-select > label[for=system].checked {
+        background-color: #fff;
+        color: #555; }
+    #log-select > label input {
+      display: none; }
+      #log-select > label input + span {
+        margin: auto; }
+      #log-select > label input:checked + span {
+        text-shadow: 1px rgba(255, 255, 255, 0.5); }
