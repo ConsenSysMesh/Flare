@@ -6,7 +6,6 @@ body {
   font-family: Myriad Pro, "Helvetica Neue", Helvetica, Arial, sans-serif; }
 
 h1, h2, h3, h4, #log-select > label input, #log-select > label input + span, h5, h6 {
-  color: #586071;
   text-transform: uppercase;
   font-weight: 600; }
 
@@ -507,7 +506,7 @@ button:disabled {
     display: flex;
     float: left;
     width: 25%;
-    height: 20%;
+    height: 10%;
     align-items: center; }
     #log-select > label[for=spark-ui] {
       background-color: #555;
