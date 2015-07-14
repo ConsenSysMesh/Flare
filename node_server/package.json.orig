@@ -4,6 +4,7 @@
   "description": "A frontend for Flare",
   "main": "js/main.jsx",
   "dependencies": {
+    "browserify": "^10.2.6",
     "d3": "*",
     "ejs": "^2.3.2",
     "errorhandler": "^1.4.1",
@@ -12,16 +13,17 @@
     "jquery": "^2.1.4",
     "lodash": "^3.10.0",
     "node-jsx": "^0.13.3",
-    "node-sass": "^3.2.0",
-    "node-sass-middleware": "^0.9.0",
     "react": "^0.13.3",
     "react-async": "*",
     "react-bootstrap": "*",
     "react-localstorage": "*",
     "react-router": "*",
+<<<<<<< HEAD:nodeserver/package.json
+    "websocket":"*"
+=======
     "reactify": "^1.1.1",
-    "shelljs": "^0.5.1",
     "websocket": "^1.0.19"
+>>>>>>> lumichael94/master:node_server/package.json
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
