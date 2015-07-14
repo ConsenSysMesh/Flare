@@ -79,10 +79,17 @@ var IPFS = React.createClass({
 });
 var Home = React.createClass({
 	displayName: "Home",
-    render: function(){
+	render: function(){
 		console.log('GET home');
-    	return (
+		return (
 			<div className='outline'>
+<<<<<<< HEAD
+				<div className='row'>
+					<div className='container home'>
+						<h3>Welcome to Project: FLARE</h3>
+					</div>
+				</div>
+=======
 			    <div className='row'>
       				<div className='container home'>
       				  	<h2>Welcome to Project: FLARE</h2>
@@ -91,7 +98,8 @@ var Home = React.createClass({
 						<IPFS/>
       				</div>
     			</div>
+>>>>>>> lumichael94/master
 			</div>
 		)
-    }
+	}
 });
