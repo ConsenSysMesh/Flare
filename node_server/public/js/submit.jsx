@@ -26,13 +26,13 @@ var AddConfig= React.createClass({
 		var form2= document.getElementById('cassandra-address');
 		var form3= document.getElementById('cassandra-username');
 		var form4= document.getElementById('cassandra-password');
-		
+
 		var sparkMAdd = 'spark.master ' + form1.value + '|';
 		var cassAdd = 'spark.cassandra.connection.host ' + form2.value + '|';
 		var cassUname = 'spark.cassandra.auth.username ' + form3.value + '|';
 		var cassPass = 'spark.cassandra.auth.password ' + form4.value + '|';
 		ws.send('config' + '|' + sparkMAdd + cassAdd + cassUname + cassPass);
-
+		
 		ws.onmessage = function(evt){
 			if (evt.data == 'config transferred'){
 				document.getElementById('addJar').disabled = false;
@@ -41,9 +41,9 @@ var AddConfig= React.createClass({
 				prgbar.innerHTML = 'Select your Jar';
 			}
 		};
-	
+
 		event.preventDefault();
-		
+
 	},
 	render: function(){
 		return(
@@ -101,15 +101,15 @@ var Submit = React.createClass({
 						</label>
 					</div>
 					<div className= 'form-row'>
-						<label id = 'form-label'>Cassandra Password 
+						<label id = 'form-label'>Cassandra Password
 							<input type='password' id = 'cassandra-password' placeholder='Cassandra Password'/>
 						</label>
 					</div>
 				</form>
 			</div>
 			<div id='button-row'>
-				<span><AddConfig/></span>  	
-				<span><AddJar/></span>	  	
+				<span><AddConfig/></span>
+				<span><AddJar/></span>
 			</div>
 						<div id= 'progress-bar'>
 							<div id = 'progress-text'>
@@ -122,4 +122,3 @@ var Submit = React.createClass({
 		)
     }
 });
-

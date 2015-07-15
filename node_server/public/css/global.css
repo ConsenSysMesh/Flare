@@ -6,7 +6,6 @@ body {
   font-family: Myriad Pro, "Helvetica Neue", Helvetica, Arial, sans-serif; }
 
 h1, h2, h3, h4, #log-select > label input, #log-select > label input + span, h5, h6 {
-  color: #586071;
   text-transform: uppercase;
   font-weight: 600; }
 
@@ -497,43 +496,18 @@ label#form-label {
   font-size: larger; }
 
 button:disabled {
-  background: #dddddd;
-}
+  background: #dddddd; }
 
-/*Connections Page*/
-#sparkWorkersTable{
-    width: 100%;
-    font-size: 15px;
-}
-#sparkApplicationsTable{
-    width: 100%;
-    font-size: 15px;
-}
-/*Even children of the table are slightly lighter*/
-tr:nth-child(even) {
-    background-color: #ffefa2;
-}
-tr{
-    height: 1.5em;
-}
-th{
-    padding-top: 7px;
-}
-
-
-/*Log Page*/
 #log-select {
   display: inline-block;
-  width: 100%;
-}
-#log-select > label {
+  width: 100%; }
+  #log-select > label {
     margin: 0;
     display: flex;
     float: left;
-    width: 15%;
-    height: 20%;
-    align-items: center;
-}
+    width: 25%;
+    height: 10%;
+    align-items: center; }
     #log-select > label[for=spark-ui] {
       background-color: #555;
       color: #fff; }
@@ -552,10 +526,10 @@ th{
       #log-select > label[for=tracing].checked {
         background-color: #fff;
         color: #555; }
-    #log-select > label[for=system] {
+    #log-select > label[for=session] {
       background-color: #555;
       color: #fff; }
-      #log-select > label[for=system].checked {
+      #log-select > label[for=session].checked {
         background-color: #fff;
         color: #555; }
     #log-select > label input {
@@ -564,3 +538,6 @@ th{
         margin: auto; }
       #log-select > label input:checked + span {
         text-shadow: 1px rgba(255, 255, 255, 0.5); }
+
+#logData {
+  white-space: pre-wrap; }
