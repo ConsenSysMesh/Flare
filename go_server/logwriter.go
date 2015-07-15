@@ -38,10 +38,12 @@ type events struct {
 	StartedAt     string
 }
 
-func writeCassandraLogs(logFolder string, ipaddr string) {
-
+func writeCassandraLogs(_logFolder string, ipaddr string) {
+	//Get environmental variables
+	//Please set env variable SESSLOGS
+	var logFolder = _logFolder
 	// connect to the cluster
-	cluster := gocql.NewCluster(ipaddr)
+	cluster := gocql.NewCluster("172.31.28.240")
 	cluster.Keyspace = "system_traces"
 	cluster.Consistency = gocql.Quorum
 	session, err := cluster.CreateSession()
@@ -71,14 +73,14 @@ func writeCassandraLogs(logFolder string, ipaddr string) {
 	defer ef.Flush()
 
 	//Checking types
-	//fmt.Println("The type of parameter is: ", reflect.TypeOf(s.SessionID))
+	//fmt.Println("The type of parameter is: ", reflect.TypeOf(s.Session_id))
 
-	var querySessions = `SELECT SessionID, coordinator, duration, parameters, request, startedAt FROM system_traces.sessions;`
+	var querySessions = `SELECT session_id, coordinator, duration, parameters, request, started_at FROM system_traces.sessions;`
 	iter := session.Query(querySessions).Consistency(gocql.One).Iter()
 
 	fmt.Println("Fetched sessions")
 	for iter.Scan(&s.SessionID, &s.Coordinator, &s.Duration, &s.Parameters, &s.Request, &s.StartedAt) {
-		//fmt.Println("Session: ", &s.SessionID, s.Coordinator, s.Duration, s.Parameters, s.Request, s.StartedAt)
+		//fmt.Println("Session: ", &s.Session_id, s.Coordinator, s.Duration, s.Parameters, s.Request, s.Started_at)
 		var param = "{"
 		for paramKeys, paramValue := range s.Parameters {
 			param = param + paramKeys + ": " + paramValue + ", "
@@ -91,12 +93,12 @@ func writeCassandraLogs(logFolder string, ipaddr string) {
 	if err := iter.Close(); err != nil {
 		log.Fatal(err)
 	}
-	var queryEvents = `SELECT SessionID, eventID, activity, source, sourceElapsed, thread FROM system_traces.events;`
+	var queryEvents = `SELECT session_id, event_id, activity, source, source_elapsed, thread FROM system_traces.events;`
 	iter2 := session.Query(queryEvents).Consistency(gocql.One).Iter()
 
 	fmt.Println("Fetched events")
 	for iter2.Scan(&e.SessionID, &e.EventID, &e.Activity, &e.Source, &e.SourceElapsed, &e.Thread) {
-		//fmt.Println("Event: ", e.EventID, e.Activity, e.Source, e.SourceElapsed, e.Thread)
+		//fmt.Println("Event: ", e.Event_id, e.Activity, e.Source, e.Source_elapsed, e.Thread)
 		var eOutput = "Event: " + "\t" + e.EventID + "\t" + e.Activity + "\t" + e.Source + "\t" + e.SourceElapsed + "\t" + e.Thread + "\n"
 		ef.WriteString(eOutput)
 	}
@@ -119,7 +121,7 @@ func getSessionLog(ipaddr string) string {
 
 	s := sessions{}
 
-	var querySessions = `SELECT SessionID, coordinator, duration, parameters, request, startedAt FROM system_traces.sessions;`
+	var querySessions = `SELECT session_id, coordinator, duration, parameters, request, started_at FROM system_traces.sessions;`
 	iter := session.Query(querySessions).Consistency(gocql.One).Iter()
 
 	fmt.Println("Fetched sessions")
@@ -154,20 +156,18 @@ func getTracingLog(ipaddr string) string {
 
 	e := events{}
 
-	var queryEvents = `SELECT SessionID, eventID, activity, source, sourceElapsed, thread FROM system_traces.events;`
+	var queryEvents = `SELECT session_id, event_id, activity, source, source_elapsed, thread FROM system_traces.events;`
 	iter := session.Query(queryEvents).Consistency(gocql.One).Iter()
 
 	fmt.Println("Fetched events")
 	var eOutput = ""
 	for iter.Scan(&e.SessionID, &e.EventID, &e.Activity, &e.Source, &e.SourceElapsed, &e.Thread) {
-		log.Println("ad")
 		fmt.Println("Event: ", e.EventID, e.Activity, e.Source, e.SourceElapsed, e.Thread)
 		eOutput += "Event: " + "\t" + e.EventID + "\t" + e.Activity + "\t" + e.Source + "\t" + e.SourceElapsed + "\t" + e.Thread + "\n"
 	}
 	if err := iter.Close(); err != nil {
 		log.Fatal(err)
 	}
-	log.Println("after")
 
 	return eOutput
 }

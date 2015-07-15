@@ -10,7 +10,6 @@ func main() {
 
 	waitGroup := new(sync.WaitGroup)
 	waitGroup.Add(1)
-	fmt.Println(getTracingLog("127.0.0.1"))
 	go initWebsockets()
 
 	for {
@@ -22,15 +21,21 @@ func main() {
 		if data["flag"] == "getlog" {
 			var response = map[string]interface{}{}
 			response["flag"] = "logdata"
+			response["success"] = false
 
 			fmt.Println(data)
 			if data["name"] == "tracing" {
 				response["success"] = true
-				response["text"] = "Connection Established"
-				var res, _ = json.Marshal(response)
-				fmt.Println(res)
-				write(res)
+				response["text"] = getTracingLog("127.0.0.1")
 			}
+			if data["name"] == "session" {
+				response["success"] = true
+				response["text"] = getSessionLog("127.0.0.1")
+			}
+
+			var res, _ = json.Marshal(response)
+			//fmt.Println(res)
+			write(res)
 		}
 	}
 	//waitGroup.Wait()
