@@ -3,6 +3,8 @@ var Settings = React.createClass({
 	render: function(){
 		return(
 			<div className='outline'>
+				<Navbar/>
+				<Sidebar path={window.location.pathname}/>
 				<div className='row'>
 					<div className='container settings'>
 						<h3>Settings</h3>
@@ -12,3 +14,6 @@ var Settings = React.createClass({
 		)
 	}
 })
+
+
+React.render(<Settings />, document.body)
