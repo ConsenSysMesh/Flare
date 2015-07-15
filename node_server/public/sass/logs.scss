@@ -25,7 +25,7 @@ $toggletxtbg : #fff;
 		&[for=tracing] {
 			@include colorize($togglebg, $toggletxtbg);
 		}
-		&[for=system] {
+		&[for=session] {
 			@include colorize($togglebg, $toggletxtbg);
 		}
 
@@ -43,4 +43,8 @@ $toggletxtbg : #fff;
 			}
 		}
 	}
+}
+
+#logData {
+	white-space: pre-wrap;
 }

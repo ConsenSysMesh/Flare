@@ -7,6 +7,17 @@ module.exports = function(server){
   var shell = require('shelljs');
   var identConn = {}
 
+  String.prototype.escapeSpecialChars = function() {
+    return this.replace(/\\n/g, "\\\\n")
+               .replace(/\\'/g, "\\\'")
+               .replace(/\\"/g, '\\\"')
+               .replace(/\\&/g, "\\\&")
+               .replace(/\\r/g, "\\\r")
+               .replace(/\\t/g, "\\\\t")
+               .replace(/\\b/g, "\\\b")
+               .replace(/\\f/g, "\\\f");
+  };
+
   wsServer = new WebSocketServer({
     httpServer: server,
     // You should not use autoAcceptConnections for production
@@ -36,9 +47,9 @@ module.exports = function(server){
     //var fileName = '';
     connection.on('message', function(message) {
       if (message.type === 'utf8') {
-        console.log('Received Message: ' + message.utf8Data);
+        console.log('Received Message: ' + message.utf8Data.escapeSpecialChars());
 
-        var data = JSON.parse(message.utf8Data)
+        var data = JSON.parse(message.utf8Data.escapeSpecialChars())
 
         if (data.flag == "identify") {
           identConn[data.name] = connection
@@ -54,7 +65,8 @@ module.exports = function(server){
 
         if(data.flag = "logdata")
         {
-          if(identConn["frontend"])
+          if(data.success == true && identConn["frontend"])
+            console.log(data.text.escapeSpecialChars());
             identConn["frontend"].sendUTF('{"flag": "logdata", "success": true, "text": "'+data.text+'"}')
         }
 

@@ -526,10 +526,10 @@ button:disabled {
       #log-select > label[for=tracing].checked {
         background-color: #fff;
         color: #555; }
-    #log-select > label[for=system] {
+    #log-select > label[for=session] {
       background-color: #555;
       color: #fff; }
-      #log-select > label[for=system].checked {
+      #log-select > label[for=session].checked {
         background-color: #fff;
         color: #555; }
     #log-select > label input {
@@ -538,3 +538,6 @@ button:disabled {
         margin: auto; }
       #log-select > label input:checked + span {
         text-shadow: 1px rgba(255, 255, 255, 0.5); }
+
+#logData {
+  white-space: pre-wrap; }
