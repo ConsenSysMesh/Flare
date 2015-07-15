@@ -87,7 +87,15 @@ var SparkConnect = React.createClass({
 });
 var CassandraConnect = React.createClass({
 	populateCassNodeRow: function(){
-
+		return(
+				<tr>
+					<th>172.31.28.240</th>
+					<th>Up</th>
+					<th>Normal</th>
+					<th>100%</th>
+					<th>9153377038966602289</th>
+				</tr>
+		)
 	},
 	render: function(){
 		return(
@@ -95,16 +103,54 @@ var CassandraConnect = React.createClass({
 			<h3>Cassandra</h3>
 			<div id = 'infobox'>
 				<span>
-					<h5>Local Status: </h5>
-					<div className= 'infotext' id='cassLocalStatus'>NA</div>
+					<h5>Top Peers: </h5>
+					<div className= 'infotext' id='cassandraTable'>
+						<table id = 'cassandraPeersTable'>
+							<tbody>
+								<tr>
+									<th>Address</th>
+									<th>Status</th>
+									<th>State</th>
+									<th>Owns</th>
+									<th>Token</th>
+								</tr>
+								{this.populateCassNodeRow()}
+							</tbody>
+						</table>
+					</div>
 				</span>
+			</div>
+			</div>
+	  	)
+	}
+});
+var IPFSConnect = React.createClass({
+	populateIPFSNodeRow: function(){
+		return(
+				<tr>
+					<th>QmNeK3hRF5Pu9dPcMDKXvYofQioskuGfQZEQz43UDkLepK</th>
+					<th>178.62.206.163</th>
+				</tr>
+		)
+	},
+	render: function(){
+		return(
+			<div>
+			<h3>IPFS</h3>
+			<div id = 'infobox'>
 				<span>
-					<h5>Connected: </h5>
-					<div className= 'infotext' id='cassConnected'>false</div>
-				</span>
-				<span>
-					<h5>Public Address: </h5>
-					<div className= 'infotext' id='cassPublicAddress'>NA</div>
+					<h5>Top Peers: </h5>
+					<div className= 'infotext' id='IPFSTable'>
+						<table id = 'IPFSPeersTable'>
+							<tbody>
+								<tr>
+									<th>Peer ID</th>
+									<th>Address</th>
+								</tr>
+								{this.populateIPFSNodeRow()}
+							</tbody>
+						</table>
+					</div>
 				</span>
 			</div>
 			</div>
@@ -122,6 +168,8 @@ var Connections = React.createClass({
 					<div className='container connections'>
 						<h3>Connections</h3>
 						<SparkConnect/>
+						<CassandraConnect/>
+						<IPFSConnect/>
 					</div>
 				</div>
 			</div>
