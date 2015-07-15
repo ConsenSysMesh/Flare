@@ -164,6 +164,8 @@ var Connections = React.createClass({
 	render: function(){
 		return(
 			<div className='outline'>
+				<Navbar/>
+				<Sidebar path={window.location.pathname}/>
 				<div className='row'>
 					<div className='container connections'>
 						<h3>Connections</h3>
@@ -176,3 +178,5 @@ var Connections = React.createClass({
 		)
 	}
 });
+
+React.render(<Connections />, document.body)
