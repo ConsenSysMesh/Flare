@@ -14,9 +14,9 @@ var logSelect = (
 			<span>Tracing</span>
 		</label>
 
-		<label htmlFor="system">
-			<input id="system" name="logtype" type="radio" value="system"/>
-			<span>System</span>
+		<label htmlFor="session">
+			<input id="session" name="logtype" type="radio" value="session"/>
+			<span>Session</span>
 		</label>
 	</div>
 );

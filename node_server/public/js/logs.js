@@ -9,7 +9,8 @@ $('#log-select input[type=radio]').click(function() {
 	ws.send('{"flag": "getlog", "name":"'+$("input[name=logtype]:checked").val()+'"}');
 
 	ws.onmessage = function(evt){
-		var data = JSON.parse(evt.data)
+		console.log(evt.data);
+		var data = $.parseJSON(evt.data)
 		if (data.flag == "logdata" && data.success == true){
 			$("#logData").text(data.text)
 		}
