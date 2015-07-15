@@ -8,7 +8,9 @@ import (
 	"flag"
 	"log"
 	"net"
-	"net/http"
+	"sync"
+	//"net/http"
+	"net/url"
 	"time"
 
 	"github.com/gorilla/websocket"
@@ -30,79 +32,97 @@ const (
 
 type websocketParams struct {
 	socket *websocket.Conn
+	read   chan []byte
+	write  chan []byte
 }
 
-var ws = websocketParams{}
+var ws = websocketParams{
+	read:  make(chan []byte),
+	write: make(chan []byte),
+}
 
 var (
 	addr     = flag.String("addr", ":8080", "http service address")
 	filename string
-	upgrader = websocket.Upgrader{
-		ReadBufferSize:  1024,
-		WriteBufferSize: 1024,
-	}
 )
+var bufferSize = 1024
 
-func reader() {
-	defer ws.socket.Close()
+func readBlocking() string {
+	raw := <-ws.read
+	s := string(raw[:len(raw)])
+
+	return s
+}
+
+func readBytesBlocking() []byte {
+	raw := <-ws.read
+	return raw
+}
+
+func readHandler() {
 	ws.socket.SetReadLimit(512)
 	ws.socket.SetReadDeadline(time.Now().Add(pongWait))
 	ws.socket.SetPongHandler(func(string) error { ws.socket.SetReadDeadline(time.Now().Add(pongWait)); return nil })
 	for {
-		_, _, err := ws.socket.ReadMessage()
+		_, message, err := ws.socket.ReadMessage()
 		if err != nil {
 			break
 		}
+		ws.read <- message
 	}
 }
 
-func writer(message []byte) {
-	ws.socket.SetWriteDeadline(time.Now().Add(writeWait))
-	if err := ws.socket.WriteMessage(websocket.TextMessage, message); err != nil {
-		log.Fatal(err)
-	}
+func write(message []byte) {
+	ws.write <- message
 }
 
-func pingWriter() {
+func writeHandler() {
 	pingTicker := time.NewTicker(pingPeriod)
-
 	defer func() {
 		pingTicker.Stop()
 		ws.socket.Close()
 	}()
-	go func() {
-		for {
-			select {
-			case <-pingTicker.C:
-				ws.socket.SetWriteDeadline(time.Now().Add(writeWait))
-				if err := ws.socket.WriteMessage(websocket.PingMessage, []byte{}); err != nil {
-					log.Fatal(err)
-				}
+
+	for {
+		select {
+		case <-pingTicker.C:
+			ws.socket.SetWriteDeadline(time.Now().Add(writeWait))
+			if err := ws.socket.WriteMessage(websocket.PingMessage, []byte{}); err != nil {
+
+				log.Fatal(err)
+			}
+		case message := <-ws.write:
+			ws.socket.SetWriteDeadline(time.Now().Add(writeWait))
+			if err := ws.socket.WriteMessage(websocket.TextMessage, message); err != nil {
+				log.Fatal(err)
 			}
 		}
-	}()
+	}
 }
 
-func serveWs(w http.ResponseWriter, r *http.Request) {
-	conn, err := net.Dial("tcp", "localhost:38477")
-	socket, err := websocket.NewClient(conn, "/", nil)
+func initWebsockets() {
+	conn, err := net.Dial("tcp", "127.0.0.1:38477")
+	if err != nil {
+		log.Println("Problem with creating connection " + err.Error())
+		return
+	}
+	site, err := url.Parse("ws://127.0.0.1:38477/")
+
+	socket, _, err := websocket.NewClient(conn, site, nil, bufferSize, bufferSize)
 	ws.socket = socket
 
 	if err != nil {
 		if _, ok := err.(websocket.HandshakeError); !ok {
 			log.Println(err)
+			log.Println("v ...interface{}")
 		}
 		return
 	}
 
-	log.Println("adad")
-	pingWriter()
-	reader()
-}
-
-func initWebsockets() {
-	http.HandleFunc("/", serveWs)
-	if err := http.ListenAndServe(*addr, nil); err != nil {
-		log.Fatal(err)
-	}
+	waitGroup := new(sync.WaitGroup)
+	waitGroup.Add(2)
+	go writeHandler()
+	write([]byte("{\"flag\":\"identify\", \"name\":\"goserver\"}"))
+	go readHandler()
+	waitGroup.Wait()
 }

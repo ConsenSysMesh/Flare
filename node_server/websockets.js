@@ -1,8 +1,23 @@
-var WebSocketServer = require('websocket').server;
-var fs = require('fs');
-var shell = require('shelljs');
+
 
 module.exports = function(server){
+
+  var WebSocketServer = require('websocket').server;
+  var fs = require('fs');
+  var shell = require('shelljs');
+  var identConn = {}
+
+  String.prototype.escapeSpecialChars = function() {
+    return this.replace(/\\n/g, "\\\\n")
+               .replace(/\\'/g, "\\\'")
+               .replace(/\\"/g, '\\\"')
+               .replace(/\\&/g, "\\\&")
+               .replace(/\\r/g, "\\\r")
+               .replace(/\\t/g, "\\\\t")
+               .replace(/\\b/g, "\\\b")
+               .replace(/\\f/g, "\\\f");
+  };
+
   wsServer = new WebSocketServer({
     httpServer: server,
     // You should not use autoAcceptConnections for production
@@ -27,14 +42,34 @@ module.exports = function(server){
       console.log((new Date()) + ' Connection from origin ' + request.origin + ' rejected.');
       return;
     }
-    console.log(request);
     var connection = request.accept();
     console.log((new Date()) + ' Connection accepted.');
     //var fileName = '';
     connection.on('message', function(message) {
       if (message.type === 'utf8') {
-        console.log('Received Message: ' + message.utf8Data);
-        connection.sendUTF(message.utf8Data);
+        console.log('Received Message: ' + message.utf8Data.escapeSpecialChars());
+
+        var data = JSON.parse(message.utf8Data.escapeSpecialChars())
+
+        if (data.flag == "identify") {
+          identConn[data.name] = connection
+          return
+        }
+
+        if(data.flag == "getlog") {
+          if(identConn["goserver"]) {
+            identConn["goserver"].sendUTF(message.utf8Data)
+          }
+          return
+        }
+
+        if(data.flag = "logdata")
+        {
+          if(data.success == true && identConn["frontend"])
+            console.log(data.text.escapeSpecialChars());
+            identConn["frontend"].sendUTF('{"flag": "logdata", "success": true, "text": "'+data.text+'"}')
+        }
+
         var messageArr = message.utf8Data.split('|');
         var configString = '';
         if(messageArr[0] == 'config'){
