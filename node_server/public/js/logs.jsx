@@ -32,6 +32,8 @@ var Logs = React.createClass({
 	render: function(){
 		return(
 			<div className='outline'>
+				<Navbar/>
+				<Sidebar path={window.location.pathname}/>
 				<h3>Logs</h3>
 				{logSelect}
 				{logData}
@@ -39,3 +41,24 @@ var Logs = React.createClass({
 		)
 	}
 })
+
+React.render(<Logs />, document.body)
+
+var ws = new WebSocket('ws://127.0.0.1:38477');
+
+
+$('#log-select input[type=radio]').click(function() {
+	$('#log-select label').toggleClass('checked', false);
+	$(this).parent().toggleClass('checked', this.checked);
+
+	ws.send('{"flag": "identify", "name":"frontend"}');
+	ws.send('{"flag": "getlog", "name":"'+$("input[name=logtype]:checked").val()+'"}');
+
+	ws.onmessage = function(evt){
+		console.log(evt.data);
+		var data = $.parseJSON(evt.data)
+		if (data.flag == "logdata" && data.success == true){
+			$("#logData").text(data.text)
+		}
+	};
+});
