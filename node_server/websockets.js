@@ -1,11 +1,28 @@
-
+var http = require('http');
+var cheerio = require('cheerio');
 
 module.exports = function(server){
 
   var WebSocketServer = require('websocket').server;
   var fs = require('fs');
   var shell = require('shelljs');
-  var identConn = {}
+  var identConn = {};
+  var http = require('http');
+
+//This is used to grab the HTML of Spark and IPFS
+  function download(url, callback) {
+  	http.get(url, function(res) {
+  	  	var data = "";
+  	  	res.on('data', function (chunk) {
+  	  	  	data += chunk;
+  	  	});
+  	  	res.on("end", function() {
+  	  	  	callback(data);
+  	  	});
+  	}).on("error", function() {
+  	  	callback(null);
+  	});
+}
 
   String.prototype.escapeSpecialChars = function() {
     return this.replace(/\\n/g, "\\\\n")
@@ -44,7 +61,7 @@ module.exports = function(server){
     }
     var connection = request.accept();
     console.log((new Date()) + ' Connection accepted.');
-    //var fileName = '';
+	connection.sendUTF('connection established');
     connection.on('message', function(message) {
       if (message.type === 'utf8') {
         console.log('Received Message: ' + message.utf8Data.escapeSpecialChars());
@@ -69,6 +86,28 @@ module.exports = function(server){
             console.log(data.text.escapeSpecialChars());
             identConn["frontend"].sendUTF('{"flag": "logdata", "success": true, "text": "'+data.text+'"}')
         }
+
+		if(data.flag = "homepage read"){
+			console.log("connection from homepage success!");
+			if(data.success == true && identConn["frontend"])
+				console.log(data.text.escapeSpecialChars());
+				identConn["frontend"].sendUTF('{"flag": "homepage", "success": true, "text": "hello world!"}');
+				var sparkURL = "http://localhost:8080/";
+				download(sparkURL, function(data){
+					if(data){
+						var $ = cheerio.load(data);	
+						$("ul.unstyled").each(function(i,e){
+							var tag = $(e).find("li ").each(function(i,e){
+								console.log($(e).text().trim().replace(/(\r\n|\n|\r)/gm,""));
+							});
+						});
+					}
+					else{
+						console.log("error");
+					}
+				});
+
+		}
 
         var messageArr = message.utf8Data.split('|');
         var configString = '';

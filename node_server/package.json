@@ -4,11 +4,13 @@
   "description": "A frontend for Flare",
   "main": "js/main.jsx",
   "dependencies": {
+    "cheerio": "^0.19.0",
     "d3": "*",
     "ejs": "^2.3.2",
     "errorhandler": "^1.4.1",
     "express": "^4.13.1",
     "font-awesome": "*",
+    "htmlparser2": "^3.8.3",
     "jquery": "^2.1.4",
     "lodash": "^3.10.0",
     "node-jsx": "^0.13.3",
