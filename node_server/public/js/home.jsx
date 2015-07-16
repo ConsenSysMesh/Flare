@@ -1,3 +1,5 @@
+ws = new WebSocket('ws://127.0.0.1:38477');
+
 var Spark = React.createClass({
 	render: function(){
 		return(
@@ -77,8 +79,20 @@ var IPFS = React.createClass({
 		)
 	}
 });
+
 var Home = React.createClass({
 	displayName: "Home",
+	componentDidMount: function(){
+			
+		console.log("homepage read");
+		ws.onmessage = function(evt){
+			if(evt.data == "connection established"){
+				ws.send('{"flag": "identify", "name":"frontend"}');
+				ws.send('{"flag": "homepage ready", "name": "frontend"}');
+			}
+			console.log(evt.data);
+		};
+	},
 	render: function(){
 		console.log('GET home');
 		return (

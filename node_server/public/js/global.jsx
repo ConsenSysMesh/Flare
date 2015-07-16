@@ -70,9 +70,7 @@ var Navbar = React.createClass({
 					<span className='icon fa fa-fire logo' aria-hidden='true'></span>
 					<span>flare</span>
 				</a>
-				<a href='https://github.com/lumichael94/flare' id='github' className='fa fa-github' target='_blank' title='Github Repository'>
-					Github
-				</a>
+				<a href='https://github.com/lumichael94/flare' id='github' className='fa fa-github' target='_blank' title='Github Repository'/>
 			</nav>
 		);
 	}
