@@ -9,7 +9,7 @@ module.exports = function(server){
   var identConn = {};
   var http = require('http');
 
-//This is used to grab the HTML of Spark and IPFS
+//This is used to grab Spark data
   function download(url, callback) {
   	http.get(url, function(res) {
   	  	var data = "";
@@ -22,7 +22,7 @@ module.exports = function(server){
   	}).on("error", function() {
   	  	callback(null);
   	});
-}
+};
 
   String.prototype.escapeSpecialChars = function() {
     return this.replace(/\\n/g, "\\\\n")
@@ -61,7 +61,7 @@ module.exports = function(server){
     }
     var connection = request.accept();
     console.log((new Date()) + ' Connection accepted.');
-	connection.sendUTF('connection established');
+	connection.send('{"success": true}');
     connection.on('message', function(message) {
       if (message.type === 'utf8') {
         console.log('Received Message: ' + message.utf8Data.escapeSpecialChars());
@@ -80,33 +80,48 @@ module.exports = function(server){
           return
         }
 
-        if(data.flag = "logdata")
+        if(data.flag == "logdata")
         {
           if(data.success == true && identConn["frontend"])
             console.log(data.text.escapeSpecialChars());
             identConn["frontend"].sendUTF('{"flag": "logdata", "success": true, "text": "'+data.text+'"}')
         }
 
-		if(data.flag = "homepage read"){
-			console.log("connection from homepage success!");
-			if(data.success == true && identConn["frontend"])
-				console.log(data.text.escapeSpecialChars());
-				identConn["frontend"].sendUTF('{"flag": "homepage", "success": true, "text": "hello world!"}');
-				var sparkURL = "http://localhost:8080/";
-				download(sparkURL, function(data){
-					if(data){
-						var $ = cheerio.load(data);	
-						$("ul.unstyled").each(function(i,e){
-							var tag = $(e).find("li ").each(function(i,e){
-								console.log($(e).text().trim().replace(/(\r\n|\n|\r)/gm,""));
-							});
+		if(data.flag == "homepage" && data.text == "spark"){
+			var sparkURL = "http://localhost:8080";
+			download(sparkURL, function(data){
+				if(data){
+					var $ = cheerio.load(data);	
+					$("ul.unstyled").each(function(i,e){
+						var tag = $(e).find("li ").each(function(i,e){
+							var response = $(e).text().replace(/(\r\n|\n|\s|\t)/gm,"")
+							identConn["frontend"].sendUTF('{"flag": "spark", "success": true, "text": "'+response+'"}');
 						});
-					}
-					else{
-						console.log("error");
-					}
-				});
+					});
+				}
+				else{
+					console.log("error");
+				}
+			});
+			return
+		}
 
+		if(data.flag == "homepage" && data.text == "IPFS"){
+			//without the async tag, it doesn't work...
+          	var child = shell.exec('ipfs config show', {async: true, silent: true});
+			//var child = shell.exec('echo "hello world!"', {async: true});
+			var IPFSResponse = "";
+			var peerID = "";
+			var currentStatus = "";
+			var swarmAddress = "";
+			child.stdout.on('data', function(data){
+				IPFSResponse = JSON.parse(data);
+				peerID = IPFSResponse.Identity.PeerID;
+				currentStatus = 'ALIVE';
+				swarmAddress = IPFSResponse.Addresses.Swarm;
+				IPFSResponse = '{"peerID": "' + peerID + '" , "currentStatus": "ALIVE", "swarmAddress": "' + swarmAddress + '"}';
+				identConn["frontend"].sendUTF('{"flag": "IPFS", "success": true, "text": '+IPFSResponse+'}');
+			});
 		}
 
         var messageArr = message.utf8Data.split('|');

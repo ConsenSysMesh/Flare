@@ -445,7 +445,8 @@ li.active a span.icon-log {
   display: block; }
 
 #ipfs-public-key {
-  min-width: 100%; }
+  min-width: 100%;
+  min-height: 10%; }
 
 #progress-bar {
   margin-top: 15%;

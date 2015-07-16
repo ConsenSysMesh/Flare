@@ -82,16 +82,44 @@ var IPFS = React.createClass({
 
 var Home = React.createClass({
 	displayName: "Home",
-	componentDidMount: function(){
-			
-		console.log("homepage read");
+	componentDidMount: function(){			
 		ws.onmessage = function(evt){
-			if(evt.data == "connection established"){
-				ws.send('{"flag": "identify", "name":"frontend"}');
-				ws.send('{"flag": "homepage ready", "name": "frontend"}');
-			}
 			console.log(evt.data);
-		};
+			var data = JSON.parse(evt.data);
+			//initial connection
+			if(data.success == true && data.flag == null){
+				ws.send('{"flag": "identify", "name":"frontend"}');
+				ws.send('{"flag": "homepage", "name": "frontend", "text": "spark"}');
+				ws.send('{"flag": "homepage", "name": "frontend", "text": "IPFS"}');
+			}
+			if(data.success == true && data.flag == 'spark'){
+				var identifier = data.text.substr(0, data.text.indexOf(':'));
+				var body = data.text.substr(data.text.indexOf(':')+1)
+				switch(identifier){
+					case 'Status':
+						document.getElementById('sparkLocalStatus').innerHTML = body;
+						break;
+					case 'Workers':
+						document.getElementById('sparkConnected').innerHTML = body + " WORKERS";
+						break;
+					case 'URL':
+						document.getElementById('sparkPublicAddress').innerHTML = body;
+						break;
+					case 'Applications':
+						body = body.replace(/0/g, ' 0 ');
+						document.getElementById('sparkRunningApplications').innerHTML = body;
+						break;
+				}
+			}
+			if(data.success == true && data.flag == 'IPFS'){
+				console.log(data);
+				document.getElementById('IPFSLocalStatus').innerHTML = data.text.peerID;
+				document.getElementById('IPFSConnected').innerHTML = data.text.currentStatus;
+				document.getElementById('IPFSPublicAddress').innerHTML = data.text.swarmAddress;
+				//TODO: This is hard coded, I can't seem to have shelljs execute "ipfs id" effectively. FIX!
+				document.getElementById('ipfs-public-key').innerHTML = "CAASpgIwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQDrW6j72baOd3qQjLF6Qf3ttqSd649MUeMSWHrnIXKf6YRF3rSnR77yTRBSRO6izJD3OnjlOl5m8i47s3lpiNSUfyUONikY2qioxmGzvmOisj1sC5t9SpmHM7F4pxiGycfx56Qmsb6RWEKAfQGE+u2DEoRNBVN+vROgwSxsGsh1nXlVO52+i9HkyEl+2BwKMGAXloYCgNFs0O+UHpZXNSjdRFRzQegYbELZoM5EIYPgjaOzdJbI0Qq0TaoaZCttcAFtyL2Sk2SpDnob4QO7cUE2/kJqwsVx0KsQXKJEfRUcBP7GdllBeJbGyvLZCBrL5uSu6pSq8QZ5/UEYBuJVxISbAgMBAAE=";
+			}
+		}
 	},
 	render: function(){
 		console.log('GET home');
