@@ -109,7 +109,7 @@ module.exports = function(server){
 
 		if(data.flag == "homepage" && data.text == "IPFS"){
 			//without the async tag, it doesn't work...
-          	var child = shell.exec('ipfs config show', {async: true, silent: true});
+          	var child = shell.exec('', {async: true, silent: true});
 			//var child = shell.exec('echo "hello world!"', {async: true});
 			var IPFSResponse = "";
 			var peerID = "";
@@ -128,7 +128,6 @@ module.exports = function(server){
 		if(data.flag == "homepage" && data.text == "cass"){
 			//without the async tag, it doesn't work...
 			shell.exec('/home/dev/Documents/cassandra/bin/nodetool info > /home/dev/Documents/flare/node_server/files/cassandra.txt');
-          	//var child = shell.exec('/home/dev/Documents/cassandra/bin/nodetool info', {async: true, silent: true});
 			var cassResponse = "";
 			var ID = "";
 			var gossipActive = "";
@@ -174,10 +173,38 @@ module.exports = function(server){
 			return
 		}
 		if(data.flag == "connections" && data.text == "ipfs"){
-            identConn["frontend"].sendUTF('{"flag": "ipfs", "success": true, "text": "hello world!"}');
+          	var child = shell.exec('ipfs swarm peers', {async: true, silent: true});
+			child.stdout.on('data', function(data){
+				peerArray = data.split(/\n+/);
+				for( i = 0; i < 10; i++){
+					identConn["frontend"].sendUTF('{"flag": "ipfs", "success": true, "text": "'+peerArray[i]+'"}');
+				}
+			});
 		}
 		if(data.flag == "connections" && data.text == "cass"){
-            identConn["frontend"].sendUTF('{"flag": "cass", "success": true, "text": "hello world!"}');
+			shell.exec('/home/dev/Documents/cassandra/bin/nodetool ring > /home/dev/Documents/flare/node_server/files/cassandra_ring.txt');
+			var cassAddress = "";
+			var cassStatus = "";
+			var cassState = "";
+			var cassOwns = "";
+			var cassToken = "";
+			fs.readFile('/home/dev/Documents/flare/node_server/files/cassandra_ring.txt', 'utf8', function(err, data){
+				if(err){
+					console.log(err);
+				}
+				var rowArray = data.split(/\n+/);
+				for( i = 6; i < 17; i++){
+					var response = '{"flag": "cass", "success": true, "text": {';
+					var columnArray = rowArray[i].split(/\s+/);
+					response += '"cassAddress": "' + columnArray[0] + '", ';
+					response += '"cassStatus": "' + columnArray[2] + '", ';
+					response += '"cassState": "' + columnArray[3] + '", ';
+					response += '"cassOwns": "' + columnArray[6] + '", ';
+					response += '"cassToken": "' + columnArray[7] + '"}} ';
+        	    	identConn["frontend"].sendUTF(response);
+					response = "";
+				}
+			});
 		}
 
         var messageArr = message.utf8Data.split('|');
