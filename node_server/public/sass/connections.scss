@@ -3,10 +3,6 @@
     width: 100%;
     font-size: 15px;
 }
-#sparkApplicationsTable{
-    width: 100%;
-    font-size: 15px;
-}
 #cassandraPeersTable{
     width: 100%;
     font-size: 15px;
@@ -24,4 +20,8 @@ tr{
 }
 th{
     padding-top: 7px;
+}
+td{
+    padding-top: 3px;
+	text-align: center;
 }

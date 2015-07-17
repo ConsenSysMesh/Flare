@@ -34,16 +34,24 @@ var Cassandra = React.createClass({
 				<h3>Cassandra</h3>
 				<div id = 'infobox'>
 					<span>
-						<h5>Local Status: </h5>
-						<div className= 'infotext' id='cassLocalStatus'>NA</div>
+						<h5>ID: </h5>
+						<div className= 'infotext' id='cassID'>NA</div>
 					</span>
 					<span>
-						<h5>Connected: </h5>
-						<div className= 'infotext' id='cassConnected'>false</div>
+						<h5>Gossip Active: </h5>
+						<div className= 'infotext' id='cassGossipActive'>NA</div>
 					</span>
 					<span>
-						<h5>Public Address: </h5>
-						<div className= 'infotext' id='cassPublicAddress'>NA</div>
+						<h5>Thrift Active: </h5>
+						<div className= 'infotext' id='cassThriftActive'>NA</div>
+					</span>
+					<span>
+						<h5>Uptime: </h5>
+						<div className= 'infotext' id='cassUptime'>NA</div>
+					</span>
+					<span>
+						<h5>Heap Memory (MB): </h5>
+						<div className= 'infotext' id='cassHeapMemory'>NA</div>
 					</span>
 				</div>
 			</div>
@@ -90,6 +98,7 @@ var Home = React.createClass({
 			if(data.success == true && data.flag == null){
 				ws.send('{"flag": "identify", "name":"frontend"}');
 				ws.send('{"flag": "homepage", "name": "frontend", "text": "spark"}');
+				ws.send('{"flag": "homepage", "name": "frontend", "text": "cass"}');
 				ws.send('{"flag": "homepage", "name": "frontend", "text": "IPFS"}');
 			}
 			if(data.success == true && data.flag == 'spark'){
@@ -106,6 +115,7 @@ var Home = React.createClass({
 						document.getElementById('sparkPublicAddress').innerHTML = body;
 						break;
 					case 'Applications':
+						//TODO: this is hardcoded for 0 at the moment...need to fix spacing
 						body = body.replace(/0/g, ' 0 ');
 						document.getElementById('sparkRunningApplications').innerHTML = body;
 						break;
@@ -116,8 +126,15 @@ var Home = React.createClass({
 				document.getElementById('IPFSLocalStatus').innerHTML = data.text.peerID;
 				document.getElementById('IPFSConnected').innerHTML = data.text.currentStatus;
 				document.getElementById('IPFSPublicAddress').innerHTML = data.text.swarmAddress;
-				//TODO: This is hard coded, I can't seem to have shelljs execute "ipfs id" effectively. FIX!
+				//TODO: This is hard coded, I can't seem to have shelljs execute "ipfs id" effectively.
 				document.getElementById('ipfs-public-key').innerHTML = "CAASpgIwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQDrW6j72baOd3qQjLF6Qf3ttqSd649MUeMSWHrnIXKf6YRF3rSnR77yTRBSRO6izJD3OnjlOl5m8i47s3lpiNSUfyUONikY2qioxmGzvmOisj1sC5t9SpmHM7F4pxiGycfx56Qmsb6RWEKAfQGE+u2DEoRNBVN+vROgwSxsGsh1nXlVO52+i9HkyEl+2BwKMGAXloYCgNFs0O+UHpZXNSjdRFRzQegYbELZoM5EIYPgjaOzdJbI0Qq0TaoaZCttcAFtyL2Sk2SpDnob4QO7cUE2/kJqwsVx0KsQXKJEfRUcBP7GdllBeJbGyvLZCBrL5uSu6pSq8QZ5/UEYBuJVxISbAgMBAAE=";
+			}
+			if(data.success == true && data.flag == 'cass'){
+				document.getElementById('cassID').innerHTML = data.text.cassID;
+				document.getElementById('cassGossipActive').innerHTML = data.text.cassGossipActive;
+				document.getElementById('cassThriftActive').innerHTML = data.text.cassThriftActive;
+				document.getElementById('cassUptime').innerHTML = data.text.cassUptime;
+				document.getElementById('cassHeapMemory').innerHTML = data.text.cassHeapMemory;
 			}
 		}
 	},
