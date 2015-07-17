@@ -71,7 +71,6 @@ var IPFSConnect = React.createClass({
 							<tbody>
 								<tr>
 									<th>Peer ID</th>
-									<th>Address</th>
 								</tr>
 							</tbody>
 						</table>
@@ -88,7 +87,7 @@ var Connections = React.createClass({
 	displayName: "Connections",
 	componentDidMount: function(){			
 		ws.onmessage = function(evt){
-			console.log(evt.data);
+			//console.log(evt.data);
 			var data = JSON.parse(evt.data);
 			//initial connection
 			if(data.success == true && data.flag == null){
@@ -129,38 +128,13 @@ var Connections = React.createClass({
 			}
 			if(data.success == true && data.flag == 'ipfs'){
 				//Test Implementation
-				var ipfsID = 'QmNeK3hRF5Pu9dPcMDKXvYofQioskuGfQZEQz43UDkLepK';
-				var ipfsAddress= '178.62.206.163'; 
-				
-				//Real implementation	
-				//var sparkID = data.text.sparkID;
-				//var sparkAddress = data.text.sparkAddress; 
-				//var sparkState = data.text.sparkState;
-				//var sparkCores = data.text.sparkCores;
-				//var sparkMemory = data.text.sparkMemory;
-				
 				var table = document.getElementById('IPFSPeersTable');
 				var row = table.insertRow(1);
 				var cell1 = row.insertCell(0);
-				var cell2 = row.insertCell(1);
-				cell1.innerHTML = ipfsID;
-				cell2.innerHTML = ipfsAddress;
+				cell1.innerHTML = data.text;
 			}
 			if(data.success == true && data.flag == 'cass'){
 				//Test Implementation
-				var cassAddress= '172.31.28.240';
-				var cassStatus = 'Up'; 
-				var cassState = 'Normal';
-				var cassOwns = '100%';
-				var cassToken = '9153377038966602289';
-				
-				//Real implementation	
-				//var sparkID = data.text.sparkID;
-				//var sparkAddress = data.text.sparkAddress; 
-				//var sparkState = data.text.sparkState;
-				//var sparkCores = data.text.sparkCores;
-				//var sparkMemory = data.text.sparkMemory;
-				
 				var table = document.getElementById('cassandraPeersTable');
 				var row = table.insertRow(1);
 				var cell1 = row.insertCell(0);
@@ -168,11 +142,11 @@ var Connections = React.createClass({
 				var cell3 = row.insertCell(2);
 				var cell4 = row.insertCell(3);
 				var cell5 = row.insertCell(4);
-				cell1.innerHTML = cassAddress;
-				cell2.innerHTML = cassStatus;
-				cell3.innerHTML = cassState;
-				cell4.innerHTML = cassOwns;
-				cell5.innerHTML = cassToken;
+				cell1.innerHTML = data.text.cassAddress;
+				cell2.innerHTML = data.text.cassStatus;
+				cell3.innerHTML = data.text.cassState;
+				cell4.innerHTML = data.text.cassOwns;
+				cell5.innerHTML = data.text.cassToken;
 			}
 		}		
 	},
