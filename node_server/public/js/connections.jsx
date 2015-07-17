@@ -1,50 +1,6 @@
-var SparkConnect = React.createClass({
+ws = new WebSocket('ws://127.0.0.1:38477');
 
-	populateApplicationRow: function(){
-			return(
-				<tr>
-					<th>app-2842371219</th>
-					<th>FIRE:192.168.1.2.3</th>
-					<th>6</th>
-					<th>1024.0 MB</th>
-					<th>7/14/2015/</th>
-					<th>automation</th>
-					<th>Running</th>
-					<th>1.5h</th>
-				</tr>
-			)
-	},
-	runningApplication: function(){
-		return(
-				<table id = 'sparkApplicationsTable'>
-					<tbody>
-						<tr>
-							<th>ID</th>
-							<th>Name</th>
-							<th>Cores</th>
-							<th>Memory Per Node</th>
-							<th>Submitted Time</th>
-							<th>User</th>
-							<th>State</th>
-							<th>Duration</th>
-						</tr>
-						{this.populateApplicationRow()}
-					</tbody>
-				</table>
-		)
-	},
-	//https://facebook.github.io/react/docs/thinking-in-react.html
-	populateWorkerRow: function(){
-		return(
-			<tr>
-				<th>worker-284719</th>
-				<th>192.168.1.2.3</th>
-				<th>ALIVE</th>
-				<th>4 (2 Used)</th>
-				<th>6.3 GB (1024.0 MB used)</th>
-			</tr>
-		)
-	},
+var SparkConnect = React.createClass({
 	render: function(){
 		return(
 			<div>
@@ -58,7 +14,7 @@ var SparkConnect = React.createClass({
 					<h5>Workers: </h5>
 					<div className= 'infotext' id='sparkWorkers'>
 						<table id = 'sparkWorkersTable'>
-							<tbody>
+							<tbody id = 'sparkTable'>
 								<tr>
 									<th>ID</th>
 									<th>Address</th>
@@ -66,18 +22,8 @@ var SparkConnect = React.createClass({
 									<th>Cores</th>
 									<th>Memory</th>
 								</tr>
-								{this.populateWorkerRow()}
-								{this.populateWorkerRow()}
-								{this.populateWorkerRow()}
-								{this.populateWorkerRow()}
 							</tbody>
 						</table>
-					</div>
-				</span>
-				<span>
-					<h5>Applications: </h5>
-					<div className= 'infotext' id= 'sparkApplications'>
-						{this.runningApplication()}
 					</div>
 				</span>
 			</div>
@@ -86,17 +32,6 @@ var SparkConnect = React.createClass({
 	}
 });
 var CassandraConnect = React.createClass({
-	populateCassNodeRow: function(){
-		return(
-				<tr>
-					<th>172.31.28.240</th>
-					<th>Up</th>
-					<th>Normal</th>
-					<th>100%</th>
-					<th>9153377038966602289</th>
-				</tr>
-		)
-	},
 	render: function(){
 		return(
 			<div>
@@ -114,7 +49,6 @@ var CassandraConnect = React.createClass({
 									<th>Owns</th>
 									<th>Token</th>
 								</tr>
-								{this.populateCassNodeRow()}
 							</tbody>
 						</table>
 					</div>
@@ -125,14 +59,6 @@ var CassandraConnect = React.createClass({
 	}
 });
 var IPFSConnect = React.createClass({
-	populateIPFSNodeRow: function(){
-		return(
-				<tr>
-					<th>QmNeK3hRF5Pu9dPcMDKXvYofQioskuGfQZEQz43UDkLepK</th>
-					<th>178.62.206.163</th>
-				</tr>
-		)
-	},
 	render: function(){
 		return(
 			<div>
@@ -147,7 +73,6 @@ var IPFSConnect = React.createClass({
 									<th>Peer ID</th>
 									<th>Address</th>
 								</tr>
-								{this.populateIPFSNodeRow()}
 							</tbody>
 						</table>
 					</div>
@@ -161,6 +86,96 @@ var IPFSConnect = React.createClass({
 
 var Connections = React.createClass({
 	displayName: "Connections",
+	componentDidMount: function(){			
+		ws.onmessage = function(evt){
+			console.log(evt.data);
+			var data = JSON.parse(evt.data);
+			//initial connection
+			if(data.success == true && data.flag == null){
+				ws.send('{"flag": "identify", "name":"frontend"}');
+				ws.send('{"flag": "connections", "name": "frontend", "text": "spark"}');
+				ws.send('{"flag": "connections", "name": "frontend", "text": "cass"}');
+				ws.send('{"flag": "connections", "name": "frontend", "text": "ipfs"}');
+			}
+			if(data.success == true && data.flag == 'spark'){
+				//Test Implementation
+				var workerID = 'worker-284719';
+				var workerAddress = '192.168.1.2.3'; 
+				var workerState = 'ALIVE';
+				var workerCores = '4 (2 Used)';
+				var workerMemory = '6.3 GB (1024.0 MB used)';
+				
+				//Real implementation	
+				//var sparkID = data.text.sparkID;
+				//var sparkAddress = data.text.sparkAddress; 
+				//var sparkState = data.text.sparkState;
+				//var sparkCores = data.text.sparkCores;
+				//var sparkMemory = data.text.sparkMemory;
+				
+				//so much kludge...
+				var table = document.getElementById('sparkTable');
+				var row = table.insertRow(1);
+				var cell1 = row.insertCell(0);
+				var cell2 = row.insertCell(1);
+				var cell3 = row.insertCell(2);
+				var cell4 = row.insertCell(3);
+				var cell5 = row.insertCell(4);
+				cell1.innerHTML = workerID;
+				cell2.innerHTML = workerAddress;
+				cell3.innerHTML = workerState;
+				cell4.innerHTML = workerCores;
+				cell5.innerHTML = workerMemory;
+				
+			}
+			if(data.success == true && data.flag == 'ipfs'){
+				//Test Implementation
+				var ipfsID = 'QmNeK3hRF5Pu9dPcMDKXvYofQioskuGfQZEQz43UDkLepK';
+				var ipfsAddress= '178.62.206.163'; 
+				
+				//Real implementation	
+				//var sparkID = data.text.sparkID;
+				//var sparkAddress = data.text.sparkAddress; 
+				//var sparkState = data.text.sparkState;
+				//var sparkCores = data.text.sparkCores;
+				//var sparkMemory = data.text.sparkMemory;
+				
+				var table = document.getElementById('IPFSPeersTable');
+				var row = table.insertRow(1);
+				var cell1 = row.insertCell(0);
+				var cell2 = row.insertCell(1);
+				cell1.innerHTML = ipfsID;
+				cell2.innerHTML = ipfsAddress;
+			}
+			if(data.success == true && data.flag == 'cass'){
+				//Test Implementation
+				var cassAddress= '172.31.28.240';
+				var cassStatus = 'Up'; 
+				var cassState = 'Normal';
+				var cassOwns = '100%';
+				var cassToken = '9153377038966602289';
+				
+				//Real implementation	
+				//var sparkID = data.text.sparkID;
+				//var sparkAddress = data.text.sparkAddress; 
+				//var sparkState = data.text.sparkState;
+				//var sparkCores = data.text.sparkCores;
+				//var sparkMemory = data.text.sparkMemory;
+				
+				var table = document.getElementById('cassandraPeersTable');
+				var row = table.insertRow(1);
+				var cell1 = row.insertCell(0);
+				var cell2 = row.insertCell(1);
+				var cell3 = row.insertCell(2);
+				var cell4 = row.insertCell(3);
+				var cell5 = row.insertCell(4);
+				cell1.innerHTML = cassAddress;
+				cell2.innerHTML = cassStatus;
+				cell3.innerHTML = cassState;
+				cell4.innerHTML = cassOwns;
+				cell5.innerHTML = cassToken;
+			}
+		}		
+	},
 	render: function(){
 		return(
 			<div className='outline'>

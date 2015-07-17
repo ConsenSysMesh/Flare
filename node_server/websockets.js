@@ -1,4 +1,5 @@
 var http = require('http');
+var fs = require('fs');
 var cheerio = require('cheerio');
 
 module.exports = function(server){
@@ -122,6 +123,61 @@ module.exports = function(server){
 				IPFSResponse = '{"peerID": "' + peerID + '" , "currentStatus": "ALIVE", "swarmAddress": "' + swarmAddress + '"}';
 				identConn["frontend"].sendUTF('{"flag": "IPFS", "success": true, "text": '+IPFSResponse+'}');
 			});
+		}
+
+		if(data.flag == "homepage" && data.text == "cass"){
+			//without the async tag, it doesn't work...
+			shell.exec('/home/dev/Documents/cassandra/bin/nodetool info > /home/dev/Documents/flare/node_server/files/cassandra.txt');
+          	//var child = shell.exec('/home/dev/Documents/cassandra/bin/nodetool info', {async: true, silent: true});
+			var cassResponse = "";
+			var ID = "";
+			var gossipActive = "";
+			var thriftActive = "";
+			var uptime = "";
+			var heapMemory = "";
+			fs.readFile('/home/dev/Documents/flare/node_server/files/cassandra.txt', 'utf8', function(err, data){
+				if(err){
+					console.log(err);
+				}
+				cassResponse = data.replace(/(\r\n|\r|\s|\t)/g,"");
+				ID = cassResponse.substring(cassResponse.indexOf("ID")+3, cassResponse.indexOf("Gossip"));
+				gossipActive = cassResponse.substring(cassResponse.indexOf("Gossipactive:")+13, cassResponse.indexOf("Thrift"));
+				thriftActive = cassResponse.substring(cassResponse.indexOf("Thriftactive:")+13, cassResponse.indexOf("NativeTransp"));
+				upTime = cassResponse.substring(cassResponse.indexOf("(seconds):")+10, cassResponse.indexOf("Heap"));
+				heapMemory = cassResponse.substring(cassResponse.indexOf("(MB):")+5, cassResponse.indexOf("Off"));
+				cassResponse = '{"cassID": "' + ID + '", "cassGossipActive": "' + gossipActive + '", "cassThriftActive": "' + thriftActive + '", "cassUptime": "' + upTime+ '", "cassHeapMemory": "' + heapMemory + '"}';
+				identConn["frontend"].sendUTF('{"flag": "cass", "success": true, "text": '+cassResponse+'}');
+				console.log(cassResponse);
+
+			});
+		}
+
+		if(data.flag == "connections" && data.text == "spark"){
+			var sparkURL = "http://localhost:8080";
+			//TODO: Take this out in the future, still need to implement this part.
+            identConn["frontend"].sendUTF('{"flag": "spark", "success": true, "text": "hello world!"}');
+			download(sparkURL, function(data){
+				if(data){
+					var $ = cheerio.load(data);	
+					$("table.table").each(function(i,e){
+						var tag = $(e).find("td").each(function(i,e){
+							var response = $(e).text().replace(/(\r\n|\n|\s|\t)/gm,"")
+							//to be implemented
+							//identConn["frontend"].sendUTF('{"flag": "spark", "success": true, "text": "'+response+'"}');
+						});
+					});
+				}
+				else{
+					console.log("error");
+				}
+			});
+			return
+		}
+		if(data.flag == "connections" && data.text == "ipfs"){
+            identConn["frontend"].sendUTF('{"flag": "ipfs", "success": true, "text": "hello world!"}');
+		}
+		if(data.flag == "connections" && data.text == "cass"){
+            identConn["frontend"].sendUTF('{"flag": "cass", "success": true, "text": "hello world!"}');
 		}
 
         var messageArr = message.utf8Data.split('|');
