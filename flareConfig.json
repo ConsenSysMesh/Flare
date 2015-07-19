@@ -1,5 +1,9 @@
 {
-	"sparkDirectory": "/home/dev/Documents/spark",
-	"cassDirectory": "/home/dev/Documents/cassandra",
-	"flareDirectory": "/home/dev/Documents/flare"
+    "sparkDirectory": "/home/dev/Documents/spark",
+    "cassDirectory": "/home/dev/Documents/cassandra",
+    "flareDirectory": "/home/dev/Documents/flare",
+    "receiverMemory": "1",
+    "cores": "1",
+    "address": "1",
+    "price": "1"
 }

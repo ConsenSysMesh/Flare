@@ -2,15 +2,15 @@ ID                     : d6f04364-c2c5-4224-9fcd-fb899d3a2746
 Gossip active          : true
 Thrift active          : true
 Native Transport active: true
-Load                   : 169.6 KB
-Generation No          : 1437293271
-Uptime (seconds)       : 901
-Heap Memory (MB)       : 335.71 / 1928.63
+Load                   : 195.04 KB
+Generation No          : 1437334199
+Uptime (seconds)       : 712
+Heap Memory (MB)       : 314.67 / 1928.63
 Off Heap Memory (MB)   : 0.00
 Data Center            : datacenter1
 Rack                   : rack1
 Exceptions             : 0
-Key Cache              : entries 4, size 304 bytes, capacity 96 MB, 32 hits, 35 requests, 0.914 recent hit rate, 14400 save period in seconds
+Key Cache              : entries 5, size 376 bytes, capacity 96 MB, 29 hits, 34 requests, 0.853 recent hit rate, 14400 save period in seconds
 Row Cache              : entries 0, size 0 bytes, capacity 0 bytes, 0 hits, 0 requests, NaN recent hit rate, 0 save period in seconds
 Counter Cache          : entries 0, size 0 bytes, capacity 48 MB, 0 hits, 0 requests, NaN recent hit rate, 7200 save period in seconds
 Token                  : (invoke with -T/--tokens to see all 256 tokens)
