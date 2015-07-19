@@ -1,6 +1,8 @@
 var http = require('http');
 var fs = require('fs');
 var cheerio = require('cheerio');
+var flareConf = process.env.FLARECONF;
+var confJSON = require(flareConf);
 
 module.exports = function(server){
 
@@ -109,32 +111,43 @@ module.exports = function(server){
 
 		if(data.flag == "homepage" && data.text == "IPFS"){
 			//without the async tag, it doesn't work...
-          	var child = shell.exec('', {async: true, silent: true});
-			//var child = shell.exec('echo "hello world!"', {async: true});
+          	var child = shell.exec('ipfs config show', {async: true, silent: true});
 			var IPFSResponse = "";
 			var peerID = "";
 			var currentStatus = "";
 			var swarmAddress = "";
+			var publicKey = "";
 			child.stdout.on('data', function(data){
 				IPFSResponse = JSON.parse(data);
 				peerID = IPFSResponse.Identity.PeerID;
 				currentStatus = 'ALIVE';
 				swarmAddress = IPFSResponse.Addresses.Swarm;
-				IPFSResponse = '{"peerID": "' + peerID + '" , "currentStatus": "ALIVE", "swarmAddress": "' + swarmAddress + '"}';
-				identConn["frontend"].sendUTF('{"flag": "IPFS", "success": true, "text": '+IPFSResponse+'}');
+				
+				//Callback in callback...not pretty but it works. Need to learn promises
+          		child2= shell.exec('curl http://127.0.0.1:5001/api/v0/id', {async: true, silent: true});
+				child2.stdout.on('data', function(data){
+					publicKey = JSON.parse(data).PublicKey;	
+					IPFSResponse = '{"peerID": "' + peerID + '" , "currentStatus": "ALIVE", "swarmAddress": "' + swarmAddress + '", "publicKey": "'+ publicKey + '"}';
+					identConn["frontend"].sendUTF('{"flag": "IPFS", "success": true, "text": '+IPFSResponse+'}');
+				});
+
 			});
 		}
 
 		if(data.flag == "homepage" && data.text == "cass"){
 			//without the async tag, it doesn't work...
-			shell.exec('/home/dev/Documents/cassandra/bin/nodetool info > /home/dev/Documents/flare/node_server/files/cassandra.txt');
+			shell.exec(confJSON.cassDirectory+'/bin/nodetool info > ' + confJSON.flareDirectory + '/node_server/files/cassandra.txt');
 			var cassResponse = "";
 			var ID = "";
 			var gossipActive = "";
 			var thriftActive = "";
 			var uptime = "";
 			var heapMemory = "";
-			fs.readFile('/home/dev/Documents/flare/node_server/files/cassandra.txt', 'utf8', function(err, data){
+
+			//console.log('flaredir: ' + flareConfig.flareDirectory);
+			//console.log('cassdir: ' + flareConfig.cassDirectory);
+			//console.log('sparkdir: ' + flareConfig.sparkDirectory);
+			fs.readFile(confJSON.flareDirectory+'/node_server/files/cassandra.txt', 'utf8', function(err, data){
 				if(err){
 					console.log(err);
 				}
@@ -146,7 +159,7 @@ module.exports = function(server){
 				heapMemory = cassResponse.substring(cassResponse.indexOf("(MB):")+5, cassResponse.indexOf("Off"));
 				cassResponse = '{"cassID": "' + ID + '", "cassGossipActive": "' + gossipActive + '", "cassThriftActive": "' + thriftActive + '", "cassUptime": "' + upTime+ '", "cassHeapMemory": "' + heapMemory + '"}';
 				identConn["frontend"].sendUTF('{"flag": "cass", "success": true, "text": '+cassResponse+'}');
-				console.log(cassResponse);
+				//console.log(cassResponse);
 
 			});
 		}
@@ -182,13 +195,13 @@ module.exports = function(server){
 			});
 		}
 		if(data.flag == "connections" && data.text == "cass"){
-			shell.exec('/home/dev/Documents/cassandra/bin/nodetool ring > /home/dev/Documents/flare/node_server/files/cassandra_ring.txt');
+			shell.exec(confJSON.cassDirectory+'/bin/nodetool ring > '+confJSON.flareDirectory+'/node_server/files/cassandra_ring.txt');
 			var cassAddress = "";
 			var cassStatus = "";
 			var cassState = "";
 			var cassOwns = "";
 			var cassToken = "";
-			fs.readFile('/home/dev/Documents/flare/node_server/files/cassandra_ring.txt', 'utf8', function(err, data){
+			fs.readFile(confJSON.flareDirectory+'/node_server/files/cassandra_ring.txt', 'utf8', function(err, data){
 				if(err){
 					console.log(err);
 				}
