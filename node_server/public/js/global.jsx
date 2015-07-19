@@ -38,9 +38,9 @@ var Sidebar = React.createClass({
 									</li>
 
 									<li>
-										<a className={this.checkPath("/settings")} id="settings" href="/settings">
-											<span className='icon fa fa-cog' aria-hidden='true'></span>
-											Settings
+										<a className={this.checkPath("/receive")} id="receiver" href="/receive">
+											<span className='icon fa fa-cloud-download' aria-hidden='true'></span>
+											Receive	
 										</a>
 									</li>
 

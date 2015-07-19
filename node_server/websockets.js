@@ -144,9 +144,6 @@ module.exports = function(server){
 			var uptime = "";
 			var heapMemory = "";
 
-			//console.log('flaredir: ' + flareConfig.flareDirectory);
-			//console.log('cassdir: ' + flareConfig.cassDirectory);
-			//console.log('sparkdir: ' + flareConfig.sparkDirectory);
 			fs.readFile(confJSON.flareDirectory+'/node_server/files/cassandra.txt', 'utf8', function(err, data){
 				if(err){
 					console.log(err);
@@ -218,6 +215,32 @@ module.exports = function(server){
 					response = "";
 				}
 			});
+		}
+		if(data.flag == "receiver"){
+        	var memory = data.text.memory;
+			var cores = data.text.cores;
+			var address = data.text.address;
+			var price = data.text.price;
+
+			confJSON.receiverMemory = memory;
+			confJSON.cores = cores;
+			confJSON.address = address;
+			confJSON.price = price;
+			var text = JSON.stringify(confJSON, null, 4);
+			//flareConf
+			fs.writeFile(flareConf, text, function(err){
+				if(err){
+					console.log(err);
+				}
+				else {
+					console.log('confJSON modified');
+				}
+			});
+			//console.log(text);
+			//TODO: Contact ethereum network, add new receiver to list
+			var response = '{"flag": "receiver", "success": true }';
+			//if ethereum network registers the receiver
+        	identConn["receiver"].sendUTF(response);
 		}
 
         var messageArr = message.utf8Data.split('|');

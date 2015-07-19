@@ -12,8 +12,8 @@ module.exports = function(app)
     res.render('./submit.html');
   });
 
-  app.get('/settings', function(req, res) {
-    res.render('./settings.html');
+  app.get('/receive', function(req, res) {
+    res.render('./receive.html');
   });
 
   app.get('/logs', function(req, res) {
