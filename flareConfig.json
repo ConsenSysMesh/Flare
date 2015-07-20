@@ -5,5 +5,9 @@
     "receiverMemory": "1",
     "cores": "1",
     "address": "1",
-    "price": "1"
+    "price": "1",
+    "sparkMasterAddress": "1",
+    "cassAddress": "1",
+    "cassUsername": "1",
+    "cassPassword": "1"
 }
