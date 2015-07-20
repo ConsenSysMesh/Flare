@@ -7,12 +7,14 @@ import (
 	"os/exec"
 )
 
+var sparkLogName = ""
+
 func initSpark() {
 
 	//create the path for the log file
 	exec.Command("mkdir", "-p", config.Spark.Log4j.Directory)
-	logName := config.Spark.Log4j.Directory + "/sparkLogging"
-	exec.Command("touch", logName)
+	sparkLogName = config.Spark.Log4j.Directory + "/sparkLogging"
+	exec.Command("touch", sparkLogName)
 
 	//create the spark logging config file
 	sparkConfigName := config.Spark.Directory + "/conf/log4j.properties"
@@ -23,7 +25,7 @@ func initSpark() {
 	w := bufio.NewWriter(sparkConfigFile)
 	w.WriteString("log4j.rootCategory=" + config.Spark.Log4j.RootCategory + "\n")
 	w.WriteString("log4j.appender.file=" + config.Spark.Log4j.Appender + "\n")
-	w.WriteString("log4j.appender.file.File=" + logName + "\n")
+	w.WriteString("log4j.appender.file.File=" + sparkLogName + "\n")
 	w.WriteString("log4j.appender.file.maxFileSize=" + config.Spark.Log4j.MaxFileSize + "\n")
 	w.WriteString("log4j.appender.file.layout" + config.Spark.Log4j.Layout + "\n")
 	w.WriteString("log4j.appender.file.layout.ConversionPattern=" + config.Spark.Log4j.ConversionPattern + "\n")

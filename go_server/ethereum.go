@@ -30,21 +30,21 @@ func completeOperations(operations int) {
 	response["operations"] = operations
 
 	var res, _ = json.Marshal(response)
-	//fmt.Println(res)
 	writeBytes(res)
 }
 
 func payPerComputation() {
 	//seed := "print angle evolve stick wild blue hidden danger nest bar retire north"
 
-	lastMod := time.Now()
+	lastMod := time.Date(1, time.January, 1, 1, 1, 1, 1, time.Local)
 	operations := 0
 
 	//SparkContext is a signal that some computation has been done
 	r, _ := regexp.Compile("SparkContext")
 	for {
 		//It's expensive to read the whole file so this is a naive method of reducing reads
-		data, _lastMod, _ := readFileIfModified(lastMod, "sparkFile")
+		data, _lastMod, _ := readFileIfModified(lastMod, sparkLogName)
+
 		if _lastMod.After(lastMod) {
 			lastMod = _lastMod
 			matches := r.FindAll(data, -1)

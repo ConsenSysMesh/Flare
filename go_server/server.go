@@ -12,11 +12,11 @@ func main() {
 	waitGroup := new(sync.WaitGroup)
 	waitGroup.Add(1)
 
-	//startup all the different asynchronous processes
+	//startup all the different asynchronous processes ,ORDER IS IMPORTANT
 	initConfig()
-	initEthereum(waitGroup)
 	initWebsockets(waitGroup)
 	initSpark()
+	initEthereum(waitGroup)
 
 	for {
 		var bytes = readBytesBlocking()
