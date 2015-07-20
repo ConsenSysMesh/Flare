@@ -156,6 +156,12 @@ strong {
 .icon {
   height: 25px; }
 
+#etherBalance {
+  float: right;
+  padding-right: 1em;
+  padding-top: 15px;
+  color: #ffffff; }
+
 #github {
   float: right;
   padding-right: 1em;

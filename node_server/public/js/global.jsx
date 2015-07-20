@@ -64,12 +64,14 @@ var Sidebar = React.createClass({
 
 var Navbar = React.createClass({
 	render: function(){
+		//Hardcoded Balance, need lightwallet integration
 		return(
 			<nav className='navbar navbar-inverse navbar-fixed-top'>
 				<a className='navbar-brand col-xs-12' href='/'>
 					<span className='icon fa fa-fire logo' aria-hidden='true'></span>
 					<span>flare</span>
 				</a>
+				<div id = 'etherBalance'>10,000,000 ETH</div>
 				<a href='https://github.com/lumichael94/flare' id='github' className='fa fa-github' target='_blank' title='Github Repository'/>
 			</nav>
 		);
