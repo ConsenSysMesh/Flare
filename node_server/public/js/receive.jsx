@@ -21,7 +21,6 @@ var StartReceiver = React.createClass({
 
 		ws.send('{"flag": "receiver", "name": "frontend", "text": '+response+'}');
 
-
 		event.preventDefault();
 
 	},
