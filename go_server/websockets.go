@@ -48,7 +48,7 @@ var (
 var bufferSize = 1024
 
 func readBlocking() string {
-	raw := <-ws.read
+	raw := readBytesBlocking()
 	s := string(raw[:len(raw)])
 
 	return s
@@ -72,7 +72,11 @@ func readHandler() {
 	}
 }
 
-func write(message []byte) {
+func write(message string) {
+	writeBytes([]byte(message))
+}
+
+func writeBytes(message []byte) {
 	ws.write <- message
 }
 
@@ -100,7 +104,7 @@ func writeHandler() {
 	}
 }
 
-func initWebsockets() {
+func initWebsockets(waitGroup *sync.WaitGroup) {
 	conn, err := net.Dial("tcp", "127.0.0.1:38477")
 	if err != nil {
 		log.Println("Problem with creating connection " + err.Error())
@@ -119,10 +123,8 @@ func initWebsockets() {
 		return
 	}
 
-	waitGroup := new(sync.WaitGroup)
 	waitGroup.Add(2)
 	go writeHandler()
-	write([]byte("{\"flag\":\"identify\", \"name\":\"goserver\"}"))
+	write("{\"flag\":\"identify\", \"name\":\"goserver\"}")
 	go readHandler()
-	waitGroup.Wait()
 }

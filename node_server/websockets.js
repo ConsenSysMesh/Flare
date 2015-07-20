@@ -94,7 +94,7 @@ module.exports = function(server){
 			var sparkURL = "http://localhost:8080";
 			download(sparkURL, function(data){
 				if(data){
-					var $ = cheerio.load(data);	
+					var $ = cheerio.load(data);
 					$("ul.unstyled").each(function(i,e){
 						var tag = $(e).find("li ").each(function(i,e){
 							var response = $(e).text().replace(/(\r\n|\n|\s|\t)/gm,"")
@@ -122,11 +122,11 @@ module.exports = function(server){
 				peerID = IPFSResponse.Identity.PeerID;
 				currentStatus = 'ALIVE';
 				swarmAddress = IPFSResponse.Addresses.Swarm;
-				
+
 				//Callback in callback...not pretty but it works. Need to learn promises
           		child2= shell.exec('curl http://127.0.0.1:5001/api/v0/id', {async: true, silent: true});
 				child2.stdout.on('data', function(data){
-					publicKey = JSON.parse(data).PublicKey;	
+					publicKey = JSON.parse(data).PublicKey;
 					IPFSResponse = '{"peerID": "' + peerID + '" , "currentStatus": "ALIVE", "swarmAddress": "' + swarmAddress + '", "publicKey": "'+ publicKey + '"}';
 					identConn["frontend"].sendUTF('{"flag": "IPFS", "success": true, "text": '+IPFSResponse+'}');
 				});
@@ -167,7 +167,7 @@ module.exports = function(server){
             identConn["frontend"].sendUTF('{"flag": "spark", "success": true, "text": "hello world!"}');
 			download(sparkURL, function(data){
 				if(data){
-					var $ = cheerio.load(data);	
+					var $ = cheerio.load(data);
 					$("table.table").each(function(i,e){
 						var tag = $(e).find("td").each(function(i,e){
 							var response = $(e).text().replace(/(\r\n|\n|\s|\t)/gm,"")
