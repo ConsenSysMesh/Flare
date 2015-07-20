@@ -20,6 +20,8 @@ var AddConfig= React.createClass({
 	onClick: function(event){
 		console.log('Uploading Config');
 
+		ws.send('{"flag": "identify", "name":"submit"}');
+
 		//Grab text from form fields.
 		//Find form fields
 		var form1= document.getElementById('spark-master-address');
@@ -27,20 +29,14 @@ var AddConfig= React.createClass({
 		var form3= document.getElementById('cassandra-username');
 		var form4= document.getElementById('cassandra-password');
 
-		var sparkMAdd = 'spark.master ' + form1.value + '|';
-		var cassAdd = 'spark.cassandra.connection.host ' + form2.value + '|';
-		var cassUname = 'spark.cassandra.auth.username ' + form3.value + '|';
-		var cassPass = 'spark.cassandra.auth.password ' + form4.value + '|';
-		ws.send('config' + '|' + sparkMAdd + cassAdd + cassUname + cassPass);
+		var response = "";
+		prgbar = document.getElementById('progress-text');
+		prgbar.innerHTML = 'Waiting for confirmation from the network...';
 
-		ws.onmessage = function(evt){
-			if (evt.data == 'config transferred'){
-				document.getElementById('addJar').disabled = false;
-				console.log(document.getElementById('addJar'));
-				prgbar = document.getElementById('progress-text');
-				prgbar.innerHTML = 'Select your Jar';
-			}
-		};
+		response += '{ "sparkMasterAddress": "' + form1.value + '", "cassAddress": "' + form2.value + '", "cassUsername": "' + form3.value + '", "cassPassword": "' + form4.value + '"}';
+
+		ws.send('{"flag": "submit", "name": "frontend", "text": '+response+'}');
+
 
 		event.preventDefault();
 
@@ -65,12 +61,26 @@ var Submit = React.createClass({
 			return;
 		}
 		console.log('Handling file');
-		ws.send(file.name);
 		ws.send(file);
+	},
+	componentDidMount: function(){			
 		ws.onmessage = function(evt){
-			if (evt.data == 'jar transferred'){
-				prgbar = document.getElementById('progress-text');
-				prgbar.innerHTML = 'Waiting for confirmation from the network...';
+			console.log(evt.data);
+			var data = JSON.parse(evt.data);
+			console.log(data);
+			if (data.flag == 'submit' && data.success == 'config'){
+				prgbartext = document.getElementById('progress-text');
+				prgbartext.innerHTML = 'Select DDApp Jar';
+			}
+			if (data.flag == 'submit' && data.success == 'jar'){
+				prgbartext = document.getElementById('progress-text');
+				prgbartext.innerHTML = 'Waiting for confirmation from the network...';
+			}
+			if(data.flag == 'submit' && data.success == 'success'){
+				prgbartext = document.getElementById('progress-text');
+				prgbartext.innerHTML = 'Registered!';
+				prgbar = document.getElementById('progress-bar');
+				prgbar.id = 'progress-bar-success';
 			}
 		};
 	},

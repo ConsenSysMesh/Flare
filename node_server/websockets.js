@@ -144,9 +144,6 @@ module.exports = function(server){
 			var uptime = "";
 			var heapMemory = "";
 
-			//console.log('flaredir: ' + flareConfig.flareDirectory);
-			//console.log('cassdir: ' + flareConfig.cassDirectory);
-			//console.log('sparkdir: ' + flareConfig.sparkDirectory);
 			fs.readFile(confJSON.flareDirectory+'/node_server/files/cassandra.txt', 'utf8', function(err, data){
 				if(err){
 					console.log(err);
@@ -219,32 +216,72 @@ module.exports = function(server){
 				}
 			});
 		}
+		if(data.flag == "receiver"){
+        	var memory = data.text.memory;
+			var cores = data.text.cores;
+			var address = data.text.address;
+			var price = data.text.price;
 
-        var messageArr = message.utf8Data.split('|');
-        var configString = '';
-        if(messageArr[0] == 'config'){
-          for (i = 1; i < messageArr.length; i++){
-            configString += messageArr[i] + '\n';
-          }
-          console.log(configString);
-          fs.writeFile('./files/deployment.conf', configString, function(err){
-            if(err) throw err;
-            connection.sendUTF('config transferred');
-          });
-        }
-        fileName = message.utf8Data;
+			confJSON.receiverMemory = memory;
+			confJSON.cores = cores;
+			confJSON.address = address;
+			confJSON.price = price;
+			var text = JSON.stringify(confJSON, null, 4);
+			//flareConf
+			fs.writeFile(flareConf, text, function(err){
+				if(err){
+					console.log(err);
+				}
+				else {
+					console.log('confJSON modified');
+				}
+			});
+			//TODO: Contact ethereum network, add new receiver to list
+			var response = '{"flag": "receiver", "success": true }';
+			//if ethereum network registers the receiver
+        	identConn["receiver"].sendUTF(response);
+		}
+
+		if(data.flag == "submit"){
+        	var masterAdd = data.text.sparkMasterAddress;
+			var cassAdd = data.text.cassAddress;
+			var cassUname = data.text.cassUsername;
+			var cassPass = data.text.cassPassword;
+
+			confJSON.sparkMasterAddress = masterAdd;
+			confJSON.cassAddress = cassAdd;
+			confJSON.cassUsername = cassUname;
+			confJSON.cassPassword = cassPass;
+
+			var text = JSON.stringify(confJSON, null, 4);
+			//flareConf
+			fs.writeFile(flareConf, text, function(err){
+				if(err){
+					console.log(err);
+				}
+				else {
+					console.log('confJSON modified');
+				}
+			});
+			var response = '{"flag": "submit", "success": "config"}';
+        	identConn["submit"].sendUTF(response);
+		}
       }
       else if (message.type === 'binary') {
+		var fileName = 'DDApp.jar';
         console.log('Received Binary Message of ' + message.binaryData.length + ' bytes');
-        connection.sendBytes(message.binaryData);
-        console.log();
         fs.writeFile('./files/' + fileName, message.binaryData, function(err){
-          if (err) throw err;
-          console.log("File is saved: " + fileName);
-          fileName = '';
-          //Place spark submit in here
-          //shell.exec('');
-          connection.sendUTF('jar transferred');
+          	if (err) throw err;
+          	console.log("File is saved: " + fileName);
+          	fileName = '';
+          	//Place spark submit in here
+          	//shell.exec('');
+			var response = '{"flag": "submit", "success": "jar"}';
+        	identConn["submit"].sendUTF(response);
+			//TODO: Contact ethereum network, add new receiver to list
+			//if ethereum network registers the receiver
+			response = '{"flag": "submit", "success": "success"}';
+			identConn["submit"].sendUTF(response);
         });
       }
     });
