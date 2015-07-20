@@ -126,8 +126,7 @@ var Home = React.createClass({
 				document.getElementById('IPFSLocalStatus').innerHTML = data.text.peerID;
 				document.getElementById('IPFSConnected').innerHTML = data.text.currentStatus;
 				document.getElementById('IPFSPublicAddress').innerHTML = data.text.swarmAddress;
-				//TODO: This is hard coded, I can't seem to have shelljs execute "ipfs id" effectively.
-				document.getElementById('ipfs-public-key').innerHTML = "CAASpgIwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQDrW6j72baOd3qQjLF6Qf3ttqSd649MUeMSWHrnIXKf6YRF3rSnR77yTRBSRO6izJD3OnjlOl5m8i47s3lpiNSUfyUONikY2qioxmGzvmOisj1sC5t9SpmHM7F4pxiGycfx56Qmsb6RWEKAfQGE+u2DEoRNBVN+vROgwSxsGsh1nXlVO52+i9HkyEl+2BwKMGAXloYCgNFs0O+UHpZXNSjdRFRzQegYbELZoM5EIYPgjaOzdJbI0Qq0TaoaZCttcAFtyL2Sk2SpDnob4QO7cUE2/kJqwsVx0KsQXKJEfRUcBP7GdllBeJbGyvLZCBrL5uSu6pSq8QZ5/UEYBuJVxISbAgMBAAE=";
+				document.getElementById('ipfs-public-key').innerHTML = data.text.publicKey;
 			}
 			if(data.success == true && data.flag == 'cass'){
 				document.getElementById('cassID').innerHTML = data.text.cassID;

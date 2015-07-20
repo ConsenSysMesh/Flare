@@ -82,7 +82,7 @@ var Submit = React.createClass({
 				<div className='row'>
 					<div className='container submit'>
 						<input type='file' id='file-select' style={{display: 'none'}} onChange={this.handleFile}/>
-						<h3>Submit</h3>
+						<h3 id = 'submith3'>Submit</h3>
 						<div id= 'textfield'>
 						</div>
 						<div className= 'config-form'>
