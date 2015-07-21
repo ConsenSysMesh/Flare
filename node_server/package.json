@@ -23,6 +23,7 @@
     "react-router": "*",
     "reactify": "^1.1.1",
     "shelljs": "^0.5.1",
+    "truffle": "0.0.10",
     "websocket": "^1.0.19"
   },
   "scripts": {
