@@ -9,12 +9,8 @@ var Sidebar = React.createClass({
 	},
 	render: function(){
 		return(
-			<div className='container-fluid'>
-				<div className='row'>
-					<div className='navbar-collapse collapse in' id='bs4'>
-						<div className='col-sm-2 sidebar'>
+						<div className='sidebar'>
 
-							<div className='row'>
 								<ul id='side' className='nav nav-sidebar'>
 									<li className='active'>
 										<a className={this.checkPath("/")} id = "home" href="/">
@@ -52,12 +48,7 @@ var Sidebar = React.createClass({
 									</li>
 
 								</ul>
-							</div>
-
-						</div>
 					</div>
-				</div>
-			</div>
 		)
 	}
 });
@@ -77,40 +68,6 @@ var Navbar = React.createClass({
 		);
 	}
 });
-
-	var Template = React.createClass({
-		routing: function(){
-			var path = window.location.pathname;
-			switch(path) {
-				case '/':
-				return (<Home/>)
-				break;
-				case '/connections':
-				return (<Connections/>)
-				break;
-				case '/submit':
-				return (<Submit/>)
-				break;
-				case '/settings':
-				return (<Settings/>)
-				break;
-				case '/logs':
-				return (<Logs/>)
-				break;
-			}
-		},
-		render: function(){
-			return(
-				<div>
-					<Navbar/>
-					<Sidebar path={window.location.pathname}/>
-					<div className='container'>
-						{this.routing()}
-					</div>
-				</div>
-			)
-		}
-	})
 
 var localWS = new WebSocket('ws://127.0.0.1:35273');
 localWS.onopen = function(evt) {

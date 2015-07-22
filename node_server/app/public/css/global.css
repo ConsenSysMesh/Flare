@@ -51,16 +51,6 @@ strong {
   color: #7a8394; }
 
 /* Some bootstrap css */
-.container-fluid {
-  margin-right: auto;
-  margin-left: auto;
-  padding-left: 15px;
-  padding-right: 15px; }
-
-.row {
-  margin-left: -15px;
-  margin-right: -15px; }
-
 .nav {
   margin-bottom: 0;
   padding-left: 0;
@@ -74,10 +64,6 @@ strong {
   position: relative;
   display: block;
   padding: 10px 15px; }
-
-.col-sm-2 {
-  width: 12%;
-  max-width: 10em; }
 
 /* add it to all your text blocks */
 .box {
@@ -357,6 +343,7 @@ ul#side li a {
 /* Sidebar navigation */
 .sidebar {
   position: fixed;
+  width: 12%;
   top: 50px;
   bottom: 0;
   left: 0;
@@ -514,6 +501,10 @@ button:disabled {
 div.container {
   width: 50%;
   margin-left: 20%; }
+
+#logs-page {
+  width: 88%;
+  float: right; }
 
 #log-select {
   display: inline-block;

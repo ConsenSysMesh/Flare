@@ -112,114 +112,19 @@ module.exports = function(localServer, masterServer){
         }
 
         if(data.flag == "homepage") {
-          require("./home.js")(data)
+          require("./home.js")(data,localIdentConn)
         }
 
-        if(data.flag == "connections" && data.text == "spark"){
-          var sparkURL = "http://localhost:8080";
-          //TODO: Take this out in the future, still need to implement this part.
-          localIdentConn["frontend"].sendUTF('{"flag": "spark", "success": true, "text": "hello world!"}');
-          download(sparkURL, function(data){
-            if(data){
-              var $ = cheerio.load(data);
-              $("table.table").each(function(i,e){
-                var tag = $(e).find("td").each(function(i,e){
-                  var response = $(e).text().replace(/(\r\n|\n|\s|\t)/gm,"")
-                  //to be implemented
-                  //localIdentConn["frontend"].sendUTF('{"flag": "spark", "success": true, "text": "'+response+'"}');
-                });
-              });
-            }
-            else{
-              console.log("error");
-            }
-          });
-          return
-        }
-        if(data.flag == "connections" && data.text == "ipfs"){
-          var child = shell.exec('ipfs swarm peers', {async: true, silent: true});
-          child.stdout.on('data', function(data){
-            peerArray = data.split(/\n+/);
-            for( i = 0; i < 10; i++){
-              localIdentConn["frontend"].sendUTF('{"flag": "ipfs", "success": true, "text": "'+peerArray[i]+'"}');
-            }
-          });
-        }
-        if(data.flag == "connections" && data.text == "cass"){
-          shell.exec(confJSON.cassandra.directory+'/bin/nodetool ring > '+confJSON.flare.directory+'/app/node_server/files/cassandra_ring.txt');
-          var cassAddress = "";
-          var cassStatus = "";
-          var cassState = "";
-          var cassOwns = "";
-          var cassToken = "";
-          fs.readFile(confJSON.flare.directory+'/app//node_server/files/cassandra_ring.txt', 'utf8', function(err, data){
-            if(err || data == undefined){
-              return
-            }
-            var rowArray = data.split(/\n+/);
-            for( i = 6; i<rowArray.length && i < 17; i++){
-              var response = '{"flag": "cass", "success": true, "text": {';
-              var columnArray = rowArray[i].split(/\s+/);
-              response += '"cassAddress": "' + columnArray[0] + '", ';
-              response += '"cassStatus": "' + columnArray[2] + '", ';
-              response += '"cassState": "' + columnArray[3] + '", ';
-              response += '"cassOwns": "' + columnArray[6] + '", ';
-              response += '"cassToken": "' + columnArray[7] + '"}} ';
-              localIdentConn["frontend"].sendUTF(response);
-              response = "";
-            }
-          });
+        if(data.flag == "connections") {
+          require("./connections.js")(data,localIdentConn)
         }
 
         if(data.flag == "receiver"){
-          var memory = data.text.memory;
-          var cores = data.text.cores;
-          var address = data.text.address;
-          var price = data.text.price;
-
-          confJSON.flare.receiverMemory = memory;
-          confJSON.flare.cores = cores;
-          confJSON.flare.address = address;
-          confJSON.flare.price = price;
-          var text = JSON.stringify(confJSON, null, 4);
-          //flareConf
-          fs.writeFile(flareConf, text, function(err){
-            if(err){
-              console.log(err);
-            }
-            else {
-              console.log('confJSON modified');
-            }
-          });
-          //TODO: Contact ethereum network, add new receiver to list
-          var response = '{"flag": "receiver", "success": true }';
-          //if ethereum network registers the receiver
-          localIdentConn["receiver"].sendUTF(response);
+          require("./receiver.js")(data,localIdentConn)
         }
 
         if(data.flag == "submit"){
-          var masterAdd = data.text.sparkMasterAddress;
-          var cassAdd = data.text.cassAddress;
-          var cassUname = data.text.cassUsername;
-          var cassPass = data.text.cassPassword;
-
-          confJSON.sparkMasterAddress = masterAdd;
-          confJSON.cassAddress = cassAdd;
-          confJSON.cassUsername = cassUname;
-          confJSON.cassPassword = cassPass;
-
-          var text = JSON.stringify(confJSON, null, 4);
-          //flareConf
-          fs.writeFile(flareConf, text, function(err){
-            if(err){
-              console.log(err);
-            }
-            else {
-              console.log('confJSON modified');
-            }
-          });
-          var response = '{"flag": "submit", "success": "config"}';
-          localIdentConn["submit"].sendUTF(response);
+          require("./submit.js")(data,localIdentConn)
         }
       }
       else if (message.type === 'binary') {
