@@ -2,7 +2,7 @@ package main
 
 import (
 	"encoding/json"
-	"io/ioutil"
+	"github.com/ActiveState/tail"
 	"os"
 	"regexp"
 	"sync"
@@ -17,10 +17,14 @@ func readFileIfModified(lastMod time.Time, filename string) ([]byte, time.Time, 
 	if !file.ModTime().After(lastMod) {
 		return nil, lastMod, nil
 	}
-	data, err := ioutil.ReadFile(filename)
-	if err != nil {
-		return nil, file.ModTime(), err
+
+	// make a buffer to keep chunks that are read
+	var data []byte
+	t, err := tail.TailFile(filename, tail.Config{Follow: false})
+	for line := range t.Lines {
+		data = append(data, line.Text...)
 	}
+
 	return data, file.ModTime(), nil
 }
 
@@ -28,7 +32,7 @@ func completeOperations(operations int) {
 	var response = map[string]interface{}{}
 	response["flag"] = "processPayment"
 	response["operations"] = operations
-	response["address"] = "05e1e2b994e9965e12e26446143c79e72230d2a3"
+	response["address"] = config.Flare.Address
 
 	var res, _ = json.Marshal(response)
 	masterWS.writeBytes(res)
@@ -45,7 +49,6 @@ func payPerComputation() {
 	for {
 		//It's expensive to read the whole file so this is a naive method of reducing reads
 		data, _lastMod, _ := readFileIfModified(lastMod, sparkLogName)
-
 		if _lastMod.After(lastMod) {
 			lastMod = _lastMod
 			matches := r.FindAll(data, -1)
