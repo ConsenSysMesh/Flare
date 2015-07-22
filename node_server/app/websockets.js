@@ -76,6 +76,7 @@ module.exports = function(server){
           return
         }
 
+        //flag for when frontend requests a log
         if(data.flag == "getlog") {
           if(identConn["goserver"]) {
             identConn["goserver"].sendUTF(message.utf8Data)
@@ -83,11 +84,16 @@ module.exports = function(server){
           return
         }
 
+        //flag for when goserver responds with the requested log data
         if(data.flag == "logdata")
         {
           if(data.success == true && identConn["frontend"])
             console.log(data.text.escapeSpecialChars());
-            identConn["frontend"].sendUTF('{"flag": "logdata", "success": true, "text": "'+data.text+'"}')
+            var message = {}
+            message.flag = "logdata"
+            message.success = true
+            message.text = data.text
+            identConn["frontend"].sendUTF(JSON.stringify(message))
         }
 
 		if(data.flag == "homepage" && data.text == "spark"){
@@ -98,7 +104,11 @@ module.exports = function(server){
 					$("ul.unstyled").each(function(i,e){
 						var tag = $(e).find("li ").each(function(i,e){
 							var response = $(e).text().replace(/(\r\n|\n|\s|\t)/gm,"")
-							identConn["frontend"].sendUTF('{"flag": "spark", "success": true, "text": "'+response+'"}');
+              var message = {}
+              message.flag = "spark"
+              message.success = true
+              message.text = response
+							identConn["frontend"].sendUTF(JSON.stringify(message));
 						});
 					});
 				}
@@ -136,7 +146,7 @@ module.exports = function(server){
 
 		if(data.flag == "homepage" && data.text == "cass"){
 			//without the async tag, it doesn't work...
-			shell.exec(confJSON.cassDirectory+'/bin/nodetool info > ' + confJSON.flareDirectory + '/node_server/files/cassandra.txt');
+			shell.exec(confJSON.cassandra.directory+'/bin/nodetool info > ' + confJSON.flare.directory + '/node_server/files/cassandra.txt');
 			var cassResponse = "";
 			var ID = "";
 			var gossipActive = "";
@@ -144,7 +154,7 @@ module.exports = function(server){
 			var uptime = "";
 			var heapMemory = "";
 
-			fs.readFile(confJSON.flareDirectory+'/node_server/files/cassandra.txt', 'utf8', function(err, data){
+			fs.readFile(confJSON.flare.directory+'/node_server/files/cassandra.txt', 'utf8', function(err, data){
 				if(err){
 					console.log(err);
 				}
@@ -192,13 +202,13 @@ module.exports = function(server){
 			});
 		}
 		if(data.flag == "connections" && data.text == "cass"){
-			shell.exec(confJSON.cassDirectory+'/bin/nodetool ring > '+confJSON.flareDirectory+'/node_server/files/cassandra_ring.txt');
+			shell.exec(confJSON.cassandra.directory+'/bin/nodetool ring > '+confJSON.flare.directory+'/node_server/files/cassandra_ring.txt');
 			var cassAddress = "";
 			var cassStatus = "";
 			var cassState = "";
 			var cassOwns = "";
 			var cassToken = "";
-			fs.readFile(confJSON.flareDirectory+'/node_server/files/cassandra_ring.txt', 'utf8', function(err, data){
+			fs.readFile(confJSON.flare.directory+'/node_server/files/cassandra_ring.txt', 'utf8', function(err, data){
 				if(err){
 					console.log(err);
 				}
@@ -222,10 +232,10 @@ module.exports = function(server){
 			var address = data.text.address;
 			var price = data.text.price;
 
-			confJSON.receiverMemory = memory;
-			confJSON.cores = cores;
-			confJSON.address = address;
-			confJSON.price = price;
+			confJSON.flare.receiverMemory = memory;
+			confJSON.flare.cores = cores;
+			confJSON.flare.address = address;
+			confJSON.flare.price = price;
 			var text = JSON.stringify(confJSON, null, 4);
 			//flareConf
 			fs.writeFile(flareConf, text, function(err){
