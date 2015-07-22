@@ -136,7 +136,7 @@ masterWS.onmessage = function(evt){
 			var seed = "print angle evolve stick wild blue hidden danger nest bar retire north"
 			var keystore = keystore = new ethlightjs.keystore(seed, password)
 			var address = keystore.generateNewAddress(password)
-			var value = 50; //lightwallet sends in units of satoshi
+			var value = 50*data.operations; //lightwallet sends in units of eth
 
 			api.getNonce(address, function(error,nonce){
 				txObj = {gasLimit: 30000, nonce: nonce}

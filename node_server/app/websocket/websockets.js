@@ -278,7 +278,7 @@ module.exports = function(localServer, masterServer){
       }
     });
     connection.on('close', function(reasonCode, description) {
-      console.log(reasonCode);
+      console.log("reasonCode"+reasonCode);
       console.log((new Date()) + ' Peer ' + connection.remoteAddress + ' disconnected.');
     });
   });
