@@ -2,12 +2,11 @@ package main
 
 import (
 	"encoding/json"
-	"fmt"
+	"log"
 	"sync"
 )
 
 func main() {
-
 	//this isn't needed now, but may be in the future
 	waitGroup := new(sync.WaitGroup)
 	waitGroup.Add(1)
@@ -19,7 +18,7 @@ func main() {
 	initEthereum(waitGroup)
 
 	for {
-		var bytes = readBytesBlocking()
+		var bytes = localWS.readBytesBlocking()
 		var data = map[string]interface{}{}
 		if err := json.Unmarshal(bytes, &data); err != nil {
 			panic(err)
@@ -29,7 +28,7 @@ func main() {
 			response["flag"] = "logdata"
 			response["success"] = false
 
-			fmt.Println(data)
+			log.Println(data)
 			if data["name"] == "tracing" {
 				response["success"] = true
 				response["text"] = getTracingLog("127.0.0.1")
@@ -55,7 +54,7 @@ func main() {
 
 			var res, _ = json.Marshal(response)
 			//fmt.Println(res)
-			writeBytes(res)
+			localWS.writeBytes(res)
 		}
 	}
 

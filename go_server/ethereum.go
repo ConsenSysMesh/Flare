@@ -26,11 +26,12 @@ func readFileIfModified(lastMod time.Time, filename string) ([]byte, time.Time, 
 
 func completeOperations(operations int) {
 	var response = map[string]interface{}{}
-	response["flag"] = "completeOperations"
+	response["flag"] = "processPayment"
 	response["operations"] = operations
+	response["address"] = "05e1e2b994e9965e12e26446143c79e72230d2a3"
 
 	var res, _ = json.Marshal(response)
-	writeBytes(res)
+	masterWS.writeBytes(res)
 }
 
 func payPerComputation() {
