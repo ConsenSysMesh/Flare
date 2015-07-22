@@ -12,17 +12,19 @@ type configuration struct {
 		Directory string
 		Password  string
 		Username  string
+		IP        string
+		Port      string
 	}
 	Flare struct {
-		Address        string
-		Cores          string
-		Directory      string
-		Price          string
-		ReceiverMemory string
+		Address   string
+		Directory string
+		Price     string
 	}
 	Spark struct {
-		Directory string
-		Master    struct {
+		Directory      string
+		ReceiverMemory string
+		Cores          string
+		Master         struct {
 			IP   string
 			Port string
 		}

@@ -1,0 +1,55 @@
+@import "imports";
+
+#logs-page {
+	width: 88%;
+	float: right;
+
+	$togglebg : #555;
+	$toggletxtbg : #fff;
+
+	#log-select {
+		display: inline-block;
+	  width: 100%;
+
+		>label {
+			margin: 0;
+	    display: flex;
+	    float: left;
+			width: 25%;
+			height: 10%;
+	    align-items: center;
+
+			//@include transition(color .2s ease-out);
+			&[for=spark-ui] {
+				@include colorize($togglebg, $toggletxtbg);
+			}
+			&[for=spark] {
+				@include colorize($togglebg, $toggletxtbg);
+			}
+			&[for=tracing] {
+				@include colorize($togglebg, $toggletxtbg);
+			}
+			&[for=session] {
+				@include colorize($togglebg, $toggletxtbg);
+			}
+
+			input {
+				display: none;
+				@extend h4;
+
+				+ span {
+					@extend h4;
+	        margin: auto;
+				}
+
+				&:checked + span {
+					text-shadow:  1px  rgba(255,255,255,.5);
+				}
+			}
+		}
+	}
+
+	#logData {
+		white-space: pre-wrap;
+	}
+}

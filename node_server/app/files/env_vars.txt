@@ -1,0 +1,7 @@
+SPARKMASTERIP = 
+SPARKSLAVEIP =
+
+CASS
+
+TODO
+	Don't forget to add Cassandra's nodetool, cqlsh, and cassandra.sh file to env_vars

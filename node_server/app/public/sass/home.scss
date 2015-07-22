@@ -1,0 +1,29 @@
+#infobox{
+	margin-bottom: 5%;
+	margin-right: 5%;
+	padding-bottom: 2px;
+	padding-top: 2px;
+	background-color: #fffbe8;
+	border-style: solid;
+	border-color: #d8d8d8;
+	border-width: 1px;
+}
+#infobox > span{
+	margin-left: 3%;
+	display:block;
+	margin-right: 5%;
+	padding-bottom: 15px;
+	padding-top: 15px;
+}
+#infobox > span > *{
+	display:inline;
+	color: #586071;
+}
+#infobox > span#publickey > *{
+	margin-top: -1%;
+	display:block;
+}
+#ipfs-public-key{
+	min-width: 100%;
+	min-height: 10%;
+}
