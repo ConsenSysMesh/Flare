@@ -501,10 +501,6 @@ label#form-label, input {
   height: 30px;
   position: relative; }
 
-input, textarea {
-  background-color: #EBEBEB;
-  padding-left: 10px; }
-
 label#form-label {
   margin-top: 20px;
   margin-bottom: 20px;

@@ -1,4 +1,4 @@
-ws = new WebSocket('ws://127.0.0.1:38477');
+ws = new WebSocket('ws://127.0.0.1:35273');
 
 var Spark = React.createClass({
 	render: function(){
@@ -90,7 +90,7 @@ var IPFS = React.createClass({
 
 var Home = React.createClass({
 	displayName: "Home",
-	componentDidMount: function(){			
+	componentDidMount: function(){
 		ws.onmessage = function(evt){
 			console.log(evt.data);
 			var data = JSON.parse(evt.data);

@@ -1,4 +1,4 @@
-ws = new WebSocket('ws://127.0.0.1:38477');
+ws = new WebSocket('ws://127.0.0.1:35273');
 
 var AddJar= React.createClass({
 	onClick: function(event){
@@ -63,7 +63,7 @@ var Submit = React.createClass({
 		console.log('Handling file');
 		ws.send(file);
 	},
-	componentDidMount: function(){			
+	componentDidMount: function(){
 		ws.onmessage = function(evt){
 			console.log(evt.data);
 			var data = JSON.parse(evt.data);

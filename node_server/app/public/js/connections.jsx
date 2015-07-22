@@ -1,4 +1,4 @@
-ws = new WebSocket('ws://127.0.0.1:38477');
+ws = new WebSocket('ws://127.0.0.1:35273');
 
 var SparkConnect = React.createClass({
 	render: function(){
@@ -85,7 +85,7 @@ var IPFSConnect = React.createClass({
 
 var Connections = React.createClass({
 	displayName: "Connections",
-	componentDidMount: function(){			
+	componentDidMount: function(){
 		ws.onmessage = function(evt){
 			//console.log(evt.data);
 			var data = JSON.parse(evt.data);
@@ -99,18 +99,18 @@ var Connections = React.createClass({
 			if(data.success == true && data.flag == 'spark'){
 				//Test Implementation
 				var workerID = 'worker-284719';
-				var workerAddress = '192.168.1.2.3'; 
+				var workerAddress = '192.168.1.2.3';
 				var workerState = 'ALIVE';
 				var workerCores = '4 (2 Used)';
 				var workerMemory = '6.3 GB (1024.0 MB used)';
-				
-				//Real implementation	
+
+				//Real implementation
 				//var sparkID = data.text.sparkID;
-				//var sparkAddress = data.text.sparkAddress; 
+				//var sparkAddress = data.text.sparkAddress;
 				//var sparkState = data.text.sparkState;
 				//var sparkCores = data.text.sparkCores;
 				//var sparkMemory = data.text.sparkMemory;
-				
+
 				//so much kludge...
 				var table = document.getElementById('sparkTable');
 				var row = table.insertRow(1);
@@ -124,7 +124,7 @@ var Connections = React.createClass({
 				cell3.innerHTML = workerState;
 				cell4.innerHTML = workerCores;
 				cell5.innerHTML = workerMemory;
-				
+
 			}
 			if(data.success == true && data.flag == 'ipfs'){
 				//Test Implementation
@@ -148,7 +148,7 @@ var Connections = React.createClass({
 				cell4.innerHTML = data.text.cassOwns;
 				cell5.innerHTML = data.text.cassToken;
 			}
-		}		
+		}
 	},
 	render: function(){
 		return(
