@@ -1,5 +1,3 @@
-ws = new WebSocket('ws://127.0.0.1:35273');
-
 var AddJar= React.createClass({
 	onClick: function(event){
 		console.log('Uploading File');
@@ -20,8 +18,6 @@ var AddConfig= React.createClass({
 	onClick: function(event){
 		console.log('Uploading Config');
 
-		ws.send('{"flag": "identify", "name":"submit"}');
-
 		//Grab text from form fields.
 		//Find form fields
 		var form1= document.getElementById('spark-master-address');
@@ -35,7 +31,7 @@ var AddConfig= React.createClass({
 
 		response += '{ "sparkMasterAddress": "' + form1.value + '", "cassAddress": "' + form2.value + '", "cassUsername": "' + form3.value + '", "cassPassword": "' + form4.value + '"}';
 
-		ws.send('{"flag": "submit", "name": "frontend", "text": '+response+'}');
+		localWS.send('{"flag": "submit", "name": "frontend", "text": '+response+'}');
 
 
 		event.preventDefault();
@@ -59,28 +55,11 @@ var Submit = React.createClass({
 			return;
 		}
 		console.log('Handling file');
-		ws.send(file);
+		localWS.send(file);
 	},
 	componentDidMount: function(){
-		ws.onmessage = function(evt){
-			console.log(evt.data);
-			var data = JSON.parse(evt.data);
-			console.log(data);
-			if (data.flag == 'submit' && data.success == 'config'){
-				prgbartext = document.getElementById('progress-text');
-				prgbartext.innerHTML = 'Select DDApp Jar';
-			}
-			if (data.flag == 'submit' && data.success == 'jar'){
-				prgbartext = document.getElementById('progress-text');
-				prgbartext.innerHTML = 'Waiting for confirmation from the network...';
-			}
-			if(data.flag == 'submit' && data.success == 'success'){
-				prgbartext = document.getElementById('progress-text');
-				prgbartext.innerHTML = 'Registered!';
-				prgbar = document.getElementById('progress-bar');
-				prgbar.id = 'progress-bar-success';
-			}
-		};
+		console.log("Ad");
+
 	},
 	render: function(){
 		return(
@@ -95,16 +74,16 @@ var Submit = React.createClass({
 						</div>
 							<form>
 								<label id='form-label'>Spark Master IP Address
-									<input type='text' id = 'spark-master-address' placeholder='Spark Master IP Address'/>
+									<input type='text' id = 'spark-master-address' placeholder='Spark Master IP Address' disabled/>
 								</label>
 								<label id='form-label'>Cassandra IP Address
-									<input type='text' id = 'cassandra-address' placeholder='Cassandra IP Address'/>
+									<input type='text' id = 'cassandra-address' placeholder='Cassandra IP Address' disabled/>
 								</label>
 								<label id='form-label'>Cassandra Username
-									<input type='text' id = 'cassandra-username' placeholder='Cassandra Username'/>
+									<input type='text' id = 'cassandra-username' placeholder='Cassandra Username' disabled/>
 								</label>
 								<label id = 'form-label'>Cassandra Password
-									<input type='password' id = 'cassandra-password' placeholder='Cassandra Password'/>
+									<input type='password' id = 'cassandra-password' placeholder='Cassandra Password'disabled/>
 								</label>
 						</form>
 						<div id='button-row'>
@@ -125,3 +104,23 @@ var Submit = React.createClass({
 
 
 React.render(<Submit />, document.body)
+
+localWS.onmessage = function(evt){
+	console.log(evt.data);
+	var data = JSON.parse(evt.data);
+	console.log(data);
+	if (data.flag == 'submit' && data.success == 'config'){
+		prgbartext = document.getElementById('progress-text');
+		prgbartext.innerHTML = 'Select DDApp Jar';
+	}
+	if (data.flag == 'submit' && data.success == 'jar'){
+		prgbartext = document.getElementById('progress-text');
+		prgbartext.innerHTML = 'Waiting for confirmation from the network...';
+	}
+	if(data.flag == 'submit' && data.success == 'success'){
+		prgbartext = document.getElementById('progress-text');
+		prgbartext.innerHTML = 'Registered!';
+		prgbar = document.getElementById('progress-bar');
+		prgbar.id = 'progress-bar-success';
+	}
+};

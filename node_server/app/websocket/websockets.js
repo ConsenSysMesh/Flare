@@ -130,18 +130,26 @@ module.exports = function(localServer, masterServer){
       else if (message.type === 'binary') {
         var fileName = 'DDApp.jar';
         console.log('Received Binary Message of ' + message.binaryData.length + ' bytes');
-        fs.writeFile('./files/' + fileName, message.binaryData, function(err){
-          if (err) throw err;
+        fs.writeFile(confJSON.flare.directory+'/node_server/app/files/' + fileName, message.binaryData, function(err){
+          if (err) {
+            console.log(err);
+            throw err
+          }
           console.log("File is saved: " + fileName);
-          fileName = '';
-          //Place spark submit in here
-          //shell.exec('');
+
+          //Place spark submit to the network
+          shell.exec(
+            confJSON.spark.directory+'/bin/spark-submit' +
+            '--properties-file" '+confJSON.flare.directory+'/node_server/app/files/deployment.conf'+
+            '--class DDAppTemplate'+confJSON.flare.directory+'/node_server/app/files/' + fileName, {async: true, silent: true});
+
           var response = '{"flag": "submit", "success": "jar"}';
-          localIdentConn["submit"].sendUTF(response);
+          localIdentConn["frontend"].sendUTF(response);
+
           //TODO: Contact ethereum network, add new receiver to list
           //if ethereum network registers the receiver
           response = '{"flag": "submit", "success": "success"}';
-          localIdentConn["submit"].sendUTF(response);
+          localIdentConn["frontend"].sendUTF(response);
         });
       }
     });

@@ -14,16 +14,17 @@ module.exports = function(data,localIdentConn) {
   confJSON.cassUsername = cassUname;
   confJSON.cassPassword = cassPass;
 
+
   var text = JSON.stringify(confJSON, null, 4);
-  //flareConf
-  fs.writeFile(flareConf, text, function(err){
+  //TODO: renable this after the presentation June-7-2015
+  /*fs.writeFile(flareConf, text, function(err){
     if(err){
       console.log(err);
     }
     else {
       console.log('confJSON modified');
     }
-  });
+  });*/
   var response = '{"flag": "submit", "success": "config"}';
   localIdentConn["submit"].sendUTF(response);
 }

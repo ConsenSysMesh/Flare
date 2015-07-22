@@ -63,7 +63,7 @@ var Receive = React.createClass({
 								<input type='text' id = 'receiver-spark-cores' placeholder='Number of cores available' disabled/>
 							</label>
 							<label id = 'form-label'>Public IP Address
-								<input type='text' id = 'receiver-public-address' placeholder='Public IP address'/>
+								<input type='text' id = 'receiver-public-address' placeholder='Public IP address'disabled/>
 							</label>
 							<label id = 'form-label'>Price
 								<input type='text' id = 'receiver-price' placeholder='Cost to run DDApp on your machine' disabled/>
