@@ -1,27 +1,33 @@
 /*Connections Page*/
-#sparkWorkersTable{
-    width: 100%;
-    font-size: 15px;
-}
-#cassandraPeersTable{
-    width: 100%;
-    font-size: 15px;
-}
-#IPFSPeersTable{
-	width: 100%;
-	font-size: 15px;
-}
-/*Even children of the table are slightly lighter*/
-tr:nth-child(even) {
-    background-color: #ffefa2;
-}
-tr{
-    height: 1.5em;
-}
-th{
-    padding-top: 7px;
-}
-td{
-    padding-top: 3px;
-	text-align: center;
+#connections-page {
+
+  #sparkWorkersTable{
+    margin: auto;
+      width: 100%;
+      font-size: 15px;
+  }
+  #cassandraPeersTable{
+    margin: auto;
+      width: 100%;
+      font-size: 15px;
+  }
+  #IPFSPeersTable{
+    margin: auto;
+  	width: 100%;
+  	font-size: 15px;
+  }
+  /*Even children of the table are slightly lighter*/
+  tr:nth-child(even) {
+      background-color: #ffefa2;
+  }
+  tr{
+      height: 1.5em;
+  }
+  th{
+      padding-top: 7px;
+  }
+  td{
+      padding-top: 3px;
+  	text-align: center;
+  }
 }

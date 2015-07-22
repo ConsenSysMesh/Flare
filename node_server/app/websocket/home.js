@@ -70,7 +70,7 @@ module.exports = function(data,localIdentConn) {
 
   if(data.text == "cass"){
     //without the async tag, it doesn't work...
-    shell.exec(confJSON.cassandra.directory+'/bin/nodetool info > ' + confJSON.flare.directory + '/app/node_server/files/cassandra.txt');
+    shell.exec(confJSON.cassandra.directory+'/bin/nodetool info > ' + confJSON.flare.directory + 'node_server/app/files/cassandra.txt');
     var cassResponse = "";
     var ID = "";
     var gossipActive = "";
@@ -78,7 +78,7 @@ module.exports = function(data,localIdentConn) {
     var uptime = "";
     var heapMemory = "";
 
-    fs.readFile(confJSON.flare.directory+'/app/node_server/files/cassandra.txt', 'utf8', function(err, data){
+    fs.readFile(confJSON.flare.directory+'/node_server/app/files/cassandra.txt', 'utf8', function(err, data){
       if(err || data == undefined){
         return
       }

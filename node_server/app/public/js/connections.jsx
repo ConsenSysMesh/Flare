@@ -64,18 +64,14 @@ var IPFSConnect = React.createClass({
 			<div>
 			<h3>IPFS</h3>
 			<div id = 'infobox'>
-				<span>
 					<h5>Top Peers: </h5>
 					<div className= 'infotext' id='IPFSTable'>
 						<table id = 'IPFSPeersTable'>
 							<tbody>
-								<tr>
-									<th>Peer ID</th>
-								</tr>
+								<tr><th>Peer ID</th></tr>
 							</tbody>
 						</table>
 					</div>
-				</span>
 			</div>
 			</div>
 	  	)
@@ -152,16 +148,14 @@ var Connections = React.createClass({
 	},
 	render: function(){
 		return(
-			<div className='outline'>
+			<div>
 				<Navbar/>
 				<Sidebar path={window.location.pathname}/>
-				<div className='row'>
-					<div className='container connections'>
-						<h3>Connections</h3>
-						<SparkConnect/>
-						<CassandraConnect/>
-						<IPFSConnect/>
-					</div>
+				<div id="connections-page" className="container">
+					<h3>Connections</h3>
+					<SparkConnect/>
+					<CassandraConnect/>
+					<IPFSConnect/>
 				</div>
 			</div>
 		)

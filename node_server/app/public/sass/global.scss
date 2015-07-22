@@ -382,7 +382,6 @@ ul#side li a {
   left: 0;
   z-index: 1000;
   display: block;
-  padding: 0 20px;
   overflow-x: hidden;
   overflow-y: auto;
   /* Scrollable contents if viewport is shorter than content. */
@@ -427,23 +426,11 @@ li.active a span.icon-log {
 .main {
   padding: 20px;
 }
-.outline {
-	left: 10%;
-	width: 90%;
-	float: left;
-	position: relative;
-	padding-left: 15px;
-	padding-right: 15px;
-}
+
 .container {
 	position: relative;
-	float: left;
-	margin-left:5%;
-	width: 85%;
-	float: left;
-  	min-height: 1px;
-  	padding-left: 15px;
-  	padding-right: 15px;
+	width: 88%;
+	float: right;
 }
 
 @import "home";

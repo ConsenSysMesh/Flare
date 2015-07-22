@@ -50,47 +50,31 @@ var Receive = React.createClass({
 	},
 	render: function(){
 		return(
-			<div className='outline'>
+			<div>
 				<Navbar/>
 				<Sidebar path={window.location.pathname}/>
-				<div className='row'>
-					<div className='container Receive'>
-						<h3 id = 'receiveh3'>Receive</h3>
-						<div id= 'textfield'>
-						</div>
-						<div className= 'config-form'>
-							<form>
-								<div className= 'form-row'>
-									<label id = 'form-label'>Memory Allowed (MB)
-										<input type='text' id = 'receiver-spark-memory' placeholder='Memory allowed on local machine' disabled/>
-									</label>
-								</div>
-								<div className= 'form-row'>
-									<label id = 'form-label'>Number of Cores allowed
-										<input type='text' id = 'receiver-spark-cores' placeholder='Number of cores available' disabled/>
-									</label>
-								</div>
-								<div className= 'form-row'>
-									<label id = 'form-label'>Public IP Address
-										<input type='text' id = 'receiver-public-address' placeholder='Public IP address'/>
-									</label>
-								</div>
-								<div className= 'form-row'>
-									<label id = 'form-label'>Price
-										<input type='text' id = 'receiver-price' placeholder='Cost to run DDApp on your machine' disabled/>
-									</label>
-								</div>
-							</form>
-						</div>
-						<div id='button-row'>
-							<span><StartReceiver/></span>
-						</div>
+					<div id="receive-page" className='container'>
+						<h3>Receive</h3>
+						<form>
+							<label id = 'form-label'>Memory Allowed (MB)
+								<input type='text' id = 'receiver-spark-memory' placeholder='Memory allowed on local machine' disabled/>
+							</label>
+							<label id = 'form-label'>Number of Cores allowed
+								<input type='text' id = 'receiver-spark-cores' placeholder='Number of cores available' disabled/>
+							</label>
+							<label id = 'form-label'>Public IP Address
+								<input type='text' id = 'receiver-public-address' placeholder='Public IP address'/>
+							</label>
+							<label id = 'form-label'>Price
+								<input type='text' id = 'receiver-price' placeholder='Cost to run DDApp on your machine' disabled/>
+							</label>
+						</form>
+						<StartReceiver/>
 						<div id= 'progress-bar'>
 							<div id = 'progress-text'>
 								Waiting
 							</div>
 						</div>
-					</div>
 				</div>
 			</div>
 		)

@@ -53,13 +53,13 @@ module.exports = function(data,localIdentConn) {
   }
 
   if(data.text == "cass"){
-    shell.exec(confJSON.cassandra.directory+'/bin/nodetool ring > '+confJSON.flare.directory+'/app/node_server/files/cassandra_ring.txt');
+    shell.exec(confJSON.cassandra.directory+'/bin/nodetool ring > '+confJSON.flare.directory+'/node_server/app/files/cassandra_ring.txt');
     var cassAddress = "";
     var cassStatus = "";
     var cassState = "";
     var cassOwns = "";
     var cassToken = "";
-    fs.readFile(confJSON.flare.directory+'/app//node_server/files/cassandra_ring.txt', 'utf8', function(err, data){
+    fs.readFile(confJSON.flare.directory+'/node_server/app/files/cassandra_ring.txt', 'utf8', function(err, data){
       if(err || data == undefined){
         return
       }
