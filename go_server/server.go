@@ -16,6 +16,8 @@ func main() {
 	initWebsockets(waitGroup)
 	initSpark()
 	initEthereum(waitGroup)
+	initCassandra()
+	initIPFS()
 
 	for {
 		var bytes = localWS.readBytesBlocking()
