@@ -40,7 +40,7 @@ var Sidebar = React.createClass({
 									<li>
 										<a className={this.checkPath("/receive")} id="receiver" href="/receive">
 											<span className='icon fa fa-cloud-download' aria-hidden='true'></span>
-											Receive	
+											Receive
 										</a>
 									</li>
 
@@ -111,3 +111,37 @@ var Navbar = React.createClass({
 			)
 		}
 	})
+
+var localWS = new WebSocket('ws://127.0.0.1:35273');
+localWS.onopen = function(evt) {
+	localWS.send('{"flag": "identify", "name":"frontend"}');
+};
+
+var masterWS = new WebSocket('ws://127.0.0.1:38477');
+masterWS.onopen = function(evt) {
+	masterWS.send('{"flag": "identify", "name":"frontend"}');
+};
+
+masterWS.onmessage = function(evt){
+	console.log(evt.data);
+	var data = $.parseJSON(evt.data)
+
+	if (data.flag == "processPayment") {
+		$.getScript("/lib/js/ethlightjs.min.js", function(){
+			//TODO this who section should get data from an ethereum contract
+			var helpers = ethlightjs.helpers
+			var api = new ethlightjs.blockchainapi.blockappsapi("http://stablenet.blockapps.net")
+
+			var password = "silly horse battery staple nonce trying bass uke fuck"
+			var seed = "print angle evolve stick wild blue hidden danger nest bar retire north"
+			var keystore = keystore = new ethlightjs.keystore(seed, password)
+			var address = keystore.generateNewAddress(password)
+			var value = 50; //lightwallet sends in units of satoshi
+
+			api.getNonce(address, function(error,nonce){
+				txObj = {gasLimit: 30000, nonce: nonce}
+				helpers.sendValueTx(address, data.address, value, txObj, api, keystore, password)
+			})
+		});
+	}
+};

@@ -1,4 +1,4 @@
-ws = new WebSocket('ws://127.0.0.1:38477');
+ws = new WebSocket('ws://127.0.0.1:35273');
 
 var StartReceiver = React.createClass({
 	onClick: function(event){
@@ -7,11 +7,11 @@ var StartReceiver = React.createClass({
 		prgbar = document.getElementById('progress-text');
 		prgbar.innerHTML = 'Waiting for confirmation from the network...';
 
-		var form1= document.getElementById('receiver-spark-memory');
-		var form2= document.getElementById('receiver-spark-cores');
-		var form3= document.getElementById('receiver-public-address');
-		var form4= document.getElementById('receiver-price');
-		
+		var form1= $('#receiver-spark-memory');
+		var form2= $('#receiver-spark-cores');
+		var form3= $('#receiver-public-address');
+		var form4= $('#receiver-price');
+
 		var response = "";
 		prgbar = document.getElementById('progress-text');
 		prgbar.innerHTML = 'Waiting for confirmation from the network...';
@@ -27,7 +27,7 @@ var StartReceiver = React.createClass({
 	render: function(){
 		return(
 			<button id = 'receiver' className='btn btn-second add-file' onClick={this.onClick}>
-				<div>Start Receiver</div>
+				<div>Become Receiver</div>
 			</button>
 		)
 	}
@@ -35,8 +35,8 @@ var StartReceiver = React.createClass({
 var Receive = React.createClass({
 	displayName: "Receive",
 	//http://spark.apache.org/docs/latest/spark-standalone.html
-	
-	componentDidMount: function(){			
+
+	componentDidMount: function(){
 		ws.onmessage = function(evt){
 			var data = JSON.parse(evt.data);
 			console.log(data);
@@ -62,12 +62,12 @@ var Receive = React.createClass({
 							<form>
 								<div className= 'form-row'>
 									<label id = 'form-label'>Memory Allowed (MB)
-										<input type='text' id = 'receiver-spark-memory' placeholder='Memory allowed on local machine'/>
+										<input type='text' id = 'receiver-spark-memory' placeholder='Memory allowed on local machine' disabled/>
 									</label>
 								</div>
 								<div className= 'form-row'>
 									<label id = 'form-label'>Number of Cores allowed
-										<input type='text' id = 'receiver-spark-cores' placeholder='Number of cores available'/>
+										<input type='text' id = 'receiver-spark-cores' placeholder='Number of cores available' disabled/>
 									</label>
 								</div>
 								<div className= 'form-row'>
@@ -77,7 +77,7 @@ var Receive = React.createClass({
 								</div>
 								<div className= 'form-row'>
 									<label id = 'form-label'>Price
-										<input type='text' id = 'receiver-price' placeholder='Cost to run DDApp on your machine'/>
+										<input type='text' id = 'receiver-price' placeholder='Cost to run DDApp on your machine' disabled/>
 									</label>
 								</div>
 							</form>
