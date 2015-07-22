@@ -138,10 +138,14 @@ module.exports = function(localServer, masterServer){
           console.log("File is saved: " + fileName);
 
           //Place spark submit to the network
+          console.log(confJSON.spark.directory+'/bin/spark-submit ' +
+          '--properties-file '+confJSON.flare.directory+'/node_server/app/files/deployment.conf '+
+          '--class DDAppTemplate '+confJSON.flare.directory+'/node_server/app/files/' + fileName);
+
           shell.exec(
-            confJSON.spark.directory+'/bin/spark-submit' +
-            '--properties-file" '+confJSON.flare.directory+'/node_server/app/files/deployment.conf'+
-            '--class DDAppTemplate'+confJSON.flare.directory+'/node_server/app/files/' + fileName, {async: true, silent: true});
+            confJSON.spark.directory+'/bin/spark-submit ' +
+            '--properties-file '+confJSON.flare.directory+'/node_server/app/files/deployment.conf '+
+            '--class DDAppTemplate '+confJSON.flare.directory+'/node_server/app/files/' + fileName, {async: true, silent: true});
 
           var response = '{"flag": "submit", "success": "jar"}';
           localIdentConn["frontend"].sendUTF(response);
