@@ -3,6 +3,7 @@ var shell = require('shelljs');
 var fs = require('fs');
 var flareConf = process.env.FLARECONF;
 var confJSON = require(flareConf);
+var cheerio = require('cheerio');
 
 function download(url, callback) {
   http.get(url, function(res) {
@@ -18,7 +19,7 @@ function download(url, callback) {
   });
 };
 
-module.exports = function(data) {
+module.exports = function(data,localIdentConn) {
   if(data.text == "spark"){
     var sparkURL = "http://localhost:8080";
     download(sparkURL, function(data){
@@ -31,7 +32,7 @@ module.exports = function(data) {
             message.flag = "spark"
             message.success = true
             message.text = response
-            identConn["frontend"].sendUTF(JSON.stringify(message));
+            localIdentConn["frontend"].sendUTF(JSON.stringify(message));
           });
         });
       }
@@ -61,7 +62,7 @@ module.exports = function(data) {
       child2.stdout.on('data', function(data){
         publicKey = JSON.parse(data).PublicKey;
         IPFSResponse = '{"peerID": "' + peerID + '" , "currentStatus": "ALIVE", "swarmAddress": "' + swarmAddress + '", "publicKey": "'+ publicKey + '"}';
-        identConn["frontend"].sendUTF('{"flag": "IPFS", "success": true, "text": '+IPFSResponse+'}');
+        localIdentConn["frontend"].sendUTF('{"flag": "IPFS", "success": true, "text": '+IPFSResponse+'}');
       });
 
     });
@@ -69,7 +70,7 @@ module.exports = function(data) {
 
   if(data.text == "cass"){
     //without the async tag, it doesn't work...
-    shell.exec(confJSON.cassandra.directory+'/bin/nodetool info > ' + confJSON.flare.directory + '/node_server/files/cassandra.txt');
+    shell.exec(confJSON.cassandra.directory+'/bin/nodetool info > ' + confJSON.flare.directory + 'node_server/app/files/cassandra.txt');
     var cassResponse = "";
     var ID = "";
     var gossipActive = "";
@@ -77,7 +78,7 @@ module.exports = function(data) {
     var uptime = "";
     var heapMemory = "";
 
-    fs.readFile(confJSON.flare.directory+'/app/node_server/files/cassandra.txt', 'utf8', function(err, data){
+    fs.readFile(confJSON.flare.directory+'/node_server/app/files/cassandra.txt', 'utf8', function(err, data){
       if(err || data == undefined){
         return
       }
@@ -88,7 +89,7 @@ module.exports = function(data) {
       upTime = cassResponse.substring(cassResponse.indexOf("(seconds):")+10, cassResponse.indexOf("Heap"));
       heapMemory = cassResponse.substring(cassResponse.indexOf("(MB):")+5, cassResponse.indexOf("Off"));
       cassResponse = '{"cassID": "' + ID + '", "cassGossipActive": "' + gossipActive + '", "cassThriftActive": "' + thriftActive + '", "cassUptime": "' + upTime+ '", "cassHeapMemory": "' + heapMemory + '"}';
-      identConn["frontend"].sendUTF('{"flag": "cass", "success": true, "text": '+cassResponse+'}');
+      localIdentConn["frontend"].sendUTF('{"flag": "cass", "success": true, "text": '+cassResponse+'}');
       //console.log(cassResponse);
 
     });

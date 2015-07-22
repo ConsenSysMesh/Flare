@@ -28,15 +28,16 @@ var logData = (
 );
 
 var Logs = React.createClass({
-	displayName: "Logs",
 	render: function(){
 		return(
-			<div className='outline'>
+			<div>
 				<Navbar/>
 				<Sidebar path={window.location.pathname}/>
-				<h3>Logs</h3>
-				{logSelect}
-				{logData}
+				<div id="logs-page">
+					<h3>Logs</h3>
+					{logSelect}
+					{logData}
+				</div>
 			</div>
 		)
 	}
