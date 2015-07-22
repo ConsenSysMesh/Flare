@@ -12,6 +12,8 @@ type configuration struct {
 		Directory string
 		Password  string
 		Username  string
+		IP        string
+		Port      string
 	}
 	Flare struct {
 		Address   string
