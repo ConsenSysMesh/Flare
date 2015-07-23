@@ -2,13 +2,28 @@ package main
 
 import (
 	"bufio"
-	//"log"
+	"log"
 	"os"
 	"os/exec"
 )
 
 //exported for use by ethereum.go
 var sparkLogName = ""
+
+//TODO: implement
+var sparkUILogName = ""
+
+func getSparkLog() (string, error) {
+	text, err := readFile(sparkLogName)
+
+	return text, err
+}
+
+func getSparkUILog() (string, error) {
+	text, err := readFile(sparkUILogName)
+
+	return text, err
+}
 
 func initSpark() {
 
@@ -32,33 +47,31 @@ func initSpark() {
 	slcw.WriteString("log4j.appender.file.layout.ConversionPattern=" + config.Spark.Log4j.ConversionPattern + "\n")
 	slcw.Flush()
 
-	/*
-		//create the spark logging config file
-		sparkConfigName := config.Spark.Directory + "/conf/spark-env.sh"
-		exec.Command("cp", "/dev/null", sparkConfigName)
-		sparkConfigFile, _ := os.Create(sparkConfigName)
+	//create the spark logging config file
+	sparkConfigName := config.Spark.Directory + "/conf/spark-env.sh"
+	exec.Command("cp", "/dev/null", sparkConfigName)
+	sparkConfigFile, _ := os.Create(sparkConfigName)
 
-		//write the logging config for spark
-		/*
-			scw := bufio.NewWriter(sparkConfigFile)
-			scw.WriteString("export SPARK_MASTER_IP=" + config.Spark.Master.IP + "\n")
-			scw.WriteString("export SPARK_MASTER_PORT=" + config.Spark.Master.Port + "\n")
-			scw.Flush()
-	*/
+	//write the logging config for spark
+
+	scw := bufio.NewWriter(sparkConfigFile)
+	scw.WriteString("export SPARK_MASTER_IP=" + config.Spark.Master.IP + "\n")
+	scw.WriteString("export SPARK_MASTER_PORT=" + config.Spark.Master.Port + "\n")
+	scw.Flush()
 
 	//TODO: fix after presentation
 	//start the node as master and slave and report any errors
-	/*master := config.Spark.Directory + "/sbin/start-master.sh"
+	master := config.Spark.Directory + "/sbin/start-master.sh"
 	slave := config.Spark.Directory + "/sbin/start-slave.sh"
 	slaveArg := "spark://" + config.Spark.Master.IP + ":" + config.Spark.Master.Port
 
-	//_, err := exec.Command(master).CombinedOutput()
+	_, err := exec.Command(master).CombinedOutput()
 	if err != nil {
 		log.Println("error with starting spark master")
 		log.Fatal(err.Error())
 	}
 
-	//_, err = exec.Command(slave, slaveArg).CombinedOutput()
+	_, err = exec.Command(slave, slaveArg).CombinedOutput()
 
 	if err != nil {
 		//This is most likely due to the slave already running, TODO: Gracefully handle this case
@@ -66,5 +79,5 @@ func initSpark() {
 		//log.Println(string(out[:]))
 		//log.Fatal(err.Error())
 	}
-	*/
+
 }

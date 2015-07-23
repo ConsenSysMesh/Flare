@@ -1,76 +1,103 @@
-//	Importing things from nodes.sol
-//	This is how Gnosis does importing on testrpc
-//	Not sure if this is correct
-contract nodesContract {
-	//All of nodesContracts functions
-	//Below is an example
-  	function e_exp(uint x) returns(uint);
-  	function ln(uint x) returns(uint);
-}
-	
+
+
 contract marketContract{
 
-	struct DDApp{
-		//An ID number in form of hash
-		//Link to escrow Ethereum address
-		//Driver node (who submitted the application)?
-		//Master node (who is running the operation)?
-		//Worker node list (group of nodes processing)?
-		//spark ip address, we are asssuming default ports for now
-		//cassandra ip address
-		//IPFS address
-		//If they are a receiving node:
-			//worker memory
-			//worker cores
-		//Add a reputation, don't need to implement it, but it'll be nice		
+	struct node{
+		bytes32 state; //online, master, worker, offline
+		bytes32 ipaddress;
+		bytes32 sparkPort;
+		bytes32 cassandraPort;
+		bytes32 ipfsPort;
+		bool start; //used to signal all workers to begin
+	}
+
+	mapping (bytes32 => node) nodes;
+	node[2**20] nodeList;
+	uint numNodes;
+
+	//Parameters should be fields in the struct, then add it to the nodeList
+	function newNode(){
+		//	bunch of setter, try to call setter methods instead of hardcoding it for more
+		//	flexibility
+
+		//	final append to nodeList
+	}
+
+	function removeNode(){
+		// Remove node from list?
+		// Remember to call penalizeNode if their state says that they are in the middle of an
+		// application.
+	}
+
+	function penalizeNode(){
+		//Penalize node if state of application isn't finished
+		//Parameters: Something like address/hash, and then the amount penalized?
+	}
+
+	function setState(bytes32 name, bytes32 state) {
+		nodes[name].state = state;
+	}
+	function setIPAddress(bytes32 name, bytes32 ipaddress) {
+		nodes[name].ipaddress = ipaddress;
+	}
+	function setSparkPort(bytes32 name, bytes32 port) {
+		nodes[name].sparkPort = port;
+	}
+	function setCassandraPort(bytes32 name, bytes32 port) {
+		nodes[name].cassandraPort = port;
+	}
+	function setIPFSPort(bytes32 name, bytes32 port) {
+		nodes[name].ipfsPort = port;
+	}
+
+	struct App{
+		node master;
+		node[] workers;
+		uint fee;
 	}
 
 	//Vars
-	mapping (uint => DDApp) DDAppList;
+	mapping (bytes32 => App) apps;
+	App[2**20] appList;
+	uint numApps;
 
 	//	Parameter should be the driver nodes, amount of ethereum in escrow, escrow address
 	//	(in the future, add the size of ddapp, memory needed, etc) to determine the
 	//	most efficient processing.
-	function newDDApp(){
-		//	Runs necessary methods:
-		//		findMasterNode();
-		//		findReceiverNodes();
-		//		newDDAppEscrow();
-		//		newInsuranceEscrow();
+	function createDDApp(bytes32 name, uint fee){
+		setMasterNode(name);
+		setReceiverNodes(name);
+		apps[name].fee = fee;
 
-		//	Notice that there is two escrow accounts, one by the origin which pays everyone else
-		//	and the other is a list of master + workers escrows.
-		
-		//	Should return back success or failure
-		//	Not quite sure if it should return back DDApp hash? 
-		//	Finally should run the function "startDDApp"
-		return;
-	}
-	
-	function startDDApp(){
-		// 	Start DDApp. Send notice to the master worker and all of the
-		// 	workers.
-
-		// 	Send them details of the node which has the cassandra instance that contains the 
-		// 	data. 
+		//DDAP is not started yet
 	}
 
-	function findMasterNode(){
-		//	Run through the node list and return appropriate
-		//	address or hash for master node.
-		return;
+	function setMasterNode(bytes32 name) {
+		for(var i =0; i < nodeList.length; i++) {
+			if (nodeList[i].state == "online") {
+				nodeList[i].state = "master";
+				apps[name].master = nodeList[i];
+				return;
+			}
+		}
 	}
 
-	function findReceiverNodes(){
-		//  Run through the node list and return a list of worker nodes
-		//	Remember to add this list to the worker node list of the DDApp struct
+	function setReceiverNodes(bytes32 name) {
+		for(var i =0; i < nodeList.length && i < 5; i++) { //TODO: Get a better way of limiting nodes
+			node[2**20] workers;
+			uint numWorkers;
+			if (nodeList[i].state == "online") {
+				nodeList[i].state = "worker";
+				workers[numWorkers] = nodeList[i];
+				numWorkers += 1;
+			}
+		}
+		apps[name].workers = workers;
 	}
 
-	function DDAppFinished(){
-		//	Remove application
-		//	You have to go through every node and tell them to stop listening
-		//	Pay everyone off
+	function DDAppFinished(bytes32 name) {
+		for(var i =0; i < apps[name].workers.length; i++) {
+			apps[name].workers[i].state = "online";
+		}
 	}
-
-	//Setter and getter methods
 }

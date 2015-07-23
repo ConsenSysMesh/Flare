@@ -16,11 +16,22 @@ func main() {
 	initWebsockets(waitGroup)
 	initSpark()
 	initEthereum(waitGroup)
+	log.Println("cassandra")
 	initCassandra()
+	log.Println("ipfs")
 	initIPFS()
 
+	go func() {
+		for {
+			var bytes = masterWS.readBytesBlocking()
+			log.Println("got master" + string(bytes))
+		}
+	}()
+
+	log.Println("flare is ready")
 	for {
 		var bytes = localWS.readBytesBlocking()
+		log.Println("got local" + string(bytes))
 		var data = map[string]interface{}{}
 		if err := json.Unmarshal(bytes, &data); err != nil {
 			panic(err)
@@ -30,14 +41,13 @@ func main() {
 			response["flag"] = "logdata"
 			response["success"] = false
 
-			log.Println(data)
 			if data["name"] == "tracing" {
 				response["success"] = true
-				response["text"] = getTracingLog("127.0.0.1")
+				response["text"] = getTracingLog()
 			}
 			if data["name"] == "session" {
 				response["success"] = true
-				response["text"] = getSessionLog("127.0.0.1")
+				response["text"] = getSessionLog()
 			}
 			if data["name"] == "spark" {
 				text, err := getSparkLog()
