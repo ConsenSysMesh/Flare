@@ -19,6 +19,8 @@ type configuration struct {
 		Address   string
 		Directory string
 		Price     string
+		IP        string
+		Port      string
 	}
 	Spark struct {
 		Directory      string

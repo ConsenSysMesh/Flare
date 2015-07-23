@@ -6,6 +6,12 @@ import (
 	"sync"
 )
 
+func anony() {
+	for {
+		var bytes = masterWS.readBytesBlocking()
+		log.Println("got master" + string(bytes))
+	}
+}
 func main() {
 	//this isn't needed now, but may be in the future
 	waitGroup := new(sync.WaitGroup)
@@ -19,8 +25,11 @@ func main() {
 	initCassandra()
 	initIPFS()
 
+	go anony()
+
 	for {
 		var bytes = localWS.readBytesBlocking()
+		log.Println("got local" + string(bytes))
 		var data = map[string]interface{}{}
 		if err := json.Unmarshal(bytes, &data); err != nil {
 			panic(err)
@@ -30,14 +39,13 @@ func main() {
 			response["flag"] = "logdata"
 			response["success"] = false
 
-			log.Println(data)
 			if data["name"] == "tracing" {
 				response["success"] = true
-				response["text"] = getTracingLog("127.0.0.1")
+				response["text"] = getTracingLog()
 			}
 			if data["name"] == "session" {
 				response["success"] = true
-				response["text"] = getSessionLog("127.0.0.1")
+				response["text"] = getSessionLog()
 			}
 			if data["name"] == "spark" {
 				text, err := getSparkLog()

@@ -20,7 +20,7 @@ const (
 	// Time allowed to read the next pong message from the client.
 	pongWait = 60 * time.Second
 	// Send pings to client with this period. Must be less than pongWait.
-	pingPeriod = 5 * time.Second
+	pingPeriod = 3 * time.Second
 )
 
 type websocketInstance struct {
@@ -28,6 +28,8 @@ type websocketInstance struct {
 	readChan   chan []byte
 	writeChan  chan []byte
 	pingTicker *time.Ticker
+	address    string
+	port       string
 }
 
 type websocketInterface interface {
@@ -44,12 +46,16 @@ var localWS = websocketInstance{
 	readChan:   make(chan []byte),
 	writeChan:  make(chan []byte),
 	pingTicker: time.NewTicker(pingPeriod),
+	address:    "127.0.0.1",
+	port:       "35273",
 }
 
 var masterWS = websocketInstance{
 	readChan:   make(chan []byte),
 	writeChan:  make(chan []byte),
 	pingTicker: time.NewTicker(pingPeriod),
+	address:    "127.0.0.1",
+	port:       "38477",
 }
 
 var bufferSize = 1024
@@ -90,7 +96,7 @@ func (wi *websocketInstance) writeBytes(message []byte) {
 
 func (wi *websocketInstance) writeHandler() {
 	defer func() {
-		wi.pingTicker.Stop()
+		log.Println("restarting websocket")
 		wi.socket.Close()
 		wi.init()
 	}()
@@ -114,24 +120,19 @@ func (wi *websocketInstance) writeHandler() {
 }
 
 func (wi *websocketInstance) init() {
-	if *wi == localWS {
-		initLocalWS()
-	}
-	if *wi == masterWS {
-		initMasterWS()
-	}
-}
 
-func initLocalWS() {
-	localConn, err := net.Dial("tcp", "127.0.0.1:35273")
+	//keep try to get a connection
+	conn, err := net.Dial("tcp", wi.address+":"+wi.port)
 	if err != nil {
 		log.Println("Problem with creating connection " + err.Error())
+		defer wi.init()
+		time.Sleep(pingPeriod)
 		return
 	}
-	localSite, err := url.Parse("ws://127.0.0.1:35273/")
 
-	localSocket, _, err := websocket.NewClient(localConn, localSite, nil, bufferSize, bufferSize)
-	localWS.socket = localSocket
+	site, err := url.Parse("ws://" + wi.address + ":" + wi.port)
+
+	wi.socket, _, err = websocket.NewClient(conn, site, nil, bufferSize, bufferSize)
 
 	if err != nil {
 		if _, ok := err.(websocket.HandshakeError); !ok {
@@ -141,33 +142,9 @@ func initLocalWS() {
 		return
 	}
 
-	go localWS.writeHandler()
-	localWS.write("{\"flag\":\"identify\", \"name\":\"goserver\"}")
-	go localWS.readHandler()
-}
-
-func initMasterWS() {
-	masterConn, err := net.Dial("tcp", "127.0.0.1:38477")
-	if err != nil {
-		log.Println("Problem with creating connection " + err.Error())
-		return
-	}
-	masterSite, err := url.Parse("ws://127.0.0.1:38477/")
-
-	masterSocket, _, err := websocket.NewClient(masterConn, masterSite, nil, bufferSize, bufferSize)
-	masterWS.socket = masterSocket
-
-	if err != nil {
-		if _, ok := err.(websocket.HandshakeError); !ok {
-			log.Println(err)
-			log.Println("v ...interface{}")
-		}
-		return
-	}
-
-	go masterWS.writeHandler()
-	masterWS.write("{\"flag\":\"identify\", \"name\":\"goserver\"}")
-	go masterWS.readHandler()
+	go wi.writeHandler()
+	wi.write("{\"flag\":\"identify\", \"name\":\"goserver\"}")
+	go wi.readHandler()
 }
 
 func initWebsockets(waitGroup *sync.WaitGroup) {

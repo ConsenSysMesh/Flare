@@ -2,31 +2,10 @@ package main
 
 import (
 	"encoding/json"
-	"github.com/ActiveState/tail"
-	"os"
 	"regexp"
 	"sync"
 	"time"
 )
-
-func readFileIfModified(lastMod time.Time, filename string) ([]byte, time.Time, error) {
-	file, err := os.Stat(filename)
-	if err != nil {
-		return nil, lastMod, err
-	}
-	if !file.ModTime().After(lastMod) {
-		return nil, lastMod, nil
-	}
-
-	// make a buffer to keep chunks that are read
-	var data []byte
-	t, err := tail.TailFile(filename, tail.Config{Follow: false})
-	for line := range t.Lines {
-		data = append(data, line.Text...)
-	}
-
-	return data, file.ModTime(), nil
-}
 
 func completeOperations(operations int) {
 	var response = map[string]interface{}{}
@@ -48,7 +27,7 @@ func payPerComputation() {
 	r, _ := regexp.Compile("SparkContext")
 	for {
 		//It's expensive to read the whole file so this is a naive method of reducing reads
-		data, _lastMod, _ := readFileIfModified(lastMod, sparkLogName)
+		data, _lastMod, _ := readFileBytesIfModified(lastMod, sparkLogName)
 		if _lastMod.After(lastMod) {
 			lastMod = _lastMod
 			matches := r.FindAll(data, -1)
