@@ -6,12 +6,6 @@ import (
 	"sync"
 )
 
-func anony() {
-	for {
-		var bytes = masterWS.readBytesBlocking()
-		log.Println("got master" + string(bytes))
-	}
-}
 func main() {
 	//this isn't needed now, but may be in the future
 	waitGroup := new(sync.WaitGroup)
@@ -25,7 +19,12 @@ func main() {
 	initCassandra()
 	initIPFS()
 
-	go anony()
+	go func() {
+		for {
+			var bytes = masterWS.readBytesBlocking()
+			log.Println("got master" + string(bytes))
+		}
+	}()
 
 	for {
 		var bytes = localWS.readBytesBlocking()

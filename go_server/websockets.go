@@ -46,16 +46,12 @@ var localWS = websocketInstance{
 	readChan:   make(chan []byte),
 	writeChan:  make(chan []byte),
 	pingTicker: time.NewTicker(pingPeriod),
-	address:    "127.0.0.1",
-	port:       "35273",
 }
 
 var masterWS = websocketInstance{
 	readChan:   make(chan []byte),
 	writeChan:  make(chan []byte),
 	pingTicker: time.NewTicker(pingPeriod),
-	address:    "127.0.0.1",
-	port:       "38477",
 }
 
 var bufferSize = 1024
@@ -121,7 +117,7 @@ func (wi *websocketInstance) writeHandler() {
 
 func (wi *websocketInstance) init() {
 
-	//keep try to get a connection
+	//keep trying to get a connection
 	conn, err := net.Dial("tcp", wi.address+":"+wi.port)
 	if err != nil {
 		log.Println("Problem with creating connection " + err.Error())
@@ -148,6 +144,12 @@ func (wi *websocketInstance) init() {
 }
 
 func initWebsockets(waitGroup *sync.WaitGroup) {
+	localWS.address = config.Flare.Local.IP
+	localWS.port = config.Flare.Local.Port
+
+	masterWS.address = config.Flare.Master.IP
+	masterWS.port = config.Flare.Master.Port
+
 	localWS.init()
 	masterWS.init()
 

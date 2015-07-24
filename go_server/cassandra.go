@@ -26,10 +26,11 @@ type events struct {
 	StartedAt     string
 }
 
-func getSessionLog(ipaddr string) string {
+//getSessionLog returns the cassandra session log by scanning the database
+func getSessionLog() string {
 
 	// connect to the cluster
-	cluster := gocql.NewCluster(ipaddr)
+	cluster := gocql.NewCluster(config.Cassandra.IP)
 	cluster.Keyspace = "system_traces"
 	cluster.Consistency = gocql.Quorum
 	session, err := cluster.CreateSession()
@@ -62,9 +63,10 @@ func getSessionLog(ipaddr string) string {
 	return sOutput
 }
 
-func getTracingLog(ipaddr string) string {
+//getTracingLog gets the tracing log by scanning the cql database
+func getTracingLog() string {
 	// connect to the cluster
-	cluster := gocql.NewCluster(ipaddr)
+	cluster := gocql.NewCluster(config.Cassandra.IP)
 	cluster.Keyspace = "system_traces"
 	cluster.Consistency = gocql.Quorum
 	session, err := cluster.CreateSession()
@@ -91,6 +93,7 @@ func getTracingLog(ipaddr string) string {
 	return eOutput
 }
 
+//initCassandra make cassandra ready for operations
 func initCassandra() {
 
 	//write the config for cassandra
