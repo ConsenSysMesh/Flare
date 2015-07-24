@@ -1,5 +1,3 @@
-ws = new WebSocket('ws://127.0.0.1:35273');
-
 var SparkConnect = React.createClass({
 	render: function(){
 		return(
@@ -81,17 +79,33 @@ var IPFSConnect = React.createClass({
 
 var Connections = React.createClass({
 	displayName: "Connections",
-	componentDidMount: function(){
-		ws.onmessage = function(evt){
+	render: function(){
+		return(
+			<div>
+				<Navbar/>
+				<Sidebar path={window.location.pathname}/>
+				<div id="connections-page" className="container">
+					<h3>Connections</h3>
+					<SparkConnect/>
+					<CassandraConnect/>
+					<IPFSConnect/>
+				</div>
+			</div>
+		)
+	}
+});
+
+React.render(<Connections />, document.body)
+
+localWS.onopen = function(evt) {
+		localWS.send('{"flag": "identify", "name":"frontend"}');
+		localWS.send('{"flag": "connections", "text": "spark"}');
+		localWS.send('{"flag": "connections", "text": "cass"}');
+		localWS.send('{"flag": "connections", "text": "ipfs"}');
+		localWS.onmessage = function(evt){
 			//console.log(evt.data);
 			var data = JSON.parse(evt.data);
-			//initial connection
-			if(data.success == true && data.flag == null){
-				ws.send('{"flag": "identify", "name":"frontend"}');
-				ws.send('{"flag": "connections", "name": "frontend", "text": "spark"}');
-				ws.send('{"flag": "connections", "name": "frontend", "text": "cass"}');
-				ws.send('{"flag": "connections", "name": "frontend", "text": "ipfs"}');
-			}
+
 			if(data.success == true && data.flag == 'spark'){
 				//Test Implementation
 				var workerID = 'worker-284719';
@@ -145,21 +159,4 @@ var Connections = React.createClass({
 				cell5.innerHTML = data.text.cassToken;
 			}
 		}
-	},
-	render: function(){
-		return(
-			<div>
-				<Navbar/>
-				<Sidebar path={window.location.pathname}/>
-				<div id="connections-page" className="container">
-					<h3>Connections</h3>
-					<SparkConnect/>
-					<CassandraConnect/>
-					<IPFSConnect/>
-				</div>
-			</div>
-		)
-	}
-});
-
-React.render(<Connections />, document.body)
+};

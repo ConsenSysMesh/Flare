@@ -1,5 +1,3 @@
-ws = new WebSocket('ws://127.0.0.1:35273');
-
 var Spark = React.createClass({
 	render: function(){
 		return(
@@ -90,53 +88,6 @@ var IPFS = React.createClass({
 
 var Home = React.createClass({
 	displayName: "Home",
-	componentDidMount: function(){
-		ws.onmessage = function(evt){
-			console.log(evt.data);
-			var data = JSON.parse(evt.data);
-			//initial connection
-			if(data.success == true && data.flag == null){
-				ws.send('{"flag": "identify", "name":"frontend"}');
-				ws.send('{"flag": "homepage", "name": "frontend", "text": "spark"}');
-				ws.send('{"flag": "homepage", "name": "frontend", "text": "cass"}');
-				ws.send('{"flag": "homepage", "name": "frontend", "text": "IPFS"}');
-			}
-			if(data.success == true && data.flag == 'spark'){
-				var identifier = data.text.substr(0, data.text.indexOf(':'));
-				var body = data.text.substr(data.text.indexOf(':')+1)
-				switch(identifier){
-					case 'Status':
-						document.getElementById('sparkLocalStatus').innerHTML = body;
-						break;
-					case 'Workers':
-						document.getElementById('sparkConnected').innerHTML = body + " WORKERS";
-						break;
-					case 'URL':
-						document.getElementById('sparkPublicAddress').innerHTML = body;
-						break;
-					case 'Applications':
-						//TODO: this is hardcoded for 0 at the moment...need to fix spacing
-						body = body.replace(/0/g, ' 0 ');
-						document.getElementById('sparkRunningApplications').innerHTML = body;
-						break;
-				}
-			}
-			if(data.success == true && data.flag == 'IPFS'){
-				console.log(data);
-				document.getElementById('IPFSLocalStatus').innerHTML = data.text.peerID;
-				document.getElementById('IPFSConnected').innerHTML = data.text.currentStatus;
-				document.getElementById('IPFSPublicAddress').innerHTML = data.text.swarmAddress;
-				document.getElementById('ipfs-public-key').innerHTML = data.text.publicKey;
-			}
-			if(data.success == true && data.flag == 'cass'){
-				document.getElementById('cassID').innerHTML = data.text.cassID;
-				document.getElementById('cassGossipActive').innerHTML = data.text.cassGossipActive;
-				document.getElementById('cassThriftActive').innerHTML = data.text.cassThriftActive;
-				document.getElementById('cassUptime').innerHTML = data.text.cassUptime;
-				document.getElementById('cassHeapMemory').innerHTML = data.text.cassHeapMemory;
-			}
-		}
-	},
 	render: function(){
 		console.log('GET home');
 		return (
@@ -158,3 +109,52 @@ var Home = React.createClass({
 
 
 React.render(<Home />, document.body)
+
+localWS.onopen = function(evt){
+//initial connection
+localWS.send('{"flag": "identify", "name":"frontend"}');
+localWS.send('{"flag": "homepage", "text": "spark"}');
+localWS.send('{"flag": "homepage", "text": "cass"}');
+localWS.send('{"flag": "homepage", "text": "IPFS"}');
+
+	localWS.onmessage = function(evt){
+	console.log(evt.data);
+
+	var data = JSON.parse(evt.data);
+
+	if(data.success == true && data.flag == 'spark'){
+		var identifier = data.text.substr(0, data.text.indexOf(':'));
+		var body = data.text.substr(data.text.indexOf(':')+1)
+		switch(identifier){
+			case 'Status':
+			document.getElementById('sparkLocalStatus').innerHTML = body;
+			break;
+			case 'Workers':
+			document.getElementById('sparkConnected').innerHTML = body + " WORKERS";
+			break;
+			case 'URL':
+			document.getElementById('sparkPublicAddress').innerHTML = body;
+			break;
+			case 'Applications':
+			//TODO: this is hardcoded for 0 at the moment...need to fix spacing
+			body = body.replace(/0/g, ' 0 ');
+			document.getElementById('sparkRunningApplications').innerHTML = body;
+			break;
+		}
+	}
+	if(data.success == true && data.flag == 'IPFS'){
+		console.log(data);
+		document.getElementById('IPFSLocalStatus').innerHTML = data.text.peerID;
+		document.getElementById('IPFSConnected').innerHTML = data.text.currentStatus;
+		document.getElementById('IPFSPublicAddress').innerHTML = data.text.swarmAddress;
+		document.getElementById('ipfs-public-key').innerHTML = data.text.publicKey;
+	}
+	if(data.success == true && data.flag == 'cass'){
+		document.getElementById('cassID').innerHTML = data.text.cassID;
+		document.getElementById('cassGossipActive').innerHTML = data.text.cassGossipActive;
+		document.getElementById('cassThriftActive').innerHTML = data.text.cassThriftActive;
+		document.getElementById('cassUptime').innerHTML = data.text.cassUptime;
+		document.getElementById('cassHeapMemory').innerHTML = data.text.cassHeapMemory;
+	}
+}
+}

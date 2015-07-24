@@ -20,6 +20,8 @@ function download(url, callback) {
 };
 
 module.exports = function(data,localIdentConn) {
+  console.log("connection");
+
   if(data.text == "spark"){
     var sparkURL = "http://localhost:8080";
     //TODO: Take this out in the future, still need to implement this part.
@@ -43,8 +45,10 @@ module.exports = function(data,localIdentConn) {
   }
 
   if(data.text == "ipfs"){
+    console.log("ipfs");
     var child = shell.exec('ipfs swarm peers', {async: true, silent: true});
     child.stdout.on('data', function(data){
+      console.log(data);
       peerArray = data.split(/\n+/);
       for( i = 0; i < 10; i++){
         localIdentConn["frontend"].sendUTF('{"flag": "ipfs", "success": true, "text": "'+peerArray[i]+'"}');

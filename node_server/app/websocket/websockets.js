@@ -74,7 +74,7 @@ module.exports = function(localServer, masterServer){
     }
     var connection = request.accept();
     console.log((new Date()) + ' Connection accepted.');
-    connection.send('{"success": true}');
+    4
     connection.on('message', function(message) {
       if (message.type === 'utf8') {
         console.log('Flare Received Message: ' + message.utf8Data.escapeSpecialChars());
@@ -97,7 +97,6 @@ module.exports = function(localServer, masterServer){
         if(data.flag == "logdata")
         {
           if(data.success == true && localIdentConn["frontend"])
-          console.log(data.text.escapeSpecialChars());
           var message = {}
           message.flag = "logdata"
           message.success = true
@@ -174,7 +173,7 @@ module.exports = function(localServer, masterServer){
     }
     var connection = request.accept();
     console.log((new Date()) + ' Connection accepted.');
-    connection.send('{"success": true}');
+    
     connection.on('message', function(message) {
       if (message.type === 'utf8') {
         console.log('Spark Master Received Message: ' + message.utf8Data.escapeSpecialChars());
