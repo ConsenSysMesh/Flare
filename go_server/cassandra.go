@@ -124,4 +124,7 @@ func initCassandra() {
 		log.Println("error with starting cassandra")
 		log.Fatal(err.Error())
 	}
+
+	cqlsh := config.Cassandra.Directory + "bin/cqlsh"
+	_, err = exec.Command("bash", "-c", `echo "tracing on;" | `+cqlsh).CombinedOutput()
 }

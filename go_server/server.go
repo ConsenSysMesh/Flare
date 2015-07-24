@@ -16,7 +16,9 @@ func main() {
 	initWebsockets(waitGroup)
 	initSpark()
 	initEthereum(waitGroup)
+	log.Println("cassandra")
 	initCassandra()
+	log.Println("ipfs")
 	initIPFS()
 
 	go func() {
@@ -26,6 +28,7 @@ func main() {
 		}
 	}()
 
+	log.Println("flare is ready")
 	for {
 		var bytes = localWS.readBytesBlocking()
 		log.Println("got local" + string(bytes))
