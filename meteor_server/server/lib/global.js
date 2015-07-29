@@ -1,11 +1,13 @@
-confJSON = undefined
-fs = undefined
-exec = undefined
-filesDirectory = undefined
-localWSServer = undefined
-localIdentConn = {}
-masterWSServer = undefined
-masterIdentConn = {}
+/*Exports
+confJSON
+fs
+exec
+filesDirectory
+localWSServer
+localIdentConn
+masterWSServer
+masterIdentConn
+*/
 
 Meteor.startup(function () {
   fs = Npm.require('fs')

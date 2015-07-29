@@ -47,7 +47,7 @@ var home = Meteor.bindEnvironment(function () {
         uptime: data["Uptime (seconds)"],
         heapMemory: data["Heap Memory (MB)"]
       }
-      
+
       CassandraDB.upsert({},{$set: obj})
     }))
 
@@ -75,5 +75,4 @@ var home = Meteor.bindEnvironment(function () {
 })
 Meteor.startup(function(){
   setInterval(home, 5000)
-  //home()
   })
