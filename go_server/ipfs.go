@@ -6,6 +6,6 @@ import (
 
 func initIPFS() {
 
-	//start ipfs and report any errors
-	_, _ = exec.Command("ipfs", "daemon").CombinedOutput()
+	//start ipfs and report any errors...which there shouldn't be
+	exec.Command("ipfs", "daemon").Start()
 }
