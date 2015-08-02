@@ -94,8 +94,7 @@ func getTracingLog() string {
 }
 
 //initCassandra make cassandra ready for operations
-func initCassandra() {
-
+func startCassandra() {
 	//write the config for cassandra
 	cassandraConfigName := config.Cassandra.Directory + "/conf/cassandra.yaml"
 
@@ -125,6 +124,11 @@ func initCassandra() {
 		log.Fatal(err.Error())
 	}
 
-	cqlsh := config.Cassandra.Directory + "bin/cqlsh"
-	_, err = exec.Command("bash", "-c", `echo "tracing on;" | `+cqlsh).CombinedOutput()
+	cqlsh := config.Cassandra.Directory + "/bin/cqlsh"
+	out, err := exec.Command("bash", "-c", `echo "tracing on;" | `+cqlsh).CombinedOutput()
+	log.Println(string(out))
+}
+
+func stopCassandra() {
+	exec.Command("bash", "-c", "kill $(ps -ef | grep '[c]assandra' | awk '{print $2}')").Start()
 }

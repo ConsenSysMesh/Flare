@@ -3,9 +3,10 @@ package main
 import (
 	"encoding/json"
 	"regexp"
-	"sync"
 	"time"
 )
+
+var runningEthereum = false
 
 func completeOperations(operations int) {
 	var response = map[string]interface{}{}
@@ -26,6 +27,9 @@ func payPerComputation() {
 	//SparkContext is a signal that some computation has been done
 	r, _ := regexp.Compile("SparkContext")
 	for {
+		if !runningEthereum {
+			return
+		}
 		//It's expensive to read the whole file so this is a naive method of reducing reads
 		data, _lastMod, _ := readFileBytesIfModified(lastMod, sparkLogName)
 		if _lastMod.After(lastMod) {
@@ -41,7 +45,11 @@ func payPerComputation() {
 	}
 }
 
-func initEthereum(waitGroup *sync.WaitGroup) {
-	waitGroup.Add(1)
+func startEthereum() {
+	runningEthereum = true
 	go payPerComputation()
+}
+
+func stopEthereum() {
+	runningEthereum = false
 }
