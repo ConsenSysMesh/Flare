@@ -32,23 +32,23 @@ Template.home.rendered = function() {
       return(
         <div>
           <h3>Spark</h3>
-          <div id = 'infobox'>
-            <span>
+          <div className='infobox'>
+            <div>
               <h5>Local Status: </h5>
-              <div className= 'infotext'>{this.state.status}</div>
-            </span>
-            <span>
+              <span>{this.state.status}</span>
+            </div>
+            <div>
               <h5>Connected Workers: </h5>
-              <div className= 'infotext' id='sparkConnected'>{this.state.workers}</div>
-            </span>
-            <span>
+              <span>{this.state.workers}</span>
+            </div>
+            <div>
               <h5>Public Address: </h5>
-              <div className= 'infotext' id='sparkPublicAddress'>{this.state.url}</div>
-            </span>
-            <span>
+              <span>{this.state.url}</span>
+            </div>
+            <div>
               <h5>Running Applications: </h5>
-              <div className= 'infotext' id='sparkRunningApplications'>{this.state.applications}</div>
-            </span>
+              <span>{this.state.applications}</span>
+            </div>
           </div>
         </div>
       )
@@ -66,7 +66,7 @@ Template.home.rendered = function() {
     },
     componentDidMount: function() {
       var self = this
-    Meteor.subscribe("cassandra", function() {
+      Meteor.subscribe("cassandra", function() {
         Tracker.autorun(function () {
           var info = CassandraDB.findOne()
           console.log(JSON.stringify(info) + "inof");
@@ -85,27 +85,27 @@ Template.home.rendered = function() {
       return(
         <div>
           <h3>Cassandra</h3>
-          <div id = 'infobox'>
-            <span>
+          <div className='infobox'>
+            <div>
               <h5>Peer ID: </h5>
-              <div className= 'infotext'>{this.state.ID}</div>
-            </span>
-            <span>
+              <span>{this.state.ID}</span>
+            </div>
+            <div>
               <h5>Gossip Active: </h5>
-              <div className= 'infotext'>{this.state.gossipActive}</div>
-            </span>
-            <span>
+              <span>{this.state.gossipActive}</span>
+            </div>
+            <div>
               <h5>Thrift Active: </h5>
-              <div className= 'infotext'>{this.state.thriftActive}</div>
-            </span>
-            <span>
+              <span>{this.state.thriftActive}</span>
+            </div>
+            <div>
               <h5>Uptime: </h5>
-              <div className= 'infotext'>{this.state.uptime}</div>
-            </span>
-            <span>
+              <span>{this.state.uptime}</span>
+            </div>
+            <div>
               <h5>Heap Memory (MB): </h5>
-              <div className= 'infotext'>{this.state.heapMemory}</div>
-            </span>
+              <span>{this.state.heapMemory}</span>
+            </div>
           </div>
         </div>
       )
@@ -139,23 +139,23 @@ Template.home.rendered = function() {
       return(
         <div>
           <h3>IPFS</h3>
-          <div id = 'infobox'>
-            <span>
+          <div className='infobox'>
+            <div>
               <h5>PeerID: </h5>
-              <div className= 'infotext'>{this.state.ID}</div>
-            </span>
-            <span>
+              <span>{this.state.ID}</span>
+            </div>
+            <div>
               <h5>Status: </h5>
-              <div className= 'infotext'>{this.state.status}</div>
-            </span>
-            <span>
+              <span>{this.state.status}</span>
+            </div>
+            <div>
               <h5>Swarm Address: </h5>
-              <div className= 'infotext'>{this.state.address}</div>
-            </span>
-            <span id='publickey'>
+              <span>{this.state.address}</span>
+            </div>
+            <div>
               <h5>Public Key: </h5>
-              <div className= 'infotext'>{this.state.publicKey}</div>
-            </span>
+              <span>{this.state.publicKey}</span>
+            </div>
           </div>
         </div>
       )
@@ -163,14 +163,13 @@ Template.home.rendered = function() {
   });
 
   var Home = React.createClass({
-    displayName: "Home",
     render: function(){
       return (
-        <div id="home-page">
+        <div id="home-page" className="page">
           <Navbar/>
-          <Sidebar path={window.location.pathnam}/>
-          <div className='container home'>
-            <h2>Welcome to Project: FLARE</h2>
+          <Sidebar path={window.location.pathname}/>
+          <div className='container'>
+            <h1>Welcome to Project: FLARE</h1>
             <Spark/>
             <Cassandra/>
             <IPFS/>

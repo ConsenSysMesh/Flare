@@ -21,51 +21,40 @@ Meteor.startup( function(){
         prgbar = $('#progress-text');
         prgbar.innerHTML = 'Waiting for confirmation from the network...';
 
-        response += '{ "memory": "' + form1.value + '", "cores": "' + form2.value + '", "address": "' + form3.value + '", "price": "' + form4.value + '"}';
-        console.log(response);
-
-        localWS.send('{"flag": "receiver", "name": "frontend", "text": '+response+'}');
-
         event.preventDefault();
 
       },
       render: function(){
         return(
-          <button id = 'receiver' className='btn btn-second add-file' onClick={this.onClick}>
+          <button id='receiver' onClick={this.onClick}>
             <div>Become Receiver</div>
           </button>
         )
       }
-    });
+    })
     var Receive = React.createClass({
-      displayName: "Receive",
       render: function(){
         return(
-          <div>
+          <div id="receive-page" className="page">
             <Navbar/>
             <Sidebar path={window.location.pathname}/>
-            <div id="receive-page" className='container'>
-              <h3>Receive</h3>
+            <div className='container'>
+              <h1>Receive</h1>
               <form>
-                <label id = 'form-label'>Memory Allowed (MB)
-                  <input type='text' id = 'receiver-spark-memory' placeholder='Memory allowed on local machine' disabled/>
+                <label>Memory Allowed (MB)
+                  <input type='text' id='receiver-spark-memory' placeholder='Memory allowed on local machine' disabled/>
                 </label>
-                <label id = 'form-label'>Number of Cores allowed
-                  <input type='text' id = 'receiver-spark-cores' placeholder='Number of cores available' disabled/>
+                <label>Number of Cores allowed
+                  <input type='text' id='receiver-spark-cores' placeholder='Number of cores available' disabled/>
                 </label>
-                <label id = 'form-label'>Public IP Address
-                  <input type='text' id = 'receiver-public-address' placeholder='Public IP address'disabled/>
+                <label>Public IP Address
+                  <input type='text' id='receiver-public-address' placeholder='Public IP address'disabled/>
                 </label>
-                <label id = 'form-label'>Price
-                  <input type='text' id = 'receiver-price' placeholder='Cost to run DDApp on your machine' disabled/>
+                <label>Price
+                  <input type='text' id='receiver-price' placeholder='Cost to run DDApp on your machine' disabled/>
                 </label>
               </form>
               <StartReceiver/>
-              <div id= 'progress-bar'>
-                <div id = 'progress-text'>
-                  Waiting
-                </div>
-              </div>
             </div>
           </div>
         )
@@ -74,18 +63,5 @@ Meteor.startup( function(){
 
 
     React.render(<Receive />, document.body)
-
-    localWS.onmessage = function(evt){
-      var data = JSON.parse(evt.data);
-      console.log(data);
-      if (data.flag == 'receiver' && data.success){
-        prgbartext = $('#progress-text');
-        prgbartext.innerHTML = 'Registered!';
-        prgbar = $('#progress-bar');
-        prgbar.id = 'progress-bar-success';
-      }
-    }
-
   }
-
 })

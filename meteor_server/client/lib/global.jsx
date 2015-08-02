@@ -53,37 +53,37 @@ Meteor.startup( function(){
 		render: function(){
 			return(
 				<div className='sidebar'>
-					<ul id='side' className='nav nav-sidebar'>
+					<ul className='nav'>
 						<li className='active'>
-							<a className={this.checkPath("/")} id = "home" href="/">
+							<a className={this.checkPath("/")} href="/">
 								<span className='icon fa fa-dot-circle-o' aria-hidden='true'></span>
 								Home
 							</a>
 						</li>
 
 						<li>
-							<a className={this.checkPath("/connections")} id="connections" href="/connections">
+							<a className={this.checkPath("/connections")}href="/connections">
 								<span className='icon fa fa-globe' aria-hidden='true'></span>
 								Connections
 							</a>
 						</li>
 
 						<li>
-							<a className={this.checkPath("/submit")} id= "submit" href="/submit">
+							<a className={this.checkPath("/submit")} href="/submit">
 								<span className='icon fa fa-cloud-upload' aria-hidden='true'></span>
 								Submit
 							</a>
 						</li>
 
 						<li>
-							<a className={this.checkPath("/receive")} id="receiver" href="/receive">
+							<a className={this.checkPath("/receive")} href="/receive">
 								<span className='icon fa fa-cloud-download' aria-hidden='true'></span>
 								Receive
 							</a>
 						</li>
 
 						<li>
-							<a className={this.checkPath("/logs")} id="logs" href="/logs">
+							<a className={this.checkPath("/logs")} href="/logs">
 								<span href="/logs" className='icon fa fa-list' aria-hidden='true'></span>
 								Logs
 							</a>

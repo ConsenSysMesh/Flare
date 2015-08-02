@@ -1,41 +1,11 @@
 #receive-page {
-	#progress-bar-success{
-		margin: auto;
-		margin-top: 20px;
-		width: 50%;
-		height: 25px;
-		background-color: #52f965;
-		background-image: linear-gradient(-45deg, rgba(255, 255, 255, 0.15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0.15) 75%, transparent 75%, transparent);
-		background-size: 40px 40px;
-		animation: progress-bar-stripes 2s linear infinite;
-	}
-
-	#progress-bar{
-		margin: auto;
-		margin-top: 20px;
-		width: 50%;
-		height: 25px;
-		background-color: #f69696;
-		background-image: linear-gradient(-45deg, rgba(255, 255, 255, 0.15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0.15) 75%, transparent 75%, transparent);
-		background-size: 40px 40px;
-		animation: progress-bar-stripes 2s linear infinite;
-	}
-
-	#progress-text{
-		color: white;
-		position: relative;
-		text-align: center;
-		padding-top: 2px;
-		font-size: larger;
-	}
-
 	h3{
 		margin:auto;
 	}
 	button#receiver{
 		display: block;
 		margin:auto;
-			margin-top: 35px;
+		margin-top: 35px;
 	}
 
 	label{

@@ -1,19 +1,10 @@
 /*Connections Page*/
 #connections-page {
-  #sparkWorkersTable{
-    margin: auto;
-      width: 100%;
-      font-size: 15px;
-  }
-  #cassandraPeersTable{
-    margin: auto;
-      width: 100%;
-      font-size: 15px;
-  }
-  #IPFSPeersTable{
+  table {
     margin: auto;
   	width: 100%;
   	font-size: 15px;
+    display: table;
   }
 
   /*Even children of the table are slightly lighter*/

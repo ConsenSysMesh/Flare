@@ -52,15 +52,21 @@ var home = Meteor.bindEnvironment(function () {
     }))
 
     exec('ipfs config show', Meteor.bindEnvironment(function(err, out, code) {
-      var IPFSResponse = JSON.parse(out);
-      var peerID = IPFSResponse.Identity.PeerID;
-      var status = 'ALIVE';
-      var address = IPFSResponse.Addresses.Swarm;
+      if (err) {
+        //TODO: create a graceful way to display all the configuration errors
+        //console.log("ipfs threw the following error, make sure it's enabled with the correct ports");
+        //console.log(err);
+        return
+      }
+      var IPFSResponse = JSON.parse(out)
+      var peerID = IPFSResponse.Identity.PeerID
+      var status = 'ALIVE'
+      var address = IPFSResponse.Addresses.Swarm
 
       //TODO: Callback in callback...not pretty but it works. Need to learn promises
       HTTP.get('http://127.0.0.1:5001/api/v0/id', function(error, response) {
         if(response) {
-          var publicKey = response.data.PublicKey;
+          var publicKey = response.data.PublicKey
           var obj = {
             ID: peerID,
             status: "ALIVE",

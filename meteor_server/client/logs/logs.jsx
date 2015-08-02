@@ -94,14 +94,11 @@ Meteor.startup( function(){
       }
     })
 
-    console.log("gonna show log");
-
     React.render(<Logs />, document.body)
 
     $('#log-select input[type=radio]').click(function() {
       $('#log-select label').toggleClass('checked', false);
       $(this).parent().toggleClass('checked', this.checked);
-
 
       $('#logData div').hide()
       $("#logData #"+$("input[name=logtype]:checked").val()).show()

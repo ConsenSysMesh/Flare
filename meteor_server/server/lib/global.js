@@ -70,6 +70,7 @@ Meteor.startup(function () {
   return EthereumDB.find()
   })
 
+  localIdentConn = {}
   localWSServer = new WebSocketServer({
     host: confJSON.flare.local.ip,
     port: confJSON.flare.local.port
@@ -105,6 +106,7 @@ Meteor.startup(function () {
     }))
   }))
 
+  masterIdentConn = {}
   masterWSServer = new WebSocketServer({
     host: confJSON.flare.master.ip,
     port: confJSON.flare.master.port
