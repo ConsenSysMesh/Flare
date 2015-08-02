@@ -74,7 +74,6 @@ func startFlare() {
 func stopFlare() {
 	//order is not as important here as in startFlare(), but still important
 	stopIPFS()
-	log.Println("stopped ipfs")
 	stopCassandra()
 	log.Println("cass")
 	stopEthereum()

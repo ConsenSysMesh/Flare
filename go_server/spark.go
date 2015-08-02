@@ -52,6 +52,7 @@ func startSpark() {
 	sparkConfigFile, _ := os.Create(sparkConfigName)
 
 	//write the logging config for spark
+
 	scw := bufio.NewWriter(sparkConfigFile)
 	scw.WriteString("export SPARK_MASTER_IP=" + config.Spark.Master.IP + "\n")
 	scw.WriteString("export SPARK_MASTER_PORT=" + config.Spark.Master.Port + "\n")
@@ -76,6 +77,7 @@ func startSpark() {
 		//log.Println(string(out[:]))
 		//log.Fatal(err.Error())
 	}
+
 }
 
 func stopSpark() {

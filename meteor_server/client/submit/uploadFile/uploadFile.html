@@ -1,0 +1,16 @@
+<template name="uploadForm">
+  <h2>Upload Jar</h2>
+  <form id="uploadForm" method="POST" enctype="multipart/form-data">
+		<label>
+      {{info}}
+    	<button id="selectFile">Choose File</button>
+    	<input id="selectFileHandler" class="jqUploadclass" type="file">
+		</label>
+		<button id="upload">StartUpload</button>
+    <div id="progressBox">
+        <div id="progressBar" style="width:{{progress}}">
+            {{progress}}
+        </div>
+    </div>
+  </form>
+</template>
