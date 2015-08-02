@@ -8,7 +8,6 @@ import (
 	"log"
 	"net"
 	"net/url"
-	"sync"
 	"time"
 
 	"github.com/gorilla/websocket"
@@ -55,6 +54,7 @@ var masterWS = websocketInstance{
 }
 
 var bufferSize = 1024
+var runningWebsockets = false
 
 func (wi *websocketInstance) readBlocking() string {
 	raw := wi.readBytesBlocking()
@@ -91,24 +91,31 @@ func (wi *websocketInstance) writeBytes(message []byte) {
 }
 
 func (wi *websocketInstance) writeHandler() {
-	defer func() {
-		log.Println("restarting websocket")
-		wi.socket.Close()
-		wi.init()
-	}()
+
+	if runningWebsockets {
+		defer func() {
+			log.Println("restarting websocket")
+			wi.socket.Close()
+			wi.init()
+		}()
+	}
 
 	for {
 		select {
 		case <-wi.pingTicker.C:
 			wi.socket.SetWriteDeadline(time.Now().Add(writeWait))
 			if err := wi.socket.WriteMessage(websocket.PingMessage, []byte{}); err != nil {
-				log.Println(err)
+				if runningWebsockets {
+					log.Println(err)
+				}
 				return
 			}
 		case message := <-wi.writeChan:
 			wi.socket.SetWriteDeadline(time.Now().Add(writeWait))
 			if err := wi.socket.WriteMessage(websocket.TextMessage, message); err != nil {
-				log.Println(err)
+				if runningWebsockets {
+					log.Println(err)
+				}
 				return
 			}
 		}
@@ -143,7 +150,9 @@ func (wi *websocketInstance) init() {
 	go wi.readHandler()
 }
 
-func initWebsockets(waitGroup *sync.WaitGroup) {
+func startWebsockets() {
+	runningWebsockets = true
+
 	localWS.address = config.Flare.Local.IP
 	localWS.port = config.Flare.Local.Port
 
@@ -152,6 +161,8 @@ func initWebsockets(waitGroup *sync.WaitGroup) {
 
 	localWS.init()
 	masterWS.init()
+}
 
-	waitGroup.Add(4)
+func stopWebsockets() {
+	runningWebsockets = false
 }
