@@ -13,6 +13,7 @@ Meteor.startup( function(){
 	IPFSDB = new Mongo.Collection("ipfs")
 	JARSDB = new Mongo.Collection("jars")
 	EthereumDB = new Mongo.Collection("ethereum")
+	ConfigDB = new Mongo.Collection("config")
 	Meteor.subscribe("ethereum", function() {
 		EthereumDB.find().observeChanges({
 			added: function(id, fields) {
@@ -76,9 +77,9 @@ Meteor.startup( function(){
 						</li>
 
 						<li>
-							<a className={this.checkPath("/receive")} href="/receive">
+							<a className={this.checkPath("/settings")} href="/settings">
 								<span className='icon fa fa-cloud-download' aria-hidden='true'></span>
-								Receive
+								Settings
 							</a>
 						</li>
 

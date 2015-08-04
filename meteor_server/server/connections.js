@@ -23,7 +23,7 @@ var connections = Meteor.bindEnvironment(function () {
     }
   })
 
-  exec(confJSON.cassandra.directory+'/bin/nodetool ring',
+  exec(confJSON.Cassandra.Directory+'/bin/nodetool ring',
   {async: true, silent: true}).stdout.on('data', Meteor.bindEnvironment( function(data) {
     var $ = cheerio.load('')
     var connections = []

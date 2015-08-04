@@ -17,7 +17,8 @@ Meteor.startup(function () {
 
   var flareConf = process.env.FLARECONF
   confJSON = Npm.require(flareConf)
-  filesDirectory = confJSON.flare.directory+'/files/'
+
+  filesDirectory = confJSON.Flare.Directory+'/files/'
 
   String.prototype.escapeSpecialChars = function() {
     return this.replace(/\\n/g, "\\\\n")
@@ -31,49 +32,55 @@ Meteor.startup(function () {
   };
 
   UploadServer.init({
-      tmpDir: filesDirectory+'jar/tmp',
-      uploadDir: filesDirectory+'jar/',
-      checkCreateDirectories: true
-    })
+    tmpDir: filesDirectory+'jar/tmp',
+    uploadDir: filesDirectory+'jar/',
+    checkCreateDirectories: true
+  })
 
 
   SparkDB = new Mongo.Collection("spark")
   SparkDB.remove({})
   Meteor.publish('spark', function() {
-  //TODO: implement this for efficiency reasons (and maybe security reasons)
-  //return SparkDB.find({}, {fields: {Status: 1, Workers: 1, URL: 1, Applications: 1, connections: 1}})
-  return SparkDB.find()
+    //TODO: decide whether to implement this for efficiency reasons (and maybe security reasons)
+    //return SparkDB.find({}, {fields: {Status: 1, Workers: 1, URL: 1, Applications: 1, connections: 1}})
+    return SparkDB.find()
   })
 
   IPFSDB = new Mongo.Collection("ipfs")
   IPFSDB.remove({})
   Meteor.publish('ipfs', function() {
-  return IPFSDB.find()
+    return IPFSDB.find()
   })
 
   CassandraDB = new Mongo.Collection("cassandra")
   CassandraDB.remove({})
   Meteor.publish('cassandra', function() {
-  return CassandraDB.find()
+    return CassandraDB.find()
   })
 
 
   JARSDB = new Mongo.Collection("jars")
   JARSDB.remove({})
   Meteor.publish('jars', function() {
-  return JARSDB.find()
+    return JARSDB.find()
   })
 
   EthereumDB = new Mongo.Collection("ethereum")
   EthereumDB.remove({}) //TODO: probably remove this for production
   Meteor.publish('ethereum', function() {
-  return EthereumDB.find()
+    return EthereumDB.find()
+  })
+
+  ConfigDB = new Mongo.Collection("config")
+  ConfigDB.remove({})
+  Meteor.publish('config', function() {
+    return ConfigDB.find()
   })
 
   localIdentConn = {}
   localWSServer = new WebSocketServer({
-    host: confJSON.flare.local.ip,
-    port: confJSON.flare.local.port
+    host: confJSON.Flare.Local.IP,
+    port: confJSON.Flare.Local.Port
   })//35275 is 'flark' (flare spark) on keypads
   localWSServer.on('connection', Meteor.bindEnvironment(function(connection) {
     connection.on('message', Meteor.bindEnvironment(function(message) {
@@ -85,31 +92,33 @@ Meteor.startup(function () {
         return
       }
       //flag for when goserver responds with the requested log data
-      if (data.flag == "logdata" && data.success == true){
-    		switch (data.type) {
-    		  case "sparkUI":
-            SparkDB.upsert({},{sparkUILog: data.text})
-    		    break;
+      if (data.flag == "getLog" && data.success == true){
+        switch (data.type) {
+          case "sparkUI":
+          SparkDB.upsert({},{sparkUILog: data.text})
+          break;
           case "spark":
-            SparkDB.upsert({},{sparkLog: data.text})
-            break;
+          SparkDB.upsert({},{sparkLog: data.text})
+          break;
           case "tracing":
-            CassandraDB.upsert({},{tracingLog: data.text})
-    		    break;
+          CassandraDB.upsert({},{tracingLog: data.text})
+          break;
           case "session":
-            CassandraDB.upsert({},{systemLog: data.text})
-            break;
-    		  default:
-
-    		}
-    	}
+          CassandraDB.upsert({},{systemLog: data.text})
+          break;
+          default:
+        }
+      }
+      if (data.flag == "getConfig" && data.success == true) {
+        ConfigDB.upsert({}, JSON.parse(data.text))
+      }
     }))
   }))
 
   masterIdentConn = {}
   masterWSServer = new WebSocketServer({
-    host: confJSON.flare.master.ip,
-    port: confJSON.flare.master.port
+    host: confJSON.Flare.Master.IP,
+    port: confJSON.Flare.Master.Port
   }) //35384 is 'fleth' (flare ethereum) on keypads
   masterWSServer.on('connection', Meteor.bindEnvironment(function(connection) {
     connection.on('message', Meteor.bindEnvironment(function(message) {

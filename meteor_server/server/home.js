@@ -17,7 +17,7 @@ var home = Meteor.bindEnvironment(function () {
     }
     })
 
-    exec(confJSON.cassandra.directory+'/bin/nodetool info', Meteor.bindEnvironment(function(err, out, code) {
+    exec(confJSON.Cassandra.Directory+'/bin/nodetool info', Meteor.bindEnvironment(function(err, out, code) {
       var keyRegex = /.*(?=\s*:.*)/g
       var keys = out.match(keyRegex)
       var valueRegex = /:.*/g
