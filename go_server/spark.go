@@ -10,15 +10,13 @@ import (
 //exported for use by ethereum.go
 var sparkLogName = ""
 
-//TODO: implement
-var sparkUILogName = ""
-
 func getSparkLog() (string, error) {
 	text, err := readFile(sparkLogName)
 
 	return text, err
 }
 
+//TODO: implement
 func getSparkUILog() (string, error) {
 	//text, err := readFile(sparkUILogName)
 	text := ""
@@ -27,8 +25,8 @@ func getSparkUILog() (string, error) {
 
 func startSpark() {
 	//create the path for the log file
-	exec.Command("mkdir", "-p", config.Spark.Log4j.Directory)
-	sparkLogName = config.Spark.Log4j.Directory + "/sparkLogging"
+	exec.Command("mkdir", "-p", config.Spark.Log4J.Directory)
+	sparkLogName = config.Spark.Log4J.Directory + "/sparkLogging"
 	exec.Command("touch", sparkLogName)
 
 	//create the spark logging config file
@@ -38,12 +36,12 @@ func startSpark() {
 
 	//write the logging config from the general config json
 	slcw := bufio.NewWriter(sparkLogConfigFile)
-	slcw.WriteString("log4j.rootCategory=" + config.Spark.Log4j.RootCategory + "\n")
-	slcw.WriteString("log4j.appender.file=" + config.Spark.Log4j.Appender + "\n")
+	slcw.WriteString("log4j.rootCategory=" + config.Spark.Log4J.RootCategory + "\n")
+	slcw.WriteString("log4j.appender.file=" + config.Spark.Log4J.Appender + "\n")
 	slcw.WriteString("log4j.appender.file.File=" + sparkLogName + "\n")
-	slcw.WriteString("log4j.appender.file.maxFileSize=" + config.Spark.Log4j.MaxFileSize + "\n")
-	slcw.WriteString("log4j.appender.file.layout=" + config.Spark.Log4j.Layout + "\n")
-	slcw.WriteString("log4j.appender.file.layout.ConversionPattern=" + config.Spark.Log4j.ConversionPattern + "\n")
+	slcw.WriteString("log4j.appender.file.maxFileSize=" + config.Spark.Log4J.MaxFileSize + "\n")
+	slcw.WriteString("log4j.appender.file.layout=" + config.Spark.Log4J.Layout + "\n")
+	slcw.WriteString("log4j.appender.file.layout.ConversionPattern=" + config.Spark.Log4J.ConversionPattern + "\n")
 	slcw.Flush()
 
 	//create the spark logging config file

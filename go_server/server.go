@@ -36,9 +36,10 @@ func startFlare() {
 			if err := json.Unmarshal(bytes, &data); err != nil {
 				panic(err)
 			}
-			if data["flag"] == "getlog" {
-				var response = map[string]interface{}{}
-				response["flag"] = "logdata"
+
+			var response = map[string]interface{}{}
+			response["flag"] = data["flag"]
+			if data["flag"] == "getLog" {
 				response["success"] = false
 				response["type"] = data["type"]
 
@@ -66,6 +67,17 @@ func startFlare() {
 				var res, _ = json.Marshal(response)
 				localWS.writeBytes(res)
 			}
+			if data["flag"] == "setConfig" {
+				setConfigBytes([]byte(data["text"].(string)))
+				saveConfig()
+			}
+			if data["flag"] == "getConfig" {
+				var _config = getConfigBytes()
+				response["success"] = true
+				response["text"] = string(_config)
+				var res, _ = json.Marshal(response)
+				localWS.writeBytes(res)
+			}
 		}
 	}()
 }
@@ -75,13 +87,9 @@ func stopFlare() {
 	//order is not as important here as in startFlare(), but still important
 	stopIPFS()
 	stopCassandra()
-	log.Println("cass")
 	stopEthereum()
-	log.Println("ether")
 	stopSpark()
-	log.Println("spark")
 	stopWebsockets()
-	log.Println("and websockets")
 }
 
 func main() {
@@ -107,13 +115,18 @@ func main() {
 				fmt.Println("Flare has already been started")
 			}
 		case "stop":
-			state.on = true
 			if state.on {
 				state.on = false
 				stopFlare()
 			} else {
 				fmt.Println("Flare is not running")
 			}
+		case "restart":
+			stopFlare()
+			initConfig()
+			startFlare()
+		case "save":
+			saveConfig()
 		}
 	}
 }
