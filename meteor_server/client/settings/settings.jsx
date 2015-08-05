@@ -2,55 +2,65 @@ Meteor.startup( function(){
   Router.route('/settings', function () {
     this.render('settings');
   })
-  Meteor.subscribe('config');
+  Meteor.subscribe('config')
 
   Template.settings.rendered = function() {
-    //TODO: auto update the config in the background, rendering this call superfluous
-    Meteor.call('getConfig')
+    initialConfig = ConfigDB.findOne()
 
     var Flare = React.createClass({
       getInitialState: function() {
-        return {
-          directory: "",
-          address: "",
-          price: "",
-          local : {
-            ip: "",
-            port: ""
-          },
-          master : {
-            ip: "",
-            port: ""
-          }
-        }
+        return initialConfig['flare']
+      },
+      componentDidMount: function() {
+        var self = this
+        Tracker.autorun(function() {
+          ConfigDB.find({}, {fields: {flare: 1}}).observeChanges({
+            added: function(id, fields) {
+              this.changed(id, fields)
+            },
+            changed: function(id, fields) {
+              self.setState(fields['flare'])
+            }
+          })
+        })
+      },
+      handleChange: function(event) {
+        var newState = this.state
+        if(event.target.value == "")
+          newState[event.target.name] = event.target.placeholder
+        else
+          newState[event.target.name] = event.target.value
+        this.setState(newState)
+        Meteor.call('setConfig', {$set: {flare: newState}})
       },
       render: function(){
+        var state = this.getInitialState()
         return(
           <div>
-            <h1>Flare</h1>
+            <h2>Flare</h2>
             <form>
               <label>Directory
-                <input type='text' placeholder={this.state.directory} disabled/>
+                <input type='text' name='directory' placeholder={state.directory} onChange={this.handleChange}/>
               </label>
               <label>Ethereum Address
-                <input type='text' placeholder={this.state.address} disabled/>
+                <input type='text' name='address' placeholder={state.address} onChange={this.handleChange}/>
               </label>
               <label>Price
-                <input type='text' placeholder={this.state.price} disabled/>
+                <input type='text' name='price' placeholder={state.price} onChange={this.handleChange}/>
               </label>
-              <h2>Local Node</h2>
+              <h3>Local Node</h3>
               <label>IP Address
-                <input type='text' placeholder={this.state.local.ip} disabled/>
+                <input type='text' name='local.ip' placeholder={state.local.ip} onChange={this.handleChange}/>
               </label>
               <label>Port
-                <input type='text' placeholder={this.state.local.port} disabled/>
+                <input type='text' name='local.port' placeholder={state.local.port} onChange={this.handleChange}/>
               </label>
-              <h2>Master Node</h2>
+              <h3>Master Node</h3>
               <label>IP Address
-                <input type='text' placeholder={this.state.master.ip} disabled/>
+                <input type='text' name='master.ip' placeholder={state.master.ip} onChange={this.handleChange}/>
               </label>
               <label>Port
-                <input type='text' placeholder={this.state.master.port} disabled/>
+                <input type='text' name='master.port' placeholder={state.master.port} onChange={this.handleChange}/>
               </label>
             </form>
           </div>
@@ -60,23 +70,7 @@ Meteor.startup( function(){
 
     var Spark = React.createClass({
       getInitialState: function() {
-        return {
-          directory: "",
-          master: {
-            ip: "",
-            port: ""
-          },
-          receiverMemory: "",
-          cores: "",
-          log4j: {
-            rootCategory: "",
-            appender: "",
-            directory: "",
-            maxFileSize: "",
-            layout: "",
-            ConversionPattern: ""
-          }
-        }
+        return initialConfig['spark']
       },
       componentDidMount: function() {
         var self = this
@@ -86,51 +80,61 @@ Meteor.startup( function(){
               this.changed(id, fields)
             },
             changed: function(id, fields) {
-               self.setState(fields['spark'])
+              self.setState(fields['spark'])
             }
           })
         })
       },
+      handleChange: function(event) {
+        var newState = this.state
+        if(event.target.value == "")
+          newState[event.target.name] = event.target.placeholder
+        else
+          newState[event.target.name] = event.target.value
+        this.setState(newState)
+        Meteor.call('setConfig', {$set: {spark: newState}})
+      },
       render: function(){
+        var state = this.getInitialState()
         return(
           <div>
-            <h1>Spark</h1>
+            <h2>Spark</h2>
             <form>
               <label>Directory
-                <input type='text' placeholder={this.state.directory} disabled/>
+                <input type='text' name='directory' placeholder={state.directory} onChange={this.handleChange}/>
               </label>
-              <h2>Master Settings</h2>
+              <h3>Master Settings</h3>
               <label>IP
-                <input type='text' placeholder={this.state.master.ip} disabled/>
+                <input type='text' name='master.ip' placeholder={state.master.ip} onChange={this.handleChange}/>
               </label>
               <label>Port
-                <input type='text' placeholder={this.state.master.port} disabled/>
+                <input type='text' name='master.port' placeholder={state.master.port} onChange={this.handleChange}/>
               </label>
               <label>Memory allowed
-                <input type='text' placeholder={this.state.receiverMemory} disabled/>
+                <input type='text' name='receiverMemory' placeholder={state.receiverMemory} onChange={this.handleChange}/>
               </label>
               <label>Cores Allowed
-                <input type='text' placeholder={this.state.cores} disabled/>
+                <input type='text' name='cores' placeholder={state.cores} onChange={this.handleChange}/>
               </label>
-              <h2>Logging Settings</h2>
-              <h3>Changing disabled options may break Flare</h3>
+              <h3>Logging Settings</h3>
+              <h4>Changing the disabled options may break Flare</h4>
               <label>Root Category
-                <input type='text' placeholder={this.state.log4j.rootCategory} disabled/>
+                <input type='text' name='log4j.rootCategory' placeholder={state.log4j.rootCategory} disabled/>
               </label>
               <label>Appender
-                <input type='text' placeholder={this.state.log4j.appender} disabled/>
+                <input type='text' name='log4j.appender' placeholder={state.log4j.appender} disabled/>
               </label>
               <label>Directory
-                <input type='text' placeholder={this.state.log4j.directory} disabled/>
+                <input type='text' name='log4j.directory' placeholder={state.log4j.directory} onChange={this.handleChange}/>
               </label>
               <label>Max File Size
-                <input type='text' placeholder={this.state.log4j.maxFileSize} disabled/>
+                <input type='text' name='log4j.maxFileSize' placeholder={state.log4j.maxFileSize} onChange={this.handleChange}/>
               </label>
               <label>Layout
-                <input type='text' placeholder={this.state.log4j.layout} disabled/>
+                <input type='text' name='log4j.layout' placeholder={state.log4j.layout} disabled/>
               </label>
               <label>Conversion Pattern
-                <input type='text' placeholder={this.state.log4j.conversionPattern} disabled/>
+                <input type='text' name='log4j.conversionPattern' placeholder={state.log4j.conversionPattern} disabled/>
               </label>
             </form>
           </div>
@@ -140,13 +144,7 @@ Meteor.startup( function(){
 
     var Cassandra = React.createClass({
       getInitialState: function() {
-        return {
-          directory: "",
-          username: "",
-          password: "",
-          ip: "",
-          port: ""
-        }
+        return initialConfig['cassandra']
       },
       componentDidMount: function() {
         var self = this
@@ -156,30 +154,40 @@ Meteor.startup( function(){
               this.changed(id, fields)
             },
             changed: function(id, fields) {
-               self.setState(fields['cassandra'])
+              self.setState(fields['cassandra'])
             }
           })
         })
       },
+      handleChange: function(event) {
+        var newState = this.state
+        if(event.target.value == "")
+          newState[event.target.name] = event.target.placeholder
+        else
+          newState[event.target.name] = event.target.value
+        this.setState(newState)
+        Meteor.call('setConfig', {$set: {cassandra: newState}})
+      },
       render: function(){
+        var state = this.getInitialState()
         return(
           <div>
-            <h1>Cassandra</h1>
+            <h2>Cassandra</h2>
             <form>
               <label>Directory
-                <input type='text' placeholder={this.state.directory} disabled/>
+                <input type='text' name='directory' placeholder={state.directory} onChange={this.handleChange}/>
               </label>
               <label>Username
-                <input type='text' placeholder={this.state.username} disabled/>
+                <input type='text' name='username' placeholder={state.username} onChange={this.handleChange}/>
               </label>
               <label>Password
-                <input type='text' placeholder={this.state.password} disabled/>
+                <input type='text' name='password' placeholder={state.password} onChange={this.handleChange}/>
               </label>
               <label>IP Address
-                <input type='text' placeholder={this.state.ip} disabled/>
+                <input type='text' name='address' placeholder={state.ip} onChange={this.handleChange}/>
               </label>
               <label>Port
-                <input type='text' placeholder={this.state.port} disabled/>
+                <input type='text' name='port' placeholder={state.port} onChange={this.handleChange}/>
               </label>
             </form>
           </div>
@@ -194,6 +202,8 @@ Meteor.startup( function(){
             <Navbar/>
             <Sidebar path={window.location.pathname}/>
             <div className='container'>
+              <h1>Settings</h1>
+              <h2>Heads up!, once you edit a setting, it's saved instantly to your config file</h2>
               <Flare />
               <Spark />
               <Cassandra />

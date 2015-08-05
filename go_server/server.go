@@ -32,7 +32,7 @@ func startFlare() {
 		for {
 			var bytes = localWS.readBytesBlocking()
 			log.Println("got local" + string(bytes))
-			var data = map[string]interface{}{}
+			var data = map[interface{}]interface{}{}
 			if err := json.Unmarshal(bytes, &data); err != nil {
 				panic(err)
 			}
@@ -68,6 +68,7 @@ func startFlare() {
 				localWS.writeBytes(res)
 			}
 			if data["flag"] == "setConfig" {
+				log.Println(data["text"])
 				setConfigBytes([]byte(data["text"].(string)))
 				saveConfig()
 			}

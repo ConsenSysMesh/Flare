@@ -69,7 +69,7 @@ func (wi *websocketInstance) readBytesBlocking() []byte {
 }
 
 func (wi *websocketInstance) readHandler() {
-	wi.socket.SetReadLimit(512)
+	//wi.socket.SetReadLimit(512)
 	wi.socket.SetReadDeadline(time.Now().Add(pongWait))
 	wi.socket.SetPongHandler(func(string) error { wi.socket.SetReadDeadline(time.Now().Add(pongWait)); return nil })
 	for {

@@ -18,7 +18,7 @@ Meteor.startup(function () {
   var flareConf = process.env.FLARECONF
   confJSON = Npm.require(flareConf)
 
-  filesDirectory = confJSON.Flare.Directory+'/files/'
+  filesDirectory = confJSON.flare.directory+'/files/'
 
   String.prototype.escapeSpecialChars = function() {
     return this.replace(/\\n/g, "\\\\n")
@@ -79,8 +79,8 @@ Meteor.startup(function () {
 
   localIdentConn = {}
   localWSServer = new WebSocketServer({
-    host: confJSON.Flare.Local.IP,
-    port: confJSON.Flare.Local.Port
+    host: confJSON.flare.local.ip,
+    port: confJSON.flare.local.port
   })//35275 is 'flark' (flare spark) on keypads
   localWSServer.on('connection', Meteor.bindEnvironment(function(connection) {
     connection.on('message', Meteor.bindEnvironment(function(message) {
@@ -117,8 +117,8 @@ Meteor.startup(function () {
 
   masterIdentConn = {}
   masterWSServer = new WebSocketServer({
-    host: confJSON.Flare.Master.IP,
-    port: confJSON.Flare.Master.Port
+    host: confJSON.flare.master.ip,
+    port: confJSON.flare.master.port
   }) //35384 is 'fleth' (flare ethereum) on keypads
   masterWSServer.on('connection', Meteor.bindEnvironment(function(connection) {
     connection.on('message', Meteor.bindEnvironment(function(message) {
