@@ -3,7 +3,6 @@ SparkDB
 CassandraDB
 IPFSDB
 JARSDB
-EthereumDB
 Navbar
 Sidebar
 */

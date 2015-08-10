@@ -64,36 +64,64 @@ Meteor.startup(function () {
     return JARSDB.find()
   })
 
-  EthereumDB = new Mongo.Collection("ethereum")
-  EthereumDB.remove({}) //TODO: probably remove this for production
-  Meteor.publish('ethereum', function() {
-    return EthereumDB.find()
-  })
-
   ConfigDB = new Mongo.Collection("config")
   ConfigDB.remove({})
+  ConfigDB.insert({
+  "cassandra": {
+    "directory": "",
+    "ip": "",
+    "password": "",
+    "port": "",
+    "username": ""
+  },
+  "flare": {
+    "address": "",
+    "directory": "",
+    "local": {
+      "ip": "",
+      "port": ""
+    },
+    "master": {
+      "ip": "",
+      "port": ""
+    },
+    "price": ""
+  },
+  "spark": {
+    "cores": "",
+    "directory": "",
+    "log4j": {
+      "conversionPattern": "",
+      "appender": "",
+      "directory": "",
+      "layout": "",
+      "maxFileSize": "",
+      "rootCategory": ""
+    },
+    "master": {
+      "ip": "",
+      "port": ""
+    },
+    "price": "",
+    "receiverMemory": ""
+  }
+})
   Meteor.publish('config', function() {
     return ConfigDB.find()
   })
 
-
-
-  localIdentConn = {}
   //35275 is 'flark' (flare spark) on keypads
   localWS = new WebSocket('ws://'+confJSON.flare.local.ip+':'+confJSON.flare.local.port+'/local')
 
-  localWS.on('error', function(error) {
-    console.log('Local Connect Error: ' + error.toString());
-  })
+  localWS.on('error', Meteor.bindEnvironment(function(error) {
+    console.log('Local WebSocket Connect Error: ' + error.toString());
+  }))
 
-  localWS.on('message', function(message) {
+  localWS.on('message', Meteor.bindEnvironment( function(message) {
     console.log('Flare Received Message: ' + message.escapeSpecialChars());
 
     var data = JSON.parse(message.escapeSpecialChars())
-    if (data.flag == "identify") {
-      localIdentConn[data.name] = connection
-      return
-    }
+
     //flag for when goserver responds with the requested log data
     if (data.flag == "getLog" && data.success == true){
       switch (data.type) {
@@ -115,5 +143,5 @@ Meteor.startup(function () {
     if (data.flag == "getConfig" && data.success == true) {
       ConfigDB.upsert({}, JSON.parse(data.text))
     }
-  });
+  }))
 })
