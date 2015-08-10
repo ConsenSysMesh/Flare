@@ -67,45 +67,45 @@ Meteor.startup(function () {
   ConfigDB = new Mongo.Collection("config")
   ConfigDB.remove({})
   ConfigDB.insert({
-  "cassandra": {
-    "directory": "",
-    "ip": "",
-    "password": "",
-    "port": "",
-    "username": ""
-  },
-  "flare": {
-    "address": "",
-    "directory": "",
-    "local": {
-      "ip": "",
-      "port": ""
-    },
-    "master": {
-      "ip": "",
-      "port": ""
-    },
-    "price": ""
-  },
-  "spark": {
-    "cores": "",
-    "directory": "",
-    "log4j": {
-      "conversionPattern": "",
-      "appender": "",
+    "cassandra": {
       "directory": "",
-      "layout": "",
-      "maxFileSize": "",
-      "rootCategory": ""
-    },
-    "master": {
       "ip": "",
-      "port": ""
+      "password": "",
+      "port": "",
+      "username": ""
     },
-    "price": "",
-    "receiverMemory": ""
-  }
-})
+    "flare": {
+      "address": "",
+      "directory": "",
+      "local": {
+        "ip": "",
+        "port": ""
+      },
+      "master": {
+        "ip": "",
+        "port": ""
+      },
+      "price": ""
+    },
+    "spark": {
+      "cores": "",
+      "directory": "",
+      "log4j": {
+        "conversionPattern": "",
+        "appender": "",
+        "directory": "",
+        "layout": "",
+        "maxFileSize": "",
+        "rootCategory": ""
+      },
+      "master": {
+        "ip": "",
+        "port": ""
+      },
+      "price": "",
+      "receiverMemory": ""
+    }
+  })
   Meteor.publish('config', function() {
     return ConfigDB.find()
   })
@@ -123,7 +123,7 @@ Meteor.startup(function () {
     var data = JSON.parse(message.escapeSpecialChars())
 
     //flag for when goserver responds with the requested log data
-    if (data.flag == "getLog" && data.success == true){
+    if (data.flag == "log"){
       switch (data.type) {
         case "sparkUI":
         SparkDB.upsert({},{sparkUILog: data.text})
@@ -140,7 +140,7 @@ Meteor.startup(function () {
         default:
       }
     }
-    if (data.flag == "getConfig" && data.success == true) {
+    if (data.flag == "config") {
       ConfigDB.upsert({}, JSON.parse(data.text))
     }
   }))

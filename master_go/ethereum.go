@@ -1,8 +1,11 @@
+/*Initializes and contacts ethereum_meteor for processing payment for computation*/
+
 package main
 
 import (
 	"encoding/json"
 	"log"
+	"os/exec"
 	"regexp"
 	"time"
 )
@@ -16,13 +19,10 @@ func completeOperations(operations int) {
 	response["address"] = config.Flare.Address
 
 	var res, _ = json.Marshal(response)
-	log.Println(string(res))
 	masterWSClient.writeBytes(res)
 }
 
 func payPerComputation() {
-	//TODO: remove this testing line
-	var sparkLogName = "/home/firescar96/flare/sparkLogging"
 	//seed := "print angle evolve stick wild blue hidden danger nest bar retire north"
 
 	lastMod := time.Date(1, time.January, 1, 1, 1, 1, 1, time.Local)
@@ -51,10 +51,12 @@ func payPerComputation() {
 
 func startEthereum() {
 	runningEthereum = true
-
+	log.Println("starting ethereum payment handler...")
+	exec.Command("bash", "-c", "cd "+config.Flare.Directory+"/ethereum_meteor && meteor -p 35388").Run()
 	go payPerComputation()
 }
 
 func stopEthereum() {
 	runningEthereum = false
+	//TODO: stop ethereum_meteor somehow
 }

@@ -54,16 +54,16 @@ type websocketInterface interface {
 }
 
 var localWSServer = websocketInstance{
-	readChan:   make(chan []byte),
-	writeChan:  make(chan []byte),
+	readChan:   make(chan []byte, 5),
+	writeChan:  make(chan []byte, 5),
 	pingTicker: time.NewTicker(pingPeriod),
 	path:       "/local",
 	isClient:   false,
 }
 
 var masterWSClient = websocketInstance{
-	readChan:   make(chan []byte),
-	writeChan:  make(chan []byte),
+	readChan:   make(chan []byte, 5),
+	writeChan:  make(chan []byte, 5),
 	pingTicker: time.NewTicker(pingPeriod),
 	path:       "/master",
 	isClient:   true,
@@ -155,17 +155,24 @@ func (wi *websocketInstance) serve(w http.ResponseWriter, r *http.Request) {
 }
 
 func (wi *websocketInstance) connect() {
-
 	//keep trying to get a connection
-	conn, err := net.Dial("tcp", wi.address+":"+wi.port)
-	if err != nil {
-		log.Println("Problem with creating connection " + err.Error())
-		defer wi.connect()
-		time.Sleep(pingPeriod)
-		return
-	}
 
-	site, err := url.Parse("ws://" + wi.address + ":" + wi.port + masterWSClient.path)
+	var conn net.Conn
+	var dialConnection func()
+	dialConnection = func() {
+		_conn, err := net.Dial("tcp", wi.address+":"+wi.port)
+		if err != nil {
+			defer dialConnection()
+			time.Sleep(pingPeriod)
+			return
+		}
+		conn = _conn
+	}
+	dialConnection()
+
+	log.Println("connection found")
+
+	site, err := url.Parse("ws://" + wi.address + ":" + wi.port + wi.path)
 
 	wi.socket, _, err = websocket.NewClient(conn, site, nil, bufferSize, bufferSize)
 
@@ -196,6 +203,7 @@ func startWebsockets() {
 	masterWSClient.address = config.Flare.Master.IP
 	masterWSClient.port = config.Flare.Master.Port
 
+	log.Println("waiting for connection to ethereum standalone...")
 	masterWSClient.connect()
 }
 

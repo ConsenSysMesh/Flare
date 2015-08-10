@@ -14,11 +14,12 @@ type status struct {
 
 func startFlare() {
 	//startup all the different asynchronous processes ,ORDER IS IMPORTANT
-	startWebsockets()
 	startSpark()
 	startEthereum()
 	startCassandra()
 	startIPFS()
+	startWebsockets()
+	startFrontend()
 	log.Println("flare is ready")
 
 	go func() {
@@ -30,17 +31,28 @@ func startFlare() {
 
 	go func() {
 		for {
+			_config := <-publish.configChan
+
+			var response = map[string]interface{}{}
+			response["flag"] = "config"
+			response["text"] = string(_config)
+			var res, _ = json.Marshal(response)
+			localWSServer.writeBytes(res)
+		}
+	}()
+
+	go func() {
+		for {
 			var bytes = localWSServer.readBytesBlocking()
 			log.Println("got local" + string(bytes))
-			var data = map[interface{}]interface{}{}
+			var data = map[string]interface{}{}
 			if err := json.Unmarshal(bytes, &data); err != nil {
 				panic(err)
 			}
 
 			var response = map[string]interface{}{}
-			response["flag"] = data["flag"]
 			if data["flag"] == "getLog" {
-				response["success"] = false
+				response["flag"] = "log"
 				response["type"] = data["type"]
 
 				switch data["type"] {
@@ -69,12 +81,11 @@ func startFlare() {
 			}
 			if data["flag"] == "setConfig" {
 				log.Println(data["text"])
-				setConfigBytes([]byte(data["text"].(string)))
-				saveConfig()
+				saveConfig([]byte(data["text"].(string)))
 			}
 			if data["flag"] == "getConfig" {
+				response["flag"] = "config"
 				var _config = getConfigBytes()
-				response["success"] = true
 				response["text"] = string(_config)
 				var res, _ = json.Marshal(response)
 				localWSServer.writeBytes(res)
@@ -86,11 +97,12 @@ func startFlare() {
 //stopFlare can be called multiple times
 func stopFlare() {
 	//order is not as important here as in startFlare(), but still important
+	stopFrontend()
+	stopWebsockets()
 	stopIPFS()
 	stopCassandra()
 	stopEthereum()
 	stopSpark()
-	stopWebsockets()
 }
 
 func main() {
@@ -99,8 +111,6 @@ func main() {
 	}
 
 	initConfig()
-	startWebsockets()
-	startEthereum()
 
 	var command string
 	for {
@@ -128,8 +138,6 @@ func main() {
 			stopFlare()
 			initConfig()
 			startFlare()
-		case "save":
-			saveConfig()
 		}
 	}
 }

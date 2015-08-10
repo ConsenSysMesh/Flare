@@ -1,10 +1,3 @@
-var settings = Meteor.bindEnvironment(function () {
-
-  //check for new configs only once
-  if(localWS && ConfigDB.findOne() == null)
-    localWS.send(JSON.stringify({flag: "getConfig"}))
-})
-
 Meteor.startup(function() {
   ConfigDB.find().observeChanges({
     changed: function(id, fields){
@@ -23,6 +16,7 @@ Meteor.startup(function() {
     }
   })
 
-//TODO: don't hardcode, subscribe and have go send config when it changes
-  setInterval(settings, 5000)
+  localWS.on('open', Meteor.bindEnvironment( function() {
+      localWS.send(JSON.stringify({flag: "getConfig"}))
+  }))
 })

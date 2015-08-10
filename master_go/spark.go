@@ -11,7 +11,7 @@ import (
 var sparkLogName = ""
 
 func getSparkLog() (string, error) {
-	text, err := readFile(sparkLogName)
+	text, err := readFileWithLines(sparkLogName)
 
 	return text, err
 }
@@ -24,6 +24,7 @@ func getSparkUILog() (string, error) {
 }
 
 func startSpark() {
+	log.Println("starting spark...")
 	//create the path for the log file
 	exec.Command("mkdir", "-p", config.Spark.Log4J.Directory)
 	sparkLogName = config.Spark.Log4J.Directory + "/sparkLogging"

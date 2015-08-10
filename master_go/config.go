@@ -1,3 +1,5 @@
+/*Manages the global configuration stuct and maintains consistency between the config variable and the json on the filesystem */
+
 package main
 
 import (
@@ -5,6 +7,7 @@ import (
 	"io/ioutil"
 	"log"
 	"os"
+	"time"
 )
 
 type configuration struct {
@@ -48,7 +51,7 @@ type configuration struct {
 	} `json:"spark"`
 }
 
-var config = &configuration{}
+var config = new(configuration)
 
 func setConfigBytes(_config []byte) {
 	if err := json.Unmarshal(_config, &config); err != nil {
@@ -62,15 +65,35 @@ func getConfigBytes() []byte {
 	return _config
 }
 
-func initConfig() {
-	//get the configuration using the system env variable
+func saveConfig(raw []byte) {
+	var _config = new(configuration)
+	if err := json.Unmarshal(raw, &_config); err != nil {
+		log.Println("error with parsing config json")
+		panic(err)
+	}
+	data, _ := json.MarshalIndent(_config, "", "    ")
 	confLoc := os.Getenv("FLARECONF")
-	_config, _ := ioutil.ReadFile(confLoc)
-	setConfigBytes(_config)
+	ioutil.WriteFile(confLoc, data, os.ModePerm)
 }
 
-func saveConfig() {
+func readAndSetConfig() {
+	var lastMod = time.Date(1, time.January, 1, 1, 1, 1, 1, time.Local)
+	//get the configuration using the system env variable
 	confLoc := os.Getenv("FLARECONF")
-	var _config, _ = json.MarshalIndent(config, "", "  ")
-	ioutil.WriteFile(confLoc, _config, os.ModePerm)
+	for {
+
+		_config, _lastMod, _ := readFileBytesIfModified(lastMod, confLoc)
+
+		if _lastMod.After(lastMod) {
+			lastMod = _lastMod
+
+			setConfigBytes(_config)
+
+			publish.configChan <- _config
+		}
+	}
+}
+
+func initConfig() {
+	go readAndSetConfig()
 }

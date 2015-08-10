@@ -5,7 +5,9 @@ Meteor.startup( function(){
   Meteor.subscribe('config')
 
   Template.settings.rendered = function() {
-    initialConfig = ConfigDB.findOne()
+    var initialConfig = ConfigDB.findOne()
+
+    console.log(initialConfig);
 
     var Flare = React.createClass({
       getInitialState: function() {

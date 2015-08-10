@@ -1,3 +1,5 @@
+/*Contains functions for the operation of and interaction with Cassandra*/
+
 package main
 
 import (
@@ -95,6 +97,7 @@ func getTracingLog() string {
 
 //initCassandra make cassandra ready for operations
 func startCassandra() {
+	log.Println("starting cassandra...")
 	//write the config for cassandra
 	cassandraConfigName := config.Cassandra.Directory + "/conf/cassandra.yaml"
 
