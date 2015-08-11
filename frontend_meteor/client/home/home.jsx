@@ -114,9 +114,8 @@ Meteor.startup( function(){
     var IPFS = React.createClass({
       getInitialState: function() {
         return {
-          ID: "N/A",
+          id: "N/A",
           status: "Not connected",
-          address: "N/A",
           publicKey: "N/A"
         }
       },
@@ -127,9 +126,8 @@ Meteor.startup( function(){
             var info = IPFSDB.findOne()
             if(info)
             self.setState({
-              ID: info["ID"],
+              id: info["id"],
               status: info["status"],
-              address: info["address"],
               publicKey: info["publicKey"]
             })
           })
@@ -141,16 +139,12 @@ Meteor.startup( function(){
             <h3>IPFS</h3>
             <div className='infobox'>
               <div>
-                <h5>PeerID: </h5>
+                <h5>ID: </h5>
                 <span>{this.state.ID}</span>
               </div>
               <div>
                 <h5>Status: </h5>
                 <span>{this.state.status}</span>
-              </div>
-              <div>
-                <h5>Swarm Address: </h5>
-                <span>{this.state.address}</span>
               </div>
               <div>
                 <h5>Public Key: </h5>

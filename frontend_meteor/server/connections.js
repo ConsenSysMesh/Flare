@@ -1,5 +1,5 @@
 var connections = Meteor.bindEnvironment(function () {
-  ///TODO: Use the spark ui logs instead, potentially scan using go
+  ///TODO: Potentially use the spark ui logs instead, potentially scan using go
   var sparkURL = "http://localhost:8080";
   HTTP.get(sparkURL, function(error, response){
     if(response){
@@ -23,11 +23,10 @@ var connections = Meteor.bindEnvironment(function () {
     }
   })
 
-  exec(confJSON.cassandra.directory+'/bin/nodetool ring',
-  {async: true, silent: true}).stdout.on('data', Meteor.bindEnvironment( function(data) {
+  exec(confJSON.cassandra.directory+'/bin/nodetool ring', Meteor.bindEnvironment( function(err, out, code) {
     var $ = cheerio.load('')
     var connections = []
-    $(data.split(/\n+/)).each(function(i,e) {
+    $(out.split(/\n+/)).each(function(i,e) {
       var colData = e.split(/\s+/);
       connections.push({
         address: colData[0],
@@ -40,14 +39,8 @@ var connections = Meteor.bindEnvironment(function () {
     CassandraDB.upsert({}, {$set: {connections: connections}})
   }))
 
-  var ipfsPeers = exec('ipfs swarm peers', {async: true, silent: true});
-  ipfsPeers.stdout.on('data', Meteor.bindEnvironment( function(data){
-    $ = cheerio.load('')
-    var connections = []
-    $(data.split(/\n+/)).each(function(i,e) {
-      connections.push({address: e})
-    })
-    IPFSDB.upsert({}, {$set: {connections: connections}})
+  var ipfsPeers = exec('ipfs swarm peers', Meteor.bindEnvironment( function(err, out, code){
+    IPFSDB.upsert({}, {$set: {connections: out.split("\n")}})
   }))
 })
 Meteor.startup(function(){setInterval(connections, 5000)})

@@ -1,4 +1,5 @@
 var home = Meteor.bindEnvironment(function () {
+  //Get the SparkUI and parse it for info
   var sparkURL = "http://localhost:8080";
   HTTP.get(sparkURL, function(error, response){
     if(response) {
@@ -15,72 +16,47 @@ var home = Meteor.bindEnvironment(function () {
         })
       })
     }
-    })
+  })
 
-    exec(confJSON.cassandra.directory+'/bin/nodetool info', Meteor.bindEnvironment(function(err, out, code) {
-      var keyRegex = /.*(?=\s*:.*)/g
-      var keys = out.match(keyRegex)
-      var valueRegex = /:.*/g
-      var values = out.match(valueRegex)
-      if (keys == null)
-        return
-      var data = {}
-      params=out.split("\n")
-      for(i=0; i< params.length; i++) {
-        if(params[i].match(keyRegex) == null)
-          break
-        var key = params[i]
-          .match(keyRegex)[0]
-          .trim()
-        var value = params[i]
-          .match(valueRegex)[0]
-          .replace(":","")
-          .trim()
+  //Use the cassandra nodetool to get state information
+  exec(confJSON.cassandra.directory+'/bin/nodetool info', Meteor.bindEnvironment(function(err, out, code) {
+    var data = {}
+    params=out.split("\n")
+    //iterate through every line of output, skipping the last blank line
+    for(i=0; i< params.length-1; i++) {
+      param = params[i].split(":")
+      var key = param[0].trim()
+      var val = param[1].trim()
+      data[key] = val
+    }
 
-        data[key] = value
-      }
+    var obj = {
+      ID: data["ID"],
+      gossipActive: data["Gossip active"],
+      thriftActive: data["Thrift active"],
+      uptime: data["Uptime (seconds)"],
+      heapMemory: data["Heap Memory (MB)"]
+    }
 
+    CassandraDB.upsert({},{$set: obj})
+  }))
+
+  //call the IPFS REST API for state information
+  HTTP.get('http://127.0.0.1:5001/api/v0/id', function(error, response) {
+    if(response) {
+      var id = response.data.ID
+      var publicKey = response.data.PublicKey
       var obj = {
-        ID: data["ID"],
-        gossipActive: data["Gossip active"],
-        thriftActive: data["Thrift active"],
-        uptime: data["Uptime (seconds)"],
-        heapMemory: data["Heap Memory (MB)"]
+        id: id,
+        status: "ALIVE",
+        publicKey: publicKey
       }
-
-      CassandraDB.upsert({},{$set: obj})
-    }))
-
-    exec('ipfs config show', Meteor.bindEnvironment(function(err, out, code) {
-      if (err) {
-        //TODO: create a graceful way to display all the configuration errors
-        //console.log("ipfs threw the following error, make sure it's enabled with the correct ports");
-        //console.log(err);
-        return
-      }
-      var IPFSResponse = JSON.parse(out)
-      var peerID = IPFSResponse.Identity.PeerID
-      var status = 'ALIVE'
-      var address = IPFSResponse.Addresses.Swarm
-
-      //TODO: Callback in callback...not pretty but it works. Need to learn promises
-      HTTP.get('http://127.0.0.1:5001/api/v0/id', function(error, response) {
-        if(response) {
-          var publicKey = response.data.PublicKey
-          var obj = {
-            ID: peerID,
-            status: "ALIVE",
-            address: address,
-            publicKey: publicKey
-          }
-          IPFSDB.upsert({},{$set: obj})
-        }
-      })
-    }))
-
+      IPFSDB.upsert({},{$set: obj})
+    }
+  })
 })
 
 Meteor.startup(function(){
   //TODO: stop from consuming CPU
-  //setInterval(home, 5000)
-  })
+  setInterval(home, 5000)
+})
