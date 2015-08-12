@@ -1,9 +1,12 @@
+@import "imports";
+
 html, body {
 	height: 100%;
 	margin: 0;
 	font-size: 14px;
 	font-weight: normal;
-	color: #929db1;
+	color: $red;
+	background-color: $black;
 	font-family: Myriad Pro, "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
@@ -33,9 +36,9 @@ h4 {
 
 .infobox{
 	margin: 2%;
-	background-color: #fffbe8;
+	background-color: $yellow;
 	border-style: solid;
-	border-color: #d8d8d8;
+	border-color: $white;
 	border-width: 1px;
 
 	>div{
@@ -45,7 +48,6 @@ h4 {
 		padding-top: 15px;
 		> *{
 			display:inline;
-			color: #586071;
 		}
 	}
 }
@@ -63,84 +65,37 @@ a, a:hover, a:active, a:visited, a:focus {
 	border: none;
 }
 
-/* add it to all your text blocks */
-.box {
-	border: 1px solid #eaecf0;
-	padding: 2%;
-}
-
 /*
 * navbar
 */
-.navbar {
-	background: #33373f;
+#navbar {
+	background-color: $red-dark;
 	position: fixed;
 	top: 0;
 	right: 0;
 	left: 0;
 	height: 50px;
 	border: 1px solid transparent;
-}
-.navbar-header {
-	float: left;
-	width: 100%;
-}
-.navbar-brand {
-	float: left;
-	height: 50px;
-	padding: 12px 20px;
-	font-size: 20px;
-	line-height: 32px;
-	text-align: left;
-	color: #ea5353;
-	margin-left: 30px;
-}
-.navbar-nav>li>a {
-	padding-top: 14px;
-	padding-bottom: 14px;
-}
+	border: 0;
 
-.icon{
-	height: 25px;
-}
+	#etherBalance{
+		float: right;
+		padding-right: 1em;
+		padding-top: 15px;
+		color: #ffffff;
+	}
+	a#github {
+		float: right;
+		padding-right: 1em;
+		padding-top: 10px;
+		opacity: 0.4;
+		font-size: 25px;
 
-#etherBalance{
-	float: right;
-	padding-right: 1em;
-	padding-top: 15px;
-	color: #ffffff;
-}
-#github{
-	float: right;
-	padding-right: 1em;
-	padding-top: 10px;
-}
-a#github {
-	opacity: 0.4;
-	font-size: 25px;
-}
-a:hover#github{
-	opacity: 1;
-	font-size: 25px;
-}
-
-/*
-* sidebar
-*/
-.bottom {
-	bottom: 0;
-	position: fixed;
-	background: none;
-	text-align: left;
-}
-.bottom a:hover {
-	background: none;
-}
-ul#side li.bottom span {
-	margin: 0 20px;
-}
-ul#side li a {
-	padding: 20px 0;
+		&:hover{
+			opacity: 1;
+			font-size: 25px;
+		}
+	}
 }
 
 /*
@@ -158,40 +113,32 @@ button {
 		border-color: #82939c;
 	}
 }
-/*
-* Global add-ons
-*/
-.sub-header {
-	padding-bottom: 10px;
-	border-bottom: 1px solid #eee;
-}
-
-/*
-* Top navigation
-* Hide default border to remove 1px line.
-*/
-.navbar-fixed-top {
-	border: 0;
-}
 
 /* Sidebar navigation */
-.sidebar {
+#sidebar {
 	position: fixed;
 	width: 12%;
-	top: 50px;
+	top: 0;
 	bottom: 0;
 	left: 0;
 	z-index: 1000;
 	display: block;
 	overflow-x: hidden;
 	overflow-y: auto;
+	background-color: $red-dark;
+
+	.navbar-brand {
+		height: 50px;
+		width: 100%;
+		padding: 0 10%;
+		font-size: 20px;
+		line-height: 32px;
+		text-align: left;
+		color: #ea5353;
+	}
 
 	ul {
 		padding: 0;
-	}
-	/* Scrollable contents if viewport is shorter than content. */
-	background-color: #eaecf0;
-	border-right: 1px solid #eaecf0;
 	a {
 		font-size: 16px;
 		color: #8f939c;
@@ -208,3 +155,4 @@ button {
 			background-color: #f69696;}
 		}
 	}
+}

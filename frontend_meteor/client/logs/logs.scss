@@ -18,16 +18,16 @@
 
 			//@include transition(color .2s ease-out);
 			&[for=sparkUI] {
-				@include colorize($togglebg, $toggletxtbg);
+				@include txtColorInvert($togglebg, $toggletxtbg);
 			}
 			&[for=spark] {
-				@include colorize($togglebg, $toggletxtbg);
+				@include txtColorInvert($togglebg, $toggletxtbg);
 			}
 			&[for=tracing] {
-				@include colorize($togglebg, $toggletxtbg);
+				@include txtColorInvert($togglebg, $toggletxtbg);
 			}
 			&[for=session] {
-				@include colorize($togglebg, $toggletxtbg);
+				@include txtColorInvert($togglebg, $toggletxtbg);
 			}
 
 			input {

@@ -23,17 +23,14 @@ Meteor.startup( function(){
 		},
 		render: function(){
 			return(
-				<div className='sidebar'>
-					<ul className='nav'>
-						<li className='active'>
-							<a className={this.checkPath("/")} href="/">
-								<span className='icon fa fa-dot-circle-o' aria-hidden='true'></span>
-								Home
-							</a>
-						</li>
-
+				<div id='sidebar'>
+					<a className='navbar-brand' href='/'>
+						<span className='icon fa fa-fire logo' aria-hidden='true'></span>
+						<span>flare</span>
+					</a>
+					<ul>
 						<li>
-							<a className={this.checkPath("/connections")}href="/connections">
+							<a className={this.checkPath("/connections")} href="/connections">
 								<span className='icon fa fa-globe' aria-hidden='true'></span>
 								Connections
 							</a>
@@ -70,13 +67,9 @@ Meteor.startup( function(){
 		render: function(){
 			//Hardcoded Balance, need lightwallet integration
 			return(
-				<nav className='navbar'>
-					<a className='navbar-brand col-xs-12' href='/'>
-						<span className='icon fa fa-fire logo' aria-hidden='true'></span>
-						<span>flare</span>
-					</a>
-					<div id = 'etherBalance'>10,000,000 ETH</div>
-					<a href='https://github.com/lumichael94/flare' id='github' className='fa fa-github' target='_blank' title='Github Repository'/>
+				<nav id='navbar'>
+					<div id='etherBalance'>10,000,000 ETH</div>
+					<a href='https://github.com/lumichael94/flare' id='github' className='fa fa-github'>Github Repository</a>
 				</nav>
 			);
 		}

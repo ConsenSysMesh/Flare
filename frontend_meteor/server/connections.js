@@ -4,14 +4,22 @@ var connections = Meteor.bindEnvironment(function () {
   HTTP.get(sparkURL, function(error, response){
     if(response){
       var $ = cheerio.load(response.content)
-      var connections = []
+
+      var master = {}
+      var title = $('h3').text()
+      //remove the link to extract the title
+      var titleText = title.replace($('h3 a').text(), "")
+      //parse out the address portion
+      master.address = titleText.trim().split(" ")[3]
+
+      var nodes = []
       var nodeArray = $('table.table tr').get().map(function(row) {
         return $(row).find('td').get().map(function(cell) {
           return $(cell).text();
         });
       });
       $(nodeArray).each(function(i,e){
-        connections.push({
+        nodes.push({
           ID: e[0].replace(/(\s)/g,""),
           address: e[1],
           state: e[2],
@@ -19,7 +27,7 @@ var connections = Meteor.bindEnvironment(function () {
           memory: e[4].replace(/(\s+)/g," ")
         })
       })
-      SparkDB.upsert({}, {$set: {connections: connections}})
+      SparkDB.upsert({}, {$set: {connections: {master:master, nodes: nodes}}})
     }
   })
 

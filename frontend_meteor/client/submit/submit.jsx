@@ -5,40 +5,6 @@ Meteor.startup( function(){
 
 
   Template.submit.rendered = function() {
-    var AddConfig= React.createClass({
-      onClick: function(event){
-        console.log('Uploading Config');
-
-        //Grab text from form fields.
-        //Find form fields
-        var form1= $('#spark-master-address');
-        var form2= $('#cassandra-address');
-        var form3= $('#cassandra-username');
-        var form4= $('#cassandra-password');
-
-        var response = "";
-        prgbar = $('#progress-text');
-        prgbar.innerHTML = 'Waiting for confirmation from the network...';
-
-        response = {
-          sparkMasterAddress: form1.val(),
-          cassAddress: form2.val(),
-          cassUsername: form3.val(),
-          cassPassword: form4.val()
-        }
-
-        event.preventDefault();
-
-      },
-      render: function(){
-        return(
-          <button onClick={this.onClick}>
-            Submit Config
-          </button>
-        )
-      }
-    });
-
     var Submit = React.createClass({
       render: function(){
         return(
@@ -47,22 +13,7 @@ Meteor.startup( function(){
             <Sidebar path={window.location.pathname}/>
             <div className='container'>
               <h1>Submit</h1>
-              <form>
-                <label>Spark Master IP Address
-                  <input type='text' id='spark-master-address' placeholder='Spark Master IP Address' disabled/>
-                </label>
-                <label>Cassandra IP Address
-                  <input type='text' id='cassandra-address' placeholder='Cassandra IP Address' disabled/>
-                </label>
-                <label>Cassandra Username
-                  <input type='text' id='cassandra-username' placeholder='Cassandra Username' disabled/>
-                </label>
-                <label>Cassandra Password
-                  <input type='password' id='cassandra-password' placeholder='Cassandra Password'disabled/>
-                </label>
-              </form>
               <div id='button-row'>
-                <AddConfig/>
                 <IncludeTemplate template={Template.uploadForm} />
               </div>
               <div id='progress-bar'>
