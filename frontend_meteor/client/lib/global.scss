@@ -128,13 +128,8 @@ button {
 	background-color: $red-dark;
 
 	.navbar-brand {
-		height: 50px;
-		width: 100%;
-		padding: 0 10%;
-		font-size: 20px;
-		line-height: 32px;
-		text-align: left;
-		color: #ea5353;
+		display: inline-block;
+		padding: 10px 0 0 10px;
 	}
 
 	ul {

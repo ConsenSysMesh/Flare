@@ -25,8 +25,7 @@ Meteor.startup( function(){
 			return(
 				<div id='sidebar'>
 					<a className='navbar-brand' href='/'>
-						<span className='icon fa fa-fire logo' aria-hidden='true'></span>
-						<span>flare</span>
+						<img src="/images/logo.png" alt="Flare logo" height="50" width="140" />
 					</a>
 					<ul>
 						<li>

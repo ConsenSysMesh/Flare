@@ -1,8 +1,8 @@
 @import "../lib/imports";
 
 #logs-page {
-	$togglebg : #555;
-	$toggletxtbg : #fff;
+	$togglebg : $gray-dark;
+	$togglefg : $gray-light;
 
 	#log-select {
 		display: flex;
@@ -18,16 +18,16 @@
 
 			//@include transition(color .2s ease-out);
 			&[for=sparkUI] {
-				@include txtColorInvert($togglebg, $toggletxtbg);
+				@include txtColorInvert($togglebg, $togglefg);
 			}
 			&[for=spark] {
-				@include txtColorInvert($togglebg, $toggletxtbg);
+				@include txtColorInvert($togglebg, $togglefg);
 			}
 			&[for=tracing] {
-				@include txtColorInvert($togglebg, $toggletxtbg);
+				@include txtColorInvert($togglebg, $togglefg);
 			}
 			&[for=session] {
-				@include txtColorInvert($togglebg, $toggletxtbg);
+				@include txtColorInvert($togglebg, $togglefg);
 			}
 
 			input {
