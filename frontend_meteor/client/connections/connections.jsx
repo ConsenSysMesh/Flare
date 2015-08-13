@@ -40,11 +40,11 @@ Meteor.startup( function(){
             <h2>Spark</h2>
             <div className='infobox'>
               <div>
-                <h5>Master: </h5>
+                <h3>Master: </h3>
                 <span>{this.state.master.address}</span>
               </div>
               <div>
-                <h5>Workers: </h5>
+                <h3>Workers: </h3>
                 <table>
                   <thead>
                     <tr>
@@ -98,8 +98,8 @@ Meteor.startup( function(){
         return(
           <div>
             <h2>Cassandra</h2>
-            <div className='infobox'>=
-              <h5>Top Peers: </h5>
+            <div className='infobox'>
+              <h3>Top Peers: </h3>
               <table>
                 <thead>
                   <tr>
@@ -149,7 +149,7 @@ Meteor.startup( function(){
           <div>
             <h2>IPFS</h2>
             <div className='infobox'>
-              <h5>Top Peers: </h5>
+              <h3>Top Peers: </h3>
               <table>
                 <thead>
                   <tr><th>Peer ID</th></tr>

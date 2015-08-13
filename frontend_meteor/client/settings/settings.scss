@@ -12,27 +12,39 @@
 
 	h3 {
 		color: $yellow;
-		padding: 0 0 0 10px;
+		margin: auto;
 	}
 
-		h4 {
-			color: $yellow;
-			padding: 0 0 0 10px;
-		}
+	h4 {
+		color: $yellow;
+		padding: 0 0 0 10px;
+	}
 
 	form {
 		display: block;
 		margin:auto;
 		width: 70%;
 
-		div {
+
+		.fullColumn {
 			display: inline-block;
+			margin: 0;
+			width: 100%;
+			text-align: center;
+		}
+
+
+		.halfColumn {
+			display: inline-block;
+			margin: 10px 0;
 			width: 50%;
+			text-align: center;
 		}
 
 		label{
+			text-align: left;
 			display: block;
-			margin: 20px auto;
+			margin: 20px 0;
 			font-size: larger;
 
 			&:first-child {
@@ -45,12 +57,15 @@
 
 			span {
 				display: block;
-				margin: 10px auto;
-				width: 375px;
+				margin: 10px 0;
+				width: 100%;
 				height: 30px;
 			}
 			input {
-				@extend span;
+				display: block;
+				width: 90%;
+				height: 30px;
+				margin: 10px auto;
 				outline: 0;
 				border: 1px solid transparent;
 				border-bottom: 1px solid $red;

@@ -39,7 +39,7 @@ Meteor.startup( function(){
           <div>
             <h2>Flare</h2>
             <form>
-              <div>
+              <div className="halfColumn">
                 <label>Directory
                   <input type='text' name='directory' placeholder={state.directory} onChange={this.handleChange}/>
                 </label>
@@ -47,12 +47,12 @@ Meteor.startup( function(){
                   <input type='text' name='address' placeholder={state.address} onChange={this.handleChange}/>
                 </label>
               </div>
-              <div>
+              <div className="halfColumn">
                 <label>Price
                   <input type='text' name='price' placeholder={state.price} onChange={this.handleChange}/>
                 </label>
               </div>
-              <div>
+              <div className="halfColumn">
                 <h3>Local Node</h3>
                 <label>IP Address
                   <input type='text' name='local.ip' placeholder={state.local.ip} onChange={this.handleChange}/>
@@ -61,7 +61,7 @@ Meteor.startup( function(){
                   <input type='text' name='local.port' placeholder={state.local.port} onChange={this.handleChange}/>
                 </label>
               </div>
-              <div>
+              <div className="halfColumn">
                 <h3>Master Node</h3>
                 <label>IP Address
                   <input type='text' name='master.ip' placeholder={state.master.ip} onChange={this.handleChange}/>
@@ -108,49 +108,55 @@ Meteor.startup( function(){
           <div>
             <h2>Spark</h2>
             <form>
+            <div className="halfColumn">
               <label>Directory
                 <input type='text' name='directory' placeholder={state.directory} onChange={this.handleChange}/>
               </label>
-              <h3>Master Settings</h3>
-              <div>
-                <label>IP
-                  <input type='text' name='master.ip' placeholder={state.master.ip} onChange={this.handleChange}/>
-                </label>
-                <label>Port
-                  <input type='text' name='master.port' placeholder={state.master.port} onChange={this.handleChange}/>
-                </label>
+            </div>
+              <div  className="fullColumn">
+                <h3>Master Settings</h3>
+                <div className="halfColumn">
+                  <label>IP
+                    <input type='text' name='master.ip' placeholder={state.master.ip} onChange={this.handleChange}/>
+                  </label>
+                  <label>Port
+                    <input type='text' name='master.port' placeholder={state.master.port} onChange={this.handleChange}/>
+                  </label>
+                </div>
+                <div className="halfColumn">
+                  <label>Memory allowed
+                    <input type='text' name='receiverMemory' placeholder={state.receiverMemory} onChange={this.handleChange}/>
+                  </label>
+                  <label>Cores Allowed
+                    <input type='text' name='cores' placeholder={state.cores} onChange={this.handleChange}/>
+                  </label>
+                </div>
               </div>
-              <div>
-                <label>Memory allowed
-                  <input type='text' name='receiverMemory' placeholder={state.receiverMemory} onChange={this.handleChange}/>
-                </label>
-                <label>Cores Allowed
-                  <input type='text' name='cores' placeholder={state.cores} onChange={this.handleChange}/>
-                </label>
-              </div>
-              <h3>Logging Settings</h3>
-              <h4>Changing the disabled options may break Flare</h4>
-              <div>
-                <label>Root Category
-                  <input type='text' name='log4j.rootCategory' placeholder={state.log4j.rootCategory} disabled/>
-                </label>
-                <label>Appender
-                  <input type='text' name='log4j.appender' placeholder={state.log4j.appender} disabled/>
-                </label>
-                <label>Directory
-                  <input type='text' name='log4j.directory' placeholder={state.log4j.directory} onChange={this.handleChange}/>
-                </label>
-              </div>
-              <div>
-                <label>Max File Size
-                  <input type='text' name='log4j.maxFileSize' placeholder={state.log4j.maxFileSize} onChange={this.handleChange}/>
-                </label>
-                <label>Layout
-                  <input type='text' name='log4j.layout' placeholder={state.log4j.layout} disabled/>
-                </label>
-                <label>Conversion Pattern
-                  <input type='text' name='log4j.conversionPattern' placeholder={state.log4j.conversionPattern} disabled/>
-                </label>
+              <div className="fullColumn">
+                <h3>Logging Settings</h3>
+                <h4>Changing the disabled options may break Flare</h4>
+                <div className="halfColumn">
+                  <label>Root Category
+                    <input type='text' name='log4j.rootCategory' placeholder={state.log4j.rootCategory} disabled/>
+                  </label>
+                  <label>Appender
+                    <input type='text' name='log4j.appender' placeholder={state.log4j.appender} disabled/>
+                  </label>
+                  <label>Directory
+                    <input type='text' name='log4j.directory' placeholder={state.log4j.directory} onChange={this.handleChange}/>
+                  </label>
+                </div>
+                <div className="halfColumn">
+                  <label>Max File Size
+                    <input type='text' name='log4j.maxFileSize' placeholder={state.log4j.maxFileSize} onChange={this.handleChange}/>
+                  </label>
+                  <label>Layout
+                    <input type='text' name='log4j.layout' placeholder={state.log4j.layout} disabled/>
+                  </label>
+                  <label>Conversion Pattern
+                    <input type='text' name='log4j.conversionPattern' placeholder={state.log4j.conversionPattern} disabled/>
+                  </label>
+                </div>
               </div>
             </form>
           </div>
@@ -190,7 +196,7 @@ Meteor.startup( function(){
           <div>
             <h2>Cassandra</h2>
             <form>
-              <div>
+              <div className="halfColumn">
                 <label>Directory
                   <input type='text' name='directory' placeholder={state.directory} onChange={this.handleChange}/>
                 </label>
@@ -201,7 +207,7 @@ Meteor.startup( function(){
                   <input type='text' name='password' placeholder={state.password} onChange={this.handleChange}/>
                 </label>
               </div>
-              <div>
+              <div className="halfColumn">
                 <label>IP Address
                   <input type='text' name='address' placeholder={state.ip} onChange={this.handleChange}/>
                 </label>

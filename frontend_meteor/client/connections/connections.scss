@@ -1,5 +1,15 @@
 /*Connections Page*/
+@import "../lib/imports";
+
 #connections-page {
+  h2 {
+  	color: $red-light;
+  }
+
+  h3 {
+  	color: $red-pure;
+  }
+
   table {
     margin: auto;
   	width: 100%;
