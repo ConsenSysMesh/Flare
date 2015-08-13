@@ -1,33 +1,74 @@
+@import "../lib/imports";
+
 #settings-page {
-	h3{
-		margin:auto;
-	}
-	button#receiver{
-		display: block;
-		margin:auto;
-		margin-top: 35px;
+	h1 {
+		color: $yellow-darker;
 	}
 
-	label{
-		display: block;
-		margin: 20px auto;
-		font-size: larger;
+	h2 {
+		color: $yellow-dark;
+		margin-left: 2%;
+	}
 
-		input, span{
-			display: block;
-			margin: 10px auto;
-			width: 375px;
-			height: 30px;
+	h3 {
+		color: $yellow;
+		padding: 0 0 0 10px;
+	}
+
+		h4 {
+			color: $yellow;
+			padding: 0 0 0 10px;
 		}
-	}
-
-	button:disabled{
-		background:#dddddd;
-	}
 
 	form {
 		display: block;
-			margin:auto;
-			width: 70%;
+		margin:auto;
+		width: 70%;
+
+		div {
+			display: inline-block;
+			width: 50%;
+		}
+
+		label{
+			display: block;
+			margin: 20px auto;
+			font-size: larger;
+
+			&:first-child {
+				margin-top: 0;
+			}
+
+			&:last-child {
+				margin-bottom: 0;
+			}
+
+			span {
+				display: block;
+				margin: 10px auto;
+				width: 375px;
+				height: 30px;
+			}
+			input {
+				@extend span;
+				outline: 0;
+				border: 1px solid transparent;
+				border-bottom: 1px solid $red;
+				background: transparent;
+				color: $yellow;
+
+				&:focus {
+					border: 1px solid $red;
+					border-bottom: 1px solid $red;
+				}
+
+				&:disabled {
+					border: 1px solid transparent;
+					border-bottom: 1px solid $gray-dark;
+					background: transparent;
+					color: $gray-light;
+				}
+			}
+		}
 	}
 }

@@ -17,9 +17,11 @@ h1 {
 
 h2 {
 	font-size: 25px;
+	margin-left: 2%;
 }
 
 h3 {
+	padding: 0 0 0 10px;
 	font-size: 20px;
 }
 
@@ -36,7 +38,8 @@ h4 {
 
 .infobox{
 	margin: 2%;
-	background-color: $yellow;
+	color: $white;
+	background-color: $red;
 	border-style: solid;
 	border-color: $white;
 	border-width: 1px;
@@ -103,11 +106,11 @@ a, a:hover, a:active, a:visited, a:focus {
 */
 
 button {
-	background-color: #90a4ae;
+	background-color: $blue;
 	border-color: #90a4ae;
 	border-radius: 3px;
 	padding: 13px 20px;
-	color: #fff;
+	color: $white;
 	&:hover:enabled, &:active:enabled, &:focus:enabled {
 		background-color: #82939c;
 		border-color: #82939c;

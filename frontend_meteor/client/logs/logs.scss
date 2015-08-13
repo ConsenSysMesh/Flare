@@ -1,8 +1,9 @@
 @import "../lib/imports";
 
 #logs-page {
-	$togglebg : $gray-dark;
-	$togglefg : $gray-light;
+	h1 {
+		color: $gray-darker;
+	}
 
 	#log-select {
 		display: flex;
@@ -15,32 +16,18 @@
 	    float: left;
 			width: 25%;
 	    align-items: center;
-
-			//@include transition(color .2s ease-out);
-			&[for=sparkUI] {
-				@include txtColorInvert($togglebg, $togglefg);
-			}
-			&[for=spark] {
-				@include txtColorInvert($togglebg, $togglefg);
-			}
-			&[for=tracing] {
-				@include txtColorInvert($togglebg, $togglefg);
-			}
-			&[for=session] {
-				@include txtColorInvert($togglebg, $togglefg);
-			}
+			@include txtColorInvert($gray-dark, $gray-light);
 
 			input {
 				display: none;
-				@extend h4;
 
 				+ span {
-					@extend h4;
+					font-size: 20px;
 	        margin: auto;
 				}
 
 				&:checked + span {
-					text-shadow:  1px  rgba(255,255,255,.5);
+					font-weight: bold;
 				}
 			}
 		}
@@ -48,8 +35,7 @@
 
 	#logData {
 		white-space: pre-wrap;
-		height: 100%;
-
+		color: $white;
 		* {
 			display: none;
 			height: 100%;

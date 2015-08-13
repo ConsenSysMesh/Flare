@@ -13,13 +13,9 @@ Meteor.startup( function(){
             <Sidebar path={window.location.pathname}/>
             <div className='container'>
               <h1>Submit</h1>
-              <div id='button-row'>
+              <div id='uploadJar'>
+                <h2>Upload Jar</h2>
                 <IncludeTemplate template={Template.uploadForm} />
-              </div>
-              <div id='progress-bar'>
-                <div id='progress-text'>
-                  Waiting
-                </div>
               </div>
             </div>
           </div>

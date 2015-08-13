@@ -6,7 +6,6 @@ Meteor.startup(function() {
     Uploader.init(this);
     Uploader.finished = function(index, fileInfo, templateContext) {
       fileInfo.state = "new"
-      console.log(fileInfo);
       JARSDB.insert(fileInfo);
     }
   }
@@ -30,7 +29,6 @@ Meteor.startup(function() {
     },
     'click #selectFile': function (e) {
       e.preventDefault()
-      console.log($("#uploadForm #selectFileHandler"));
       $("#uploadForm #selectFileHandler").trigger("click")
     }
   })

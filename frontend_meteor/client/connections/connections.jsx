@@ -37,7 +37,7 @@ Meteor.startup( function(){
         })
         return(
           <div>
-            <h3>Spark</h3>
+            <h2>Spark</h2>
             <div className='infobox'>
               <div>
                 <h5>Master: </h5>
@@ -97,7 +97,7 @@ Meteor.startup( function(){
         })
         return(
           <div>
-            <h3>Cassandra</h3>
+            <h2>Cassandra</h2>
             <div className='infobox'>=
               <h5>Top Peers: </h5>
               <table>
@@ -147,7 +147,7 @@ Meteor.startup( function(){
         })
         return(
           <div>
-            <h3>IPFS</h3>
+            <h2>IPFS</h2>
             <div className='infobox'>
               <h5>Top Peers: </h5>
               <table>

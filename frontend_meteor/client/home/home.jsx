@@ -31,7 +31,7 @@ Meteor.startup( function(){
       render: function(){
         return(
           <div>
-            <h3>Spark</h3>
+            <h2>Spark</h2>
             <div className='infobox'>
               <div>
                 <h5>Local Status: </h5>
@@ -84,7 +84,7 @@ Meteor.startup( function(){
       render: function(){
         return(
           <div>
-            <h3>Cassandra</h3>
+            <h2>Cassandra</h2>
             <div className='infobox'>
               <div>
                 <h5>Peer ID: </h5>
@@ -136,7 +136,7 @@ Meteor.startup( function(){
       render: function(){
         return(
           <div>
-            <h3>IPFS</h3>
+            <h2>IPFS</h2>
             <div className='infobox'>
               <div>
                 <h5>ID: </h5>

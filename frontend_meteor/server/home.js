@@ -58,5 +58,5 @@ var home = Meteor.bindEnvironment(function () {
 
 Meteor.startup(function(){
   //TODO: stop from consuming CPU
-  setInterval(home, 5000)
+  //setInterval(home, 5000)
 })

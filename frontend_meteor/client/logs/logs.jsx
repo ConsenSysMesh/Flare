@@ -27,12 +27,11 @@ Meteor.startup( function(){
 
     var LogData = React.createClass({
       getInitialState: function() {
-        console.log("hey");
         return {
-          sparkUI: "spadaad",
-          spark: "yooo",
-          tracing: "wehoao",
-          session: "tricks"
+          sparkUI: "",
+          spark: "",
+          tracing: "",
+          session: ""
         }
       },
       componentDidMount: function() {

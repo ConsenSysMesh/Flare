@@ -1,3 +1,9 @@
+@import "../lib/imports";
+
 #home-page {
   word-wrap: break-word;
+
+  h2 {
+  	color: $red-light;
+  }
 }
