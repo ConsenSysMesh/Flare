@@ -82,8 +82,38 @@
 					border-bottom: 1px solid $gray-dark;
 					background: transparent;
 					color: $gray-light;
+
+					&::-webkit-input-placeholder { /* WebKit, Blink, Edge */
+						color:    $gray-dark;
+					}
+					&:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+						color:    $gray-dark;
+						opacity:  1;
+					}
+					&::-moz-placeholder { /* Mozilla Firefox 19+ */
+						color:    $gray-dark;
+						opacity:  1;
+					}
+					&:-ms-input-placeholder { /* Internet Explorer 10-11 */
+						color:    $gray-dark;
+					}
 				}
 			}
 		}
+	}
+
+	::-webkit-input-placeholder { /* WebKit, Blink, Edge */
+		color:    $yellow-darker;
+	}
+	:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+		color:    $yellow-darker;
+		opacity:  1;
+	}
+	::-moz-placeholder { /* Mozilla Firefox 19+ */
+		color:    $yellow-darker;
+		opacity:  1;
+	}
+	:-ms-input-placeholder { /* Internet Explorer 10-11 */
+		color:    $yellow-darker;
 	}
 }

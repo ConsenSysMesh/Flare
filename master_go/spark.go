@@ -8,7 +8,8 @@ import (
 )
 
 //exported for use by ethereum.go
-var sparkLogName = ""
+var sparkLogName string
+var sparkDeployName string
 
 func getSparkLog() (string, error) {
 	text, err := readFileWithLines(sparkLogName)
@@ -21,6 +22,18 @@ func getSparkUILog() (string, error) {
 	//text, err := readFile(sparkUILogName)
 	text := ""
 	return text, nil
+}
+
+func sparkSubmit(data map[string]interface{}) bool {
+	//submit the jar to spark and re   turn false for any errors
+	_, err := exec.Command("bash", "-c", config.Spark.Directory+"/bin/spark-submit"+
+		" --properties-file "+sparkDeployName+
+		" --class "+data["class"].(string)+
+		` "`+data["name"].(string)+`"`).CombinedOutput()
+	if err != nil {
+		return false
+	}
+	return true
 }
 
 func startSpark() {
@@ -51,13 +64,31 @@ func startSpark() {
 	sparkConfigFile, _ := os.Create(sparkConfigName)
 
 	//write the logging config for spark
-
 	scw := bufio.NewWriter(sparkConfigFile)
 	scw.WriteString("export SPARK_MASTER_IP=" + config.Spark.Master.IP + "\n")
 	scw.WriteString("export SPARK_MASTER_PORT=" + config.Spark.Master.Port + "\n")
 	scw.Flush()
 
-	//TODO: fix so slave isn't started til after enabled in webui
+	//create the sparkUI logging config directory
+	sparkUIDirName := config.Flare.FilesDirectory + "/sparkUI"
+	exec.Command("mkdir", sparkUIDirName)
+
+	//write the spark deployment config file
+	sparkDeployName = config.Flare.FilesDirectory + "sparkDeployment.conf"
+	exec.Command("cp", "/dev/null", sparkDeployName)
+	sparkDeployFile, _ := os.Create(sparkDeployName)
+
+	//create the spark deployment config file
+	sdw := bufio.NewWriter(sparkDeployFile)
+	sdw.WriteString("spark.master spark://" + config.Spark.Master.IP + ":" + config.Spark.Master.Port + "\n")
+	sdw.WriteString("spark.executor.memory " + "1g" + "\n")
+	sdw.WriteString("spark.cassandra.connection.host " + config.Cassandra.IP + "\n")
+	sdw.WriteString("spark.serializer " + "org.apache.spark.serializer.KryoSerializer" + "\n")
+	sdw.WriteString("spark.eventLog.enabled " + "true" + "\n")
+	sdw.WriteString("spark.eventLog.dir " + sparkUIDirName + "\n")
+	sdw.Flush()
+
+	//TODO: fix so slave isn't started til after a toggle is enabled in webui
 	master := config.Spark.Directory + "/sbin/start-master.sh"
 	slave := config.Spark.Directory + "/sbin/start-slave.sh"
 	slaveArg := "spark://" + config.Spark.Master.IP + ":" + config.Spark.Master.Port

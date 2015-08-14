@@ -7,10 +7,10 @@ Meteor.startup( function(){
     var Spark = React.createClass({
       getInitialState: function() {
         return {
-          status: "INACTIVE",
-          workers: "N/A",
-          url: "N/A",
-          applications: "N/A"
+          status: "",
+          workers: "",
+          url: "",
+          applications: ""
         }
       },
       componentDidMount: function() {

@@ -29,7 +29,8 @@ type configuration struct {
 			IP   string `json:"ip"`
 			Port string `json:"port"`
 		} `json:"master"`
-		Price string `json:"price"`
+		Price          string `json:"price"`
+		FilesDirectory string `json:"filesDirectory"`
 	} `json:"flare"`
 	Spark struct {
 		Cores     string `json:"cores"`

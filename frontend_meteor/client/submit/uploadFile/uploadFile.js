@@ -16,7 +16,14 @@ Meteor.startup(function() {
       Tracker.autorun(function () {
         JARSDB.find().observeChanges({
           changed: function(id, fields) {
-            $("#uploadForm #progressBar").addClass("complete")
+            if(fields.state == "completed") {
+              $("#uploadForm #progressBar").addClass("completed")
+              $("#uploadForm #progressBar").removeClass("failed")
+            }
+            if(fields.state == "failed") {
+              $("#uploadForm #progressBar").addClass("failed")
+              $("#uploadForm #progressBar").removeClass("completed")
+            }
           }
         })
       })
@@ -47,8 +54,8 @@ Meteor.startup(function() {
 
       // we display different result when running or not
       return progress.running ?
-        info.name + ' - ' + progress.progress + '% - [' + progress.bitrate + ']' :
-        info.name + ' - ' + info.size + 'B';
+      info.name + ' - ' + progress.progress + '% - [' + progress.bitrate + ']' :
+      info.name + ' - ' + info.size + 'B';
     },
     progress: function() {
       return Template.instance().globalInfo.get().progress + '%';
