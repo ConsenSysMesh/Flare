@@ -7,6 +7,8 @@ import (
 	"github.com/gocql/gocql"
 	"log"
 	"os/exec"
+	"reflect"
+	"strings"
 	"time"
 )
 
@@ -27,6 +29,9 @@ type events struct {
 	Thread        string
 	StartedAt     string
 }
+
+var nodeInfoTicker = time.NewTicker(5 * time.Second)
+var nodeRingTicker = time.NewTicker(5 * time.Second)
 
 //getSessionLog returns the cassandra session log by scanning the database
 func getSessionLog() string {
@@ -95,6 +100,67 @@ func getTracingLog() string {
 	return eOutput
 }
 
+//Use the cassandra nodetool to get state information
+func publishNodeInfo() {
+	out, _ := exec.Command(config.Cassandra.Directory+"/bin/nodetool", "info").CombinedOutput()
+
+	var data = map[string]interface{}{}
+	params := strings.Split(string(out), "\n")
+
+	//iterate through every line of output, skipping the last blank line
+	for i, param := range params {
+		if i == len(params)-1 {
+			break
+		}
+		_param := strings.Split(param, ":")
+		var key = strings.TrimSpace(_param[0])
+		var val = strings.TrimSpace(_param[1])
+		data[key] = val
+	}
+
+	var info = map[string]interface{}{
+		"ID":           data["ID"],
+		"gossipActive": data["Gossip active"],
+		"thriftActive": data["Thrift active"],
+		"uptime":       data["Uptime (seconds)"],
+		"heapMemory":   data["Heap Memory (MB)"],
+	}
+
+	if !reflect.DeepEqual(info, publish.cassandraNodeInfo) {
+		publish.cassandraNodeInfo = info
+		publish.cassandraNodeInfoChan.In() <- info
+	}
+}
+
+func publishNodeRing() {
+	out, _ := exec.Command(config.Cassandra.Directory+"/bin/nodetool", "ring").CombinedOutput()
+
+	var ring = []map[string]interface{}{}
+	params := strings.Split(string(out), "\n")
+	//iterate through every line of output, skipping the last blank line
+	for _, param := range params {
+		if param == "" {
+			continue
+		}
+		_param := strings.Fields(param)
+		if _param[0] != config.Cassandra.IP {
+			continue
+		}
+		ring = append(ring, map[string]interface{}{
+			"address": _param[0],
+			"status":  _param[2],
+			"state":   _param[3],
+			"owns":    _param[6],
+			"token":   _param[7],
+		})
+	}
+
+	if !reflect.DeepEqual(ring, publish.cassandraNodeRing) {
+		publish.cassandraNodeRing = ring
+		publish.cassandraNodeRingChan.In() <- ring
+	}
+}
+
 //initCassandra make cassandra ready for operations
 func startCassandra() {
 	log.Println("starting cassandra...")
@@ -130,6 +196,17 @@ func startCassandra() {
 	cqlsh := config.Cassandra.Directory + "/bin/cqlsh"
 	out, err := exec.Command("bash", "-c", `echo "tracing on;" | `+cqlsh).CombinedOutput()
 	log.Println(string(out))
+
+	go func() {
+		for {
+			select {
+			case <-nodeInfoTicker.C:
+				publishNodeInfo()
+			case <-nodeRingTicker.C:
+				publishNodeRing()
+			}
+		}
+	}()
 }
 
 func stopCassandra() {

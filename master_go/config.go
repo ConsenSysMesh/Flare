@@ -7,6 +7,7 @@ import (
 	"io/ioutil"
 	"log"
 	"os"
+	"reflect"
 	"time"
 )
 
@@ -53,6 +54,7 @@ type configuration struct {
 }
 
 var config = new(configuration)
+var configTicker = time.NewTicker(5 * time.Second)
 
 func setConfigBytes(_config []byte) {
 	if err := json.Unmarshal(_config, &config); err != nil {
@@ -82,19 +84,28 @@ func readAndSetConfig() {
 	//get the configuration using the system env variable
 	confLoc := os.Getenv("FLARECONF")
 	for {
+		select {
+		case <-configTicker.C:
+			_config, _lastMod, _ := readFileBytesIfModified(lastMod, confLoc)
 
-		_config, _lastMod, _ := readFileBytesIfModified(lastMod, confLoc)
+			if _lastMod.After(lastMod) {
+				lastMod = _lastMod
 
-		if _lastMod.After(lastMod) {
-			lastMod = _lastMod
+				setConfigBytes(_config)
 
-			setConfigBytes(_config)
-
-			publish.configChan <- _config
+				if !reflect.DeepEqual(config, _config) {
+					publish.config = _config
+					publish.configChan.In() <- _config
+				}
+			}
 		}
 	}
 }
 
 func initConfig() {
+	confLoc := os.Getenv("FLARECONF")
+	_config, _ := readFileBytes(confLoc)
+
+	setConfigBytes(_config)
 	go readAndSetConfig()
 }

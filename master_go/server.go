@@ -31,13 +31,26 @@ func startFlare() {
 
 	go func() {
 		for {
-			_config := <-publish.configChan
-
 			var response = map[string]interface{}{}
-			response["flag"] = "config"
-			response["text"] = string(_config)
-			var res, _ = json.Marshal(response)
-			localWSServer.writeBytes(res)
+			select {
+			case _config := <-publish.configChan.Out():
+				response["flag"] = "config"
+				response["text"] = string(_config.([]byte))
+				var res, _ = json.Marshal(response)
+				localWSServer.writeBytes(res)
+			case info := <-publish.cassandraNodeInfoChan.Out():
+				response["flag"] = "cassandraNodeInfo"
+				data, _ := json.Marshal(info)
+				response["text"] = string(data)
+				var res, _ = json.Marshal(response)
+				localWSServer.writeBytes(res)
+			case ring := <-publish.cassandraNodeRingChan.Out():
+				response["flag"] = "cassandraNodeRing"
+				data, _ := json.Marshal(ring)
+				response["text"] = string(data)
+				var res, _ = json.Marshal(response)
+				localWSServer.writeBytes(res)
+			}
 		}
 	}()
 
@@ -80,7 +93,6 @@ func startFlare() {
 				localWSServer.writeBytes(res)
 			}
 			if data["flag"] == "setConfig" {
-				log.Println(data["text"])
 				saveConfig([]byte(data["text"].(string)))
 			}
 			if data["flag"] == "getConfig" {
