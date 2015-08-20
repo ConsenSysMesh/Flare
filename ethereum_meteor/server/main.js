@@ -1,4 +1,3 @@
-
 Meteor.startup(function () {
   var WebSocketServer = Meteor.npmRequire('ws').Server
   var Transaction = Meteor.npmRequire('ethereumjs-tx');

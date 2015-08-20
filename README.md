@@ -1,4 +1,5 @@
-Flare
+#Flare
+
 Flare is the (uncontested) first implementation of decentralized computing with Ethereum. The goal is to use Apache Spark and Cassandra, two technologies designed for cluster computation, and integrate a connection with Ethereum to provide trusted, verifiably correct, computation in untrusted systems. This will allow anyone with internet access to run code in a distributed decentralized processing network.
 
 Right now we are designing a system that can operate in semi-trusted environments, where no actor is actively trying to game the system. This implementation requires a frontend to fasciliate the configuration of Spark and Cassandra, submitting computations to Spark, and monitoring computations being processed.

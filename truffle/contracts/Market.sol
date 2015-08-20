@@ -100,7 +100,6 @@ contract Market {
 		return apps[name].on;
 	}
 
-	bool public here;
 	function startApp(bytes32 nodename, bytes32 appname) {
 		if (nodes[nodename].name == apps[appname].master.name)
 			apps[appname].on = true;
