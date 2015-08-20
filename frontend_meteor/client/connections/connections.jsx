@@ -23,7 +23,6 @@ Meteor.startup( function(){
         })
       },
       render: function() {
-        console.log(this.state);
         var nodeTable = this.state.nodes.map(function (node) {
           return (
             <tr>
@@ -76,6 +75,7 @@ Meteor.startup( function(){
         Meteor.subscribe("cassandra", function() {
           Tracker.autorun(function () {
             var info = CassandraDB.findOne()
+            console.log(info)
             if(info)
             self.setState({
               data: info["connections"]

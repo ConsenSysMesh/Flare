@@ -31,24 +31,20 @@ var connections = Meteor.bindEnvironment(function () {
     }
   })
 
-  exec(confJSON.cassandra.directory+'/bin/nodetool ring', Meteor.bindEnvironment( function(err, out, code) {
-    var $ = cheerio.load('')
-    var connections = []
-    $(out.split(/\n+/)).each(function(i,e) {
-      var colData = e.split(/\s+/);
-      connections.push({
-        address: colData[0],
-        status: colData[2],
-        state: colData[3],
-        owns: colData[6],
-        token: colData[7]
-      })
-    })
-    CassandraDB.upsert({}, {$set: {connections: connections}})
-  }))
-
   var ipfsPeers = exec('ipfs swarm peers', Meteor.bindEnvironment( function(err, out, code){
     IPFSDB.upsert({}, {$set: {connections: out.split("\n")}})
   }))
 })
-Meteor.startup(function(){setInterval(connections, 5000)})
+Meteor.startup(function(){
+
+  setInterval(connections, 5000)
+  localWS.on('message', Meteor.bindEnvironment( function(message) {
+    console.log('Flare Received Message: ' + message.escapeSpecialChars());
+
+    var data = JSON.parse(message.escapeSpecialChars())
+
+    if (data.flag == "cassandraNodeRing") {
+      CassandraDB.upsert({}, {$set: {connections: JSON.parse(data.text)}})
+    }
+  }))
+})

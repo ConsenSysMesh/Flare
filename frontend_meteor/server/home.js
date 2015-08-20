@@ -18,29 +18,6 @@ var home = Meteor.bindEnvironment(function () {
     }
   })
 
-  //Use the cassandra nodetool to get state information
-  exec(confJSON.cassandra.directory+'/bin/nodetool info', Meteor.bindEnvironment(function(err, out, code) {
-    var data = {}
-    params=out.split("\n")
-    //iterate through every line of output, skipping the last blank line
-    for(i=0; i< params.length-1; i++) {
-      param = params[i].split(":")
-      var key = param[0].trim()
-      var val = param[1].trim()
-      data[key] = val
-    }
-
-    var obj = {
-      ID: data["ID"],
-      gossipActive: data["Gossip active"],
-      thriftActive: data["Thrift active"],
-      uptime: data["Uptime (seconds)"],
-      heapMemory: data["Heap Memory (MB)"]
-    }
-
-    CassandraDB.upsert({},{$set: obj})
-  }))
-
   //call the IPFS REST API for state information
   HTTP.get('http://127.0.0.1:5001/api/v0/id', function(error, response) {
     if(response) {
@@ -58,5 +35,14 @@ var home = Meteor.bindEnvironment(function () {
 
 Meteor.startup(function(){
   //TODO: stop from consuming CPU
-  //setInterval(home, 5000)
+  setInterval(home, 5000)
+
+  localWS.on('message', Meteor.bindEnvironment( function(message) {
+    console.log('Flare Received Message: ' + message.escapeSpecialChars());
+
+    var data = JSON.parse(message.escapeSpecialChars())
+
+    if (data.flag == "cassandraNodeInfo")
+      CassandraDB.upsert({}, {$set: JSON.parse(data.text)})
+  }))
 })

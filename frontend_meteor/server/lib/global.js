@@ -30,6 +30,7 @@ Meteor.startup(function () {
     .replace(/\\f/g, "\\\f");
   };
 
+  //used for the submission of jars for spark
   UploadServer.init({
     tmpDir: filesDirectory+'jar/tmp',
     uploadDir: filesDirectory+'jar/',
@@ -122,24 +123,6 @@ Meteor.startup(function () {
 
     var data = JSON.parse(message.escapeSpecialChars())
 
-    //flag for when goserver responds with the requested log data
-    if (data.flag == "log"){
-      switch (data.type) {
-        case "sparkUI":
-        SparkDB.upsert({},{sparkUILog: data.text})
-        break;
-        case "spark":
-        SparkDB.upsert({},{sparkLog: data.text})
-        break;
-        case "tracing":
-        CassandraDB.upsert({},{tracingLog: data.text})
-        break;
-        case "session":
-        CassandraDB.upsert({},{systemLog: data.text})
-        break;
-        default:
-      }
-    }
     if (data.flag == "config") {
       ConfigDB.upsert({}, JSON.parse(data.text))
     }
