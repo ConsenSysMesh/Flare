@@ -1,0 +1,70 @@
+@import "imports";
+
+$nav-height: 70px;
+
+#homePage {
+  nav {
+    position: fixed;
+    width: 100%;
+    background-color: $red;
+    color: $yellow-dark;
+    text-align: center;
+    height: $nav-height;
+  }
+
+  label[for="marketAddress"] {
+    display: block;
+    padding: 30px 0;
+    color: $yellow;
+    font-size: 20px;
+
+    input {
+      background-color: transparent;
+      outline: none;
+      border: none;
+      border-bottom: solid 1px $yellow;
+      color: $turquoise;
+      font-size: 20px;
+    }
+  }
+
+  main {
+    position: relative;
+    top: $nav-height;
+
+    #dappsOuter {
+      display: block;
+      margin: auto;
+      padding: 20px;
+      text-align: center;
+
+      #dappsInner {
+        display: inline-block;
+        background-color: $blue;
+      }
+
+      .dapp {
+        text-align: left;
+        position: relative;
+        float: left;
+        width: 200px;
+        height: 200px;
+        padding: 30px;
+        background-color: $gray-light;
+        color: $black;
+        margin: 20px 50px;
+
+        &.clearLeft {
+          clear: left;
+        }
+        &.placeholder {
+          background-color: transparent;
+        }
+
+        h3 {
+          text-align: center;
+        }
+      }
+    }
+  }
+}
