@@ -16,3 +16,4 @@ cosmos:browserify
 
 
 npm-container
+iron:router

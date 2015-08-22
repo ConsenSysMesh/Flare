@@ -1,23 +1,17 @@
-<head>
-  <title>Flareth</title>
-</head>
-
-<body>
-  <div id="homePage">
-    <nav>
-      <h1>Welcome to Flareth</h1>
-    </nav>
-
-    <main>
+<template name="view">
+  <body>
+    <main id="viewPage">
       <label for="marketAddress">
         <span>Market Address</span>
         <input id="marketAddress" value="0c781397c72d50585539dd1405765d3fe71ce1c8">
       </label>
       {{> dapps}}
-  </main>
-</div>
-</body>
+    </main>
+  </body>
+</template>
 
+
+<!-- Separate Template to allow jsx to load after this does -->
 <template name="dapps">
   <div id="dappsOuter"></div>
 </template>
