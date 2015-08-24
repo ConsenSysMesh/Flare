@@ -7,6 +7,15 @@ Meteor.startup(function() {
   })
 
   Template.dapps.rendered = function() {
+    var contract = Meteor.globals.contract
+    var apiURL = Meteor.globals.apiURL
+
+    contract.sync(apiURL,function() {
+      console.log(contract.get["appsList"])
+      /*apps.forEach(function(app) {
+        console.log("App:");console.log(app.toString());
+      })*/
+    })
 
     /*A single Dapp with state taken from the contract*/
     var DApp = React.createClass({

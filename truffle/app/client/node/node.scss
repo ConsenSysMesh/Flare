@@ -1,0 +1,45 @@
+@import "../imports";
+
+#nodePage {
+  display: flex;
+  flex: 1 1 auto;
+
+  #newDapp {
+    display: inline-block;
+    margin: auto;
+    padding: 15%;
+    height: 40%;
+    text-align: center;
+    background-color: $blue;
+
+    label {
+      display: block;
+      margin: 20px 0;
+      font-size: 40px;
+      font-weight: bold;
+      color: $blue-darker;
+
+      input {
+        background-color: transparent;
+        outline: none;
+        border: 2px solid transparent;
+        border-bottom: 2px solid $blue-darker;
+        margin: 0 20px;
+        font-size: 40px;
+        color: $white;
+
+        &:focus {
+          border: 2px solid $red;
+        }
+      }
+    }
+
+    button {
+      padding: 5px;
+      border: $white;
+        background-color: $blue-dark;
+        color: $white;
+      font-size: 40px;
+    }
+  }
+}

@@ -8,7 +8,6 @@ meteor-platform
 autopublish
 insecure
 fourseven:scss
-react
 meteorhacks:npm
 
 
@@ -17,3 +16,5 @@ cosmos:browserify
 
 npm-container
 iron:router
+react
+mquandalle:harmony
