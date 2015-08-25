@@ -14,6 +14,7 @@ cosmos:browserify@0.4.0
 ddp@1.1.0
 deps@1.0.7
 ejson@1.0.6
+ethereum:web3@0.12.2
 fastclick@1.0.3
 fourseven:scss@3.2.0
 geojson-utils@1.0.3

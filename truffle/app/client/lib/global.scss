@@ -1,4 +1,4 @@
-@import "../imports";
+@import "imports";
 
 $nav-height: 70px;
 
@@ -14,7 +14,7 @@ body {
 }
 
 nav {
-  position: fixed;
+  position: static;
   display: flex;
   width: 100%;
   background-color: $red;
@@ -90,7 +90,7 @@ nav {
 
 main {
   position: relative;
-  top: $nav-height;
+  flex: 1;
 }
 
 a {

@@ -1,10 +1,9 @@
 Meteor.startup(function() {
-  Router.route('/app', function () {
-    this.render('app')
+  Router.route('/dapps/edit', function () {
+    this.render('editDApps')
   })
 
-  Template.app.rendered = function() {
-
+  Template.editDApps.rendered = function() {
     var NewDApp = React.createClass({
       createNewDApp: function(argument) {
         console.log("he");
@@ -40,13 +39,13 @@ Meteor.startup(function() {
         )
         var div = React.createElement(
           'div',
-          {id: "newDapp"},
+          {id: "newDApp"},
           [ident, fee, create]
         )
         return (div)
       }
     })
 
-    React.render(<NewDApp />, $('#appPage')[0])
+    React.render(<NewDApp />, $('#editDApps')[0])
   }
 })

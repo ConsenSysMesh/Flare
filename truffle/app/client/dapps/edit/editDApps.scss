@@ -1,30 +1,36 @@
-@import "../imports";
+@import "../../lib/imports";
 
-#nodePage {
+#editDApps {
   display: flex;
-  flex: 1 1 auto;
+  flex-direction: column;
 
-  #newDapp {
-    display: inline-block;
+  #newDApp {
+    display: inline-flex;
+    flex-direction: column;
     margin: auto;
-    padding: 15%;
+    padding: 10%;
     height: 40%;
     text-align: center;
     background-color: $blue;
 
     label {
-      display: block;
+      display: inline-block;
       margin: 20px 0;
       font-size: 40px;
       font-weight: bold;
       color: $blue-darker;
 
+      span {
+        float: left;
+      }
+
       input {
+        margin: 0 20px;
+        float: right;
         background-color: transparent;
         outline: none;
         border: 2px solid transparent;
         border-bottom: 2px solid $blue-darker;
-        margin: 0 20px;
         font-size: 40px;
         color: $white;
 
@@ -35,10 +41,13 @@
     }
 
     button {
+      display: block;
+      margin: 30px auto;
+      clear: both;
       padding: 5px;
       border: $white;
-        background-color: $blue-dark;
-        color: $white;
+      background-color: $blue-dark;
+      color: $white;
       font-size: 40px;
     }
   }
