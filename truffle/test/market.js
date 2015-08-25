@@ -68,11 +68,11 @@ contract('Market', function(accounts) {
   it("should get apps fee", function(done) {
     return market.createApp("marke1", 200)
     .then(function() {
-      return market.getFee.call("marke1");
+      return market.apps.call("marke1");
     })
-    .then(function(data) {
+    .then(function(app) {
       var fee = 200
-      assert.strictEqual(fee, data.c[0], "Contract data created incorrectly")
+      assert.strictEqual(fee, app[2].c[0], "Contract data created incorrectly")
       return done();
     })
   });
@@ -82,11 +82,11 @@ contract('Market', function(accounts) {
       return market.createApp("marke1", 200)
     })
     .then(function() {
-      return market.getMasterName.call("marke1");
+      return market.apps.call("marke1");
     })
-    .then(function(data) {
+    .then(function(app) {
       var hexstate = "marketer1".hexEncode()
-      assert.strictEqual(hexstate, data.substring(2,20), "Contract data created incorrectly")
+      assert.strictEqual(hexstate, app[0].substring(2,20), "Contract data created incorrectly")
       return done();
     })
   });
@@ -99,10 +99,10 @@ contract('Market', function(accounts) {
       return market.startApp("marketer1","app1");
     })
     .then(function() {
-      return market.getOn.call("app1");
+      return market.apps.call("app1");
     })
-    .then(function(data) {
-      assert.isTrue(data, "Contract data created incorrectly")
+    .then(function(app) {
+      assert.isTrue(app[3], "Contract data created incorrectly")
       return done();
     })
   });

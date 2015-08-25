@@ -6,11 +6,11 @@ Meteor.startup(function() {
   Template.editNodes.rendered = function() {
     var NewNode = React.createClass({
       createNewNode: function(argument) {
-        var contract = Meteor.globals.contractFactory.at('0xd71ca02e6c007c3bf7310e84d35c9e4c9b73b45d')
-        var ident = $("#ident").val()
+        var contract = Meteor.globals.contract
+        var name = $("#name").val()
         var state = $("#state").val()
         var ipaddress = $("#ipaddress").val()
-        contract.createNode(ident, state, ipaddress, {
+        contract.createNode(name, state, ipaddress, {
           from:"0x82a978b3f5962a5b0957d9ee9eef472ee55b42f1",
           gas: 100,
           gasPrice:1
@@ -18,10 +18,10 @@ Meteor.startup(function() {
         })
       },
       render: function() {
-        var ident = (
+        var name = (
           <label>
-            <span>Identifier</span>
-            <input id="ident"/>
+            <span>Name</span>
+            <input id="name"/>
           </label>
         )
         var state = (
@@ -43,7 +43,7 @@ Meteor.startup(function() {
         var div = React.createElement(
           'div',
           {id: "newNode"},
-          [ident, state, ipaddress, create]
+          [name, state, ipaddress, create]
         )
         return (div)
       }

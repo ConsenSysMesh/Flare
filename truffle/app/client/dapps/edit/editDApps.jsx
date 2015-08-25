@@ -6,18 +6,14 @@ Meteor.startup(function() {
   Template.editDApps.rendered = function() {
     var NewDApp = React.createClass({
       createNewDApp: function(argument) {
-        console.log("he");
-        Meteor.globals.contract.call(Meteor.globals.apiURL, function(){
-          console.log("inside data");
-        },
-        {
-          funcName:"createApp",
-          fromAccount:Meteor.globals.userAccount,
-          value:200,
-          gasPrice:1,
-          gasLimit: 3141592
-        }, {name: "test",
-          fee:200
+        var contract = Meteor.globals.contract
+        var ident = $("#ident").val()
+        var fee = $("#fee").val()
+        contract.createApp(ident, parseInt(fee), {
+          from:"0x82a978b3f5962a5b0957d9ee9eef472ee55b42f1",
+          gas: 100,
+          gasPrice:1
+        }, function() {
         })
       },
       render: function() {
@@ -30,7 +26,7 @@ Meteor.startup(function() {
         var fee = (
           <label>
             <span>Price</span>
-            <input id="price"/>
+            <input id="fee"/>
           </label>
         )
 

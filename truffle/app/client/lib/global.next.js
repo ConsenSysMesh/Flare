@@ -1,12 +1,13 @@
 Meteor.startup(function() {
   Meteor.globals = {
     privkey: "",
-    contractFactory: null
+    contractFactory: null,
+    contract: null
   }
 
   // See below for options passed to the constructor.
   /*var provider = new BlockAppsWeb3Provider({
-    host: "http://hacknet.blockapps.net"
+  host: "http://hacknet.blockapps.net"
   })*/
 
   //TESTRPC
@@ -56,23 +57,6 @@ Meteor.startup(function() {
     {
       "inputs": [
         {
-          "type": "bytes32",
-          "name": "appname"
-        }
-      ],
-      "constant": false,
-      "name": "getMasterName",
-      "outputs": [
-        {
-          "type": "bytes32",
-          "name": ""
-        }
-      ],
-      "type": "function"
-    },
-    {
-      "inputs": [
-        {
           "type": "uint256",
           "name": ""
         }
@@ -97,6 +81,35 @@ Meteor.startup(function() {
       "constant": false,
       "name": "DDAppFinished",
       "outputs": [],
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "type": "bytes32",
+          "name": ""
+        }
+      ],
+      "constant": true,
+      "name": "apps",
+      "outputs": [
+        {
+          "type": "bytes32",
+          "name": "master"
+        },
+        {
+          "type": "bytes32",
+          "name": "ident"
+        },
+        {
+          "type": "uint32",
+          "name": "fee"
+        },
+        {
+          "type": "bool",
+          "name": "on"
+        }
+      ],
       "type": "function"
     },
     {
@@ -175,8 +188,25 @@ Meteor.startup(function() {
     {
       "inputs": [
         {
+          "type": "uint256",
+          "name": ""
+        }
+      ],
+      "constant": true,
+      "name": "appList",
+      "outputs": [
+        {
           "type": "bytes32",
-          "name": "name"
+          "name": ""
+        }
+      ],
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "type": "bytes32",
+          "name": "ident"
         },
         {
           "type": "uint32",
@@ -186,23 +216,6 @@ Meteor.startup(function() {
       "constant": false,
       "name": "createApp",
       "outputs": [],
-      "type": "function"
-    },
-    {
-      "inputs": [
-        {
-          "type": "bytes32",
-          "name": "name"
-        }
-      ],
-      "constant": false,
-      "name": "getOn",
-      "outputs": [
-        {
-          "type": "bool",
-          "name": ""
-        }
-      ],
       "type": "function"
     },
     {
@@ -237,24 +250,8 @@ Meteor.startup(function() {
         }
       ],
       "type": "function"
-    },
-    {
-      "inputs": [
-        {
-          "type": "bytes32",
-          "name": "name"
-        }
-      ],
-      "constant": false,
-      "name": "getFee",
-      "outputs": [
-        {
-          "type": "uint32",
-          "name": ""
-        }
-      ],
-      "type": "function"
     }
   ]
-  Meteor.globals.contractFactory = web3.eth.contract(abi);
+  Meteor.globals.contractFactory = web3.eth.contract(abi)
+  Meteor.globals.contract = web3.eth.contract(abi).at('0xbe9ac4e1155485a2fe2077d3af6a1a89bbd01996')
 })

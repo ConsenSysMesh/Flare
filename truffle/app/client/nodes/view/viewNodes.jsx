@@ -7,10 +7,10 @@ Meteor.startup(function() {
   })
 
   Template.viewNodes.rendered = function() {
-    var contract = Meteor.globals.contractFactory.at('0xd71ca02e6c007c3bf7310e84d35c9e4c9b73b45d')
+    var contract = Meteor.globals.contract
 
     /*A single Dapp with state taken from the contract*/
-    var DApp = React.createClass({
+    var Node = React.createClass({
       getInitialState: function() {
         return {
           name: "loading...",
@@ -20,21 +20,24 @@ Meteor.startup(function() {
           appIdent: ""
         }
       },
+      componentWillMount: function() {
+        var self = this;
+        contract.nodeList(this.props.index, function(err, name) {
+          contract.nodes.call(name,function(err,info) {
+            self.setState({
+              state: web3.toAscii(info[0]),
+              ipaddress: web3.toAscii(info[1]),
+              appIdent: web3.toAscii(info[2]),
+              coinbase: info[3],
+              name: web3.toAscii(info[4])
+            })
+          })
+        })
+      },
       render: function() {
         var classes = classnames({
           dapp: true,
           clearLeft: this.props.clearLeft
-        })
-
-        var self = this;
-        contract.nodes.call(this.props.name,function(err,info) {
-          self.setState({
-            state: web3.toAscii(info[0]),
-            ipaddress: web3.toAscii(info[1]),
-            appIdent: web3.toAscii(info[2]),
-            coinbase: info[3],
-            name: web3.toAscii(info[4])
-          })
         })
 
         return (
@@ -50,22 +53,21 @@ Meteor.startup(function() {
     })
 
     /*Grid of all DApps in the market contract*/
-    var DApps = React.createClass({
+    var Nodes = React.createClass({
       render: function() {
-        var div = React.createElement('div',{id: "dappsInner"},[])
+        var div = React.createElement('div',{id: "nodesInner"},[])
         for(var i=0; i< this.props.numNodes; i++) {
           if(i%3 == 0)
-          div.props.children.push(<DApp clearLeft={true} name={contract.nodeList(i)}/>)
+          div.props.children.push(<Node clearLeft={true} index={i}/>)
           else
-          div.props.children.push(<DApp clearLeft={false} name={contract.nodeList(i)}/>)
+          div.props.children.push(<Node clearLeft={false} index={i}/>)
         }
 
         return (div)
       }
     })
-
     contract.numNodes(function(err, numNodes) {
-      React.render(<DApps numNodes={numNodes}/>, $('#dappsOuter')[0])
+      React.render(<Nodes numNodes={numNodes}/>, $('#nodesOuter')[0])
     })
   }
 
