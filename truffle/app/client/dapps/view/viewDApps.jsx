@@ -17,17 +17,29 @@ Meteor.startup(function() {
         }
       },
       componentWillMount: function() {
-        var self = this;
-        contract.appList(this.props.index, function(err, name) {
-          contract.apps.call(name,function(err,info) {
-            self.setState({
-              master: web3.toAscii(info[0]),
-              ident: web3.toAscii(info[1]),
-              fee: info[2],
-              on: info[3]
+        if (Meteor.globals.useBlockapps) {
+          var contract = Meteor.globals.contract
+          var URL = Meteor.globals.URL
+
+          contract.blockapps.object.sync(URL,function() {
+            console.log(contract.get["appsList"])
+            /*apps.forEach(function(app) {
+            console.log("App:");console.log(app.toString());
+            })*/
+          })
+        } else {
+          var self = this;
+          contract.web3.object.appList(this.props.index, function(err, name) {
+            contract.web3.object.apps.call(name,function(err,info) {
+              self.setState({
+                master: web3.toAscii(info[0]),
+                ident: web3.toAscii(info[1]),
+                fee: info[2],
+                on: info[3]
+              })
             })
           })
-        })
+        }
       },
       render: function() {
         var classes = classnames({
@@ -49,7 +61,8 @@ Meteor.startup(function() {
     /*Grid of all DApps in the market contract*/
     var DApps = React.createClass({
       render: function() {
-        var div = React.createElement('div',{id: "dappsInner"},[])
+        console.log(this.props.numDApps);
+        var div = React.createElement('div',{id: "viewDApps"},[])
         for(var i=0; i< this.props.numDApps; i++) {
           if(i%3 == 0)
           div.props.children.push(<DApp clearLeft={true} index={i}/>)
@@ -60,9 +73,16 @@ Meteor.startup(function() {
         return (div)
       }
     })
-    contract.numApps(function(err, numDApps) {
-      React.render(<DApps numDApps={numDApps}/>, $('#dappsOuter')[0])
+    if (Meteor.globals.useBlockapps) {
+      contract.blockapps.object.get(Meteor.globals.contract.blockapps.URL,function(numDApps) {
+        console.log("hello");
+        React.render(<DApps numDApps={numDApps}/>, $('#mainContent')[0])
+      },"numDApps")
+    } else {
+    contract.web3.object.numApps(function(err, numDApps) {
+      React.render(<DApps numDApps={numDApps}/>, $('#mainContent')[0])
     })
+    }
   }
 
 })

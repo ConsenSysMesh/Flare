@@ -8,14 +8,16 @@ meteor-platform
 autopublish
 insecure
 fourseven:scss
-meteorhacks:npm
 
 
-cosmos:browserify
 
 
-npm-container
 iron:router
 react
 mquandalle:harmony
 ethereum:web3
+
+
+npm-container
+meteorhacks:npm
+maxharris9:classnames

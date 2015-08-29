@@ -7,15 +7,32 @@ Meteor.startup(function() {
     var NewNode = React.createClass({
       createNewNode: function(argument) {
         var contract = Meteor.globals.contract
-        var name = $("#name").val()
-        var state = $("#state").val()
-        var ipaddress = $("#ipaddress").val()
-        contract.createNode(name, state, ipaddress, {
-          from:"0x82a978b3f5962a5b0957d9ee9eef472ee55b42f1",
-          gas: 100,
-          gasPrice:1
-        }, function() {
-        })
+        if(Meteor.globals.useBlockapps) {
+          contract.blockapps.object.call(contract.blockapps.URL, function(){
+            console.log("inside data");
+          },
+          {
+            funcName:"createNode",
+            fromAccount:contract.blockapps.userAccount,
+            value:0,
+            gasPrice:100,
+            gasLimit: 3141592
+          }, {
+            name: "test",
+            state: "offline",
+            ipaddress: "127.0.0.1"
+          })
+        } else {
+          var name = $("#name").val()
+          var state = $("#state").val()
+          var ipaddress = $("#ipaddress").val()
+          contract.createNode(name, state, ipaddress, {
+            from:"0x82a978b3f5962a5b0957d9ee9eef472ee55b42f1",
+            gas: 100,
+            gasPrice:1
+          }, function() {
+          })
+        }
       },
       render: function() {
         var name = (
@@ -42,13 +59,13 @@ Meteor.startup(function() {
         )
         var div = React.createElement(
           'div',
-          {id: "newNode"},
+          {id: "editNodes"},
           [name, state, ipaddress, create]
         )
         return (div)
       }
     })
 
-    React.render(<NewNode/>, $('#editNodes')[0])
+    React.render(<NewNode/>, $('#mainContent')[0])
   }
 })

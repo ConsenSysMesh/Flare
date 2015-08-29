@@ -7,8 +7,6 @@ Meteor.startup(function() {
   })
 
   Template.viewNodes.rendered = function() {
-    var contract = Meteor.globals.contract
-
     /*A single Dapp with state taken from the contract*/
     var Node = React.createClass({
       getInitialState: function() {
@@ -21,9 +19,13 @@ Meteor.startup(function() {
         }
       },
       componentWillMount: function() {
+        var contract = Meteor.globals.contract
         var self = this;
-        contract.nodeList(this.props.index, function(err, name) {
-          contract.nodes.call(name,function(err,info) {
+        if (Meteor.globals.useBlockapps) {
+          contract.blockapps.object.sync(contract.blockapps.URL,function() {
+            var name = contract.blockapps.object.get["nodeList"][self.props.index].toString()
+            var info = contract.blockapps.object.get["nodes"](name)
+            console.log(info);
             self.setState({
               state: web3.toAscii(info[0]),
               ipaddress: web3.toAscii(info[1]),
@@ -32,11 +34,23 @@ Meteor.startup(function() {
               name: web3.toAscii(info[4])
             })
           })
-        })
+        } else {
+          contract.web3.object.nodeList(this.props.index, function(err, name) {
+            contract.web3.object.nodes.call(name,function(err,info) {
+              self.setState({
+                state: web3.toAscii(info[0]),
+                ipaddress: web3.toAscii(info[1]),
+                appIdent: web3.toAscii(info[2]),
+                coinbase: info[3],
+                name: web3.toAscii(info[4])
+              })
+            })
+          })
+        }
       },
       render: function() {
-        var classes = classnames({
-          dapp: true,
+        var classes = classNames({
+          node: true,
           clearLeft: this.props.clearLeft
         })
 
@@ -55,7 +69,7 @@ Meteor.startup(function() {
     /*Grid of all DApps in the market contract*/
     var Nodes = React.createClass({
       render: function() {
-        var div = React.createElement('div',{id: "nodesInner"},[])
+        var div = React.createElement('div',{id: "viewNodes"},[])
         for(var i=0; i< this.props.numNodes; i++) {
           if(i%3 == 0)
           div.props.children.push(<Node clearLeft={true} index={i}/>)
@@ -66,9 +80,17 @@ Meteor.startup(function() {
         return (div)
       }
     })
-    contract.numNodes(function(err, numNodes) {
-      React.render(<Nodes numNodes={numNodes}/>, $('#nodesOuter')[0])
-    })
-  }
 
+    var contract = Meteor.globals.contract
+    if (Meteor.globals.useBlockapps) {
+      contract.blockapps.object.get(contract.blockapps.URL,function(numNodes) {
+        console.log(numNodes);
+        React.render(<Nodes numNodes={numNodes}/>, $('#mainContent')[0])
+      }, "numNodes")
+    } else {
+      contract.web3.object.numNodes(function(err, numNodes) {
+        React.render(<Nodes numNodes={numNodes}/>, $('#mainContent')[0])
+      })
+    }
+  }
 })
