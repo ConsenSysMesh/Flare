@@ -1,0 +1,21 @@
+{
+  "build": {
+    "app.js": {
+      "files": [
+      ],
+      "post-process": [
+        "meteor"
+      ]
+    }
+  },
+  "deploy": [
+    "Market"
+  ],
+  "processors": {
+    "meteor":"start-app.js"
+  },
+  "rpc": {
+    "host": "localhost",
+    "port": 8545
+  }
+}

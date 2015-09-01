@@ -1,0 +1,106 @@
+@import "../../lib/imports";
+
+#viewNodes {
+  margin: 0 2%;
+  display: flex;
+  flex: 1;
+
+  #display {
+    display: block;
+    margin: auto;
+    padding: 20px;
+    flex-grow: 3;
+    text-align: center;
+    display: inline-block;
+
+    &:empty {
+      visibility: hidden;
+    }
+
+    .node {
+      text-align: left;
+      position: relative;
+      float: left;
+      width: 300px;
+      height: 300px;
+      padding: 0px;
+      background-color: grayscale($blue);
+      color: $white;
+      margin: 20px 50px;
+      border: 2px solid $white;
+      word-wrap: break-word;
+
+      &.clearLeft {
+        clear: left;
+      }
+
+      &.active {
+        background-color: $blue;
+      }
+
+      input {
+        display: none;
+      }
+
+      h3 {
+        text-align: center;
+      }
+    }
+  }
+
+  #actions {
+    position: static;
+    margin: 5% 0 5% 2%;
+    display: flex;
+    flex-grow: 1;
+    background-color: grayscale($blue);
+    color: $yellow;
+    flex-direction: column;
+    font-size: 20px;
+
+    &.active {
+      background-color: $blue;
+    }
+
+    h3 {
+      font-size: 30px;
+      margin: 5% auto;
+    }
+
+    div {
+      margin: auto;
+
+      label {
+        margin: auto;
+        input {
+          margin: 20px;
+          border: 2px solid transparent;
+          border-bottom: 2px solid $blue-dark;
+          outline: none;
+          background-color: transparent;
+          color: $white;
+          font-size: 20px;
+        }
+
+        input[type=number]::-webkit-inner-spin-button,
+        input[type=number]::-webkit-outer-spin-button {
+          -webkit-appearance: none;
+          -moz-appearance: none;
+          appearance: none;
+          margin: 0;
+        }
+      }
+
+      button {
+        display: block;
+        margin: auto;
+        clear: both;
+        padding: 5px;
+        border: $white;
+        background-color: $blue-dark;
+        color: $white;
+        font-size: 20px;
+      }
+    }
+  }
+}

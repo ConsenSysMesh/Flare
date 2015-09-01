@@ -1,0 +1,49 @@
+@import "../../lib/imports";
+
+#editDApps {
+  display: inline-flex;
+  flex-direction: column;
+  margin: auto;
+  padding: 10%;
+  height: 40%;
+  text-align: center;
+  background-color: $blue;
+
+  label {
+    display: inline-block;
+    margin: 20px 0;
+    font-size: 40px;
+    font-weight: bold;
+    color: $blue-darker;
+
+    span {
+      float: left;
+    }
+
+    input {
+      margin: 0 20px;
+      float: right;
+      background-color: transparent;
+      outline: none;
+      border: 2px solid transparent;
+      border-bottom: 2px solid $blue-darker;
+      font-size: 40px;
+      color: $white;
+
+      &:focus {
+        border: 2px solid $red;
+      }
+    }
+  }
+
+  button {
+    display: block;
+    margin: 30px auto;
+    clear: both;
+    padding: 5px;
+    border: $white;
+    background-color: $blue-dark;
+    color: $white;
+    font-size: 40px;
+  }
+}
